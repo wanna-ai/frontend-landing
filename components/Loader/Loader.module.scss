@@ -1,0 +1,20 @@
+/* HTML: <div class="loader"></div> */
+.loader {
+  height: 50px;
+  aspect-ratio: 2;
+  scale: .4;
+  border: 10px solid var(--color-black);
+  box-sizing: border-box;
+  background: 
+    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) left/20px 20px,
+    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) left/20px 20px,
+    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) center/20px 20px,
+    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) right/20px 20px,
+    var(--color-black);
+  background-repeat: no-repeat;
+  filter: blur(4px) contrast(10) invert(1);
+  animation: l14 0.8s infinite;
+}
+@keyframes l14 {
+  100%  {background-position:right,left,center,right}
+}

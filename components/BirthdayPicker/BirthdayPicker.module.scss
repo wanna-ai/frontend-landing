@@ -1,0 +1,22 @@
+.birthday {
+  
+  &__items {
+    display: flex;
+    gap: var(--space-4);
+    width: 100%;
+  }
+
+  &__item {
+    border-radius: var(--border-radius-small);
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2);
+    
+    &__input {
+      background-color: var(--color-gray-light-2);
+      border-radius: var(--border-radius-super-small);
+      border: none;
+    }
+  }
+}

@@ -1,0 +1,130 @@
+@use "@/app/_breakpoints" as bp;
+.edit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  gap: var(--space-6);
+
+  padding: 0px var(--space-5);
+
+  /* &__title {
+    text-transform: uppercase;
+  } */
+
+  &__value {
+    background-color: var(--color-separator);
+    border-radius: var(--border-radius-small);
+    padding: var(--space-4);
+    &__header {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+  }
+
+  &__experience {
+    &__container {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      width: fit-content;
+      border: 1px solid var(--color-gray);
+      border-radius: var(--border-radius-small);
+      padding: var(--space-4);
+    }
+  }
+
+  &__privacy {
+    &__title {
+      margin-bottom: var(--space-4);
+    }
+    &__options {
+      display: flex;
+      gap: 1rem;
+      flex-direction: row;
+      @include bp.respond-to(md) {
+        flex-direction: column;
+      }
+
+      &__option {
+        position: relative;
+        cursor: pointer;
+
+        input[type="radio"] {
+          position: absolute;
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        &__content {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          padding: 1.25rem;
+          border: 2px solid #e0e0e0;
+          border-radius: 12px;
+          transition: all 0.2s;
+
+          &:hover {
+            border-color: #b0b0b0;
+          }
+        }
+
+        input[type="radio"]:checked ~ &__content {
+          border-color: var(--color-yellow);
+          background-color: #fff3d6;
+        }
+
+        &__radio {
+          position: relative;
+          width: 20px;
+          height: 20px;
+          min-width: 20px;
+          border: 2px solid #ccc;
+          border-radius: 50%;
+          transition: all 0.2s;
+          margin-top: 2px;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--color-yellow);
+            transition: transform 0.2s;
+          }
+        }
+
+        input[type="radio"]:checked ~ &__content &__radio {
+          border-color: var(--color-yellow);
+
+          &::after {
+            transform: translate(-50%, -50%) scale(1);
+          }
+        }
+
+        &__title {
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+          color: #333;
+        }
+
+        &__description {
+          font-size: 0.875rem;
+          color: #666;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  &__button {
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+}

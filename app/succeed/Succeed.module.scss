@@ -1,0 +1,42 @@
+@use "@/app/_breakpoints" as bp;
+.succeed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  padding: 0px var(--space-5);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+
+    &__text {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: var(--space-4);
+    flex-direction: row;
+    @include bp.respond-to(md) {
+      flex-direction: column;
+    }
+
+    &__button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      background-color: var(--color-black);
+      color: var(--color-white);
+      &__whatsapp {
+        background-color: #25d366;
+      }
+    }
+  }
+}

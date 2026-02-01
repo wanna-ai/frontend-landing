@@ -1,0 +1,31 @@
+.header {
+  background-color: var(--color-white);
+  width: 100%;
+  z-index: 10000;
+  padding: var(--space-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+
+  &__link {
+    position: relative;
+    text-transform: uppercase;
+    &:after {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      content: "";
+      display: block;
+      width: 0;
+      height: 2px;
+      background-color: var(--color-main);
+      transition: width 0.3s ease;
+    }
+    &:hover {
+      &:after {
+        width: 100%;
+      }
+    }
+  }
+}
