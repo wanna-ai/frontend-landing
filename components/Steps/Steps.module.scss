@@ -1,0 +1,44 @@
+@use "@/app/_breakpoints" as bp;
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: var(--max-width-container-x-small);
+  margin: 0 auto;
+
+  @include bp.respond-to(md) {
+    max-width: var(--max-width-container-small);
+  }
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    opacity: 0;
+
+    &:nth-child(1) {
+      animation: fadeInStep 1s ease forwards ;
+      animation-delay: 1.5s;
+    }
+    &:nth-child(2) {
+      animation: fadeInStep 1s ease forwards;
+      animation-delay: 2s;
+    }
+    &:nth-child(3) {
+      animation: fadeInStep 1s ease forwards;
+      animation-delay: 2.5s;
+    }
+  }
+}
+
+@keyframes fadeInStep {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,34 @@
+.checks {
+
+  animation: fadeInChecks 1s ease forwards;
+  animation-delay: 3s;
+  opacity: 0;
+
+  &__title {
+    margin-bottom: var(--space-4);
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+  }
+
+}
+
+@keyframes fadeInChecks {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

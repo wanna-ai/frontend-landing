@@ -1,34 +1,94 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { AppContext } from '@/context/AppContext'
 
 const LoginSuccessPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-
+  const { postId: contextPostId } = useContext(AppContext)
+  
   useEffect(() => {
-    const token = searchParams.get('token')
-    
-    if (token) {
-      // Guardar el token
-      localStorage.setItem('authToken', token)
+    const processLogin = async () => {
+      try {
+        const token = searchParams.get('token')
+        
+        if (!token) {
+          router.push('/register')
+          return
+        }
 
-      /**
-       * TODO: VINCULAR EL POST CON EL USUARIO
-       */
-      
-      // Redirigir a donde quieras
-      router.push('/brief') // o la página que prefieras
-    } else {
-      // Si no hay token, redirigir al login
-      router.push('/register')
+        // Guardar el token
+        localStorage.setItem('authToken', token)
+
+        // Obtener postId del localStorage o del contexto
+        const storedPostId = localStorage.getItem('postId')
+        const postId = storedPostId || contextPostId
+
+        console.log('PostId:', postId)
+        console.log('Token:', token)
+
+        // Vincular el post con el usuario si existe postId
+        if (postId) {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/landing/interview/assign`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ postId })
+            }
+          )
+
+          if (!response.ok) {
+            const errorText = await response.text()
+            console.error('Error response:', errorText)
+            throw new Error(`Error al vincular el post: ${response.status}`)
+          }
+
+          // Obtener la respuesta como texto primero
+          const responseText = await response.text()
+          console.log('Response text:', responseText)
+
+          // Intentar parsearlo como JSON si no está vacío
+          let data = null
+          if (responseText) {
+            try {
+              data = JSON.parse(responseText)
+              console.log('Parsed JSON:', data)
+            } catch (e) {
+              // Si no es JSON, usar el texto tal cual
+              console.log('Response is plain text:', responseText)
+              data = responseText
+            }
+          }
+
+          // Limpiar el postId del localStorage después de asignarlo
+          // localStorage.removeItem('postId')
+          
+          // Redirigir solo si todo fue exitoso
+          router.push('/preview?postId=' + postId)
+        } else {
+          // Si no hay postId, redirigir igualmente
+          router.push('/preview?postId=' + postId)
+        }
+
+      } catch (error) {
+        console.error('Error durante el login:', error)
+      }
     }
-  }, [searchParams, router])
+
+    processLogin()
+  }, [searchParams, router, contextPostId])
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <p>Iniciando sesión...</p>
+      <div className="text-center">
+        <p>Procesando login...</p>
+      </div>
     </div>
   )
 }

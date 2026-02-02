@@ -1,11 +1,12 @@
 @use "@/app/_breakpoints" as bp;
 .chat {
   position: relative;
-  height: calc(100dvh - 70px);
+  height: 100dvh;
 
   width: 95%;
   max-width: var(--max-width-container-small);
   margin: 0 auto;
+  padding: var(--header-height) var(--space-5);
 
   &__messages {
     display: flex;
@@ -16,7 +17,7 @@
     padding-left: 0;
     padding-right: 0;
     overflow-y: auto;
-    height: calc(100dvh - 70px);
+    height: calc(100dvh - var(--header-height));
     scroll-behavior: smooth;
     padding-bottom: var(--space-12);
 

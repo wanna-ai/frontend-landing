@@ -1,6 +1,5 @@
 // src/services/api.ts
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
-console.log(API_BASE_URL)
 
 interface RequestOptions {
   headers?: Record<string, string>;
@@ -17,18 +16,17 @@ export const apiService = {
         },
         body: JSON.stringify(data)
       })
-
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('Error en la petición:', error)
       throw error
     }
   },
-
+  
   async get(endpoint: string, options?: RequestOptions) {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -38,18 +36,17 @@ export const apiService = {
           ...options?.headers
         }
       })
-
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('Error en la petición:', error)
       throw error
     }
   },
-
+  
   async put(endpoint: string, data: any, options?: RequestOptions) {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -60,18 +57,17 @@ export const apiService = {
         },
         body: JSON.stringify(data)
       })
-
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('Error en la petición:', error)
       throw error
     }
   },
-
+  
   async delete(endpoint: string, options?: RequestOptions) {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -81,19 +77,17 @@ export const apiService = {
           ...options?.headers
         }
       })
-
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('Error en la petición:', error)
       throw error
     }
   },
-
-  // Convenience method for authenticated requests
+  
   withAuth(token: string) {
     return {
       post: (endpoint: string, data: any, options?: RequestOptions) =>

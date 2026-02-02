@@ -74,6 +74,9 @@
   --max-width-container: 1280px;
   --max-width-container-small: 768px;
   --max-width-container-x-small: 480px;
+
+  // header height
+  --header-height: 70px;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -179,7 +182,7 @@ textarea {
 
   &__content {
     max-width: var(--max-width-container);
-    min-height: calc(100dvh - 70px);
+    /* min-height: calc(100dvh - var(--header-height)); */
     margin: 0 auto;
     
     @include bp.respond-to(md) {

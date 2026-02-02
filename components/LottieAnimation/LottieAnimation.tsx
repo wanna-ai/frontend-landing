@@ -19,7 +19,6 @@ export default function LottieAnimation({
   autoplay = true,
   style,
   className,
-  speed = 1,
   onComplete,
 }: LottieAnimationProps) {
   return (
