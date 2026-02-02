@@ -8,9 +8,9 @@
   padding: var(--header-height) var(--space-5);
   padding-bottom: var(--space-10);
 
-  &__title {
+  /* &__title {
     text-transform: uppercase;
-  }
+  } */
 
   &__experience {
     &__header {
@@ -20,6 +20,10 @@
 
       &__title {
         width: calc(100% - 20px);
+      }
+
+      &__svg {
+        margin-top: 5px;
       }
     }
     &__content {
@@ -43,6 +47,10 @@
 
       &__title {
         width: calc(100% - 24px);
+      }
+
+      &__svg {
+        margin-top: 5px;
       }
     }
   }

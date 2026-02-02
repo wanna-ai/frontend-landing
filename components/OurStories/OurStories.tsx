@@ -101,6 +101,7 @@ interface ModalProps {
 
 const Modal = ({ member, onClose }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   // Lock body scroll when modal is open
   useEffect(() => {
     if (member) {
@@ -135,14 +136,19 @@ const Modal = ({ member, onClose }: ModalProps) => {
   }, [member, onClose]);
 
   const handleClose = () => {
-    onClose();
-    document.body.style.overflow = '';
+    setIsClosing(true);
+
+    // Wait for animation to finish
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300); // same duration as CSS animation
   };
 
   if (!member) return null;
 
   return (
-    <div className={`${styles.modal} ${isOpen ? styles.open : ''}`} onClick={handleClose}>
+    <div className={`${styles.modal} ${isOpen ? styles.open : ''} ${isClosing ? styles.closing : ''}`} onClick={handleClose}>
       <div className={styles.modal__overlay}></div>
       <div className={styles.modal__content} onClick={(e) => e.stopPropagation()}>
         
@@ -153,7 +159,7 @@ const Modal = ({ member, onClose }: ModalProps) => {
           </div>
           <button 
             className={styles.modal__header__close} 
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close modal"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,10 +191,6 @@ const OurStories = () => {
 
   const closeModal = () => {
     setSelectedMember(null);
-  };
-
-  const toggleExpand = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
   };
 
   const getTruncatedText = (text: string, maxWords: number = 20) => {

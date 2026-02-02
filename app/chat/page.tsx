@@ -79,7 +79,7 @@ export default function ChatPage() {
       localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
 
       // Navigate
-      router.push(authToken ? '/preview?postId=' + responseData.id : '/register?postId=' + responseData.id);
+      router.push('/register?postId=' + responseData.id);
 
     } catch (error) {
       console.error('Error al enviar la conversación al backend:', error);
@@ -165,7 +165,7 @@ export default function ChatPage() {
     setMessages([]);
     hasNavigated.current = false; // ✅ Reset navigation flag
 
-    /* sendMessage(
+    sendMessage(
       {
         role: "user",
         parts: [{ type: "text", text: "Hola Wanna!" }]
@@ -178,7 +178,7 @@ export default function ChatPage() {
           }
         }
       }
-    ); */
+    );
   }, []);
 
   useEffect(() => {

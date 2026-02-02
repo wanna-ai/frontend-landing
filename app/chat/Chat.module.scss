@@ -8,6 +8,10 @@
   margin: 0 auto;
   padding: var(--header-height) var(--space-5);
 
+  @include bp.respond-to(md) {
+    padding: var(--header-height) 0;
+  }
+
   &__messages {
     display: flex;
     flex-direction: column;

@@ -46,7 +46,7 @@
           font-family: var(--font-diatype-trial-heavy);
           line-height: var(--line-height-small);
           max-width: 400px;
-          margin-bottom: var(--space-2);
+          margin-bottom: var(--space-4);
 
           &__span {
             position: relative;
@@ -79,13 +79,16 @@
           /* justify-content: center; */
           gap: var(--space-4);
       
-          /* min-width: 270px;
-          width: 100%; */
+          padding: var(--space-3) var(--space-8);
 
           margin-top: var(--space-8);
+
+          animation: fadeInSection 1s ease forwards;
+          animation-delay: 3s;
+          opacity: 0;
       
           p {
-            font-size: var(--font-size-lg);
+            font-size: var(--font-size-md);
           }
 
           @include bp.respond-to(md) {

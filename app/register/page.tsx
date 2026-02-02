@@ -153,7 +153,7 @@ const RegisterPage = () => {
           ) : (
             <>
               <LoginOAuth _url={'/brief'} />
-              <LoginMail handleEmailSignIn={() => setShowLoginMail(true)} />
+              {/* <LoginMail handleEmailSignIn={() => setShowLoginMail(true)} /> */}
             </>
           )}
         </div>

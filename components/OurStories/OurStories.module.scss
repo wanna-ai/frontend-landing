@@ -2,6 +2,9 @@
 .our_stories {
 
   margin-bottom: 100px;
+  opacity: 0;
+  animation: fadeInSection 1s ease forwards;
+  animation-delay: 2.5s;
 
   @include bp.respond-to(md) {
     margin-bottom: 0px;
@@ -67,6 +70,7 @@
         position: relative;
         margin-bottom: var(--space-4);
         &__icon {
+          cursor: pointer;
           position: absolute;
           bottom: var(--space-4);
           right: var(--space-4);
@@ -220,6 +224,7 @@
       margin-bottom: var(--space-6);
 
       @include bp.respond-to(md) {
+        width: 100%;
         margin-bottom: var(--space-4);
       }
     }
@@ -233,6 +238,23 @@
         font-size: 0.95rem;
       }
     }
+  }
+
+  &.closing {
+    animation: fadeOutModal 0.3s ease forwards;
+  }
+}
+
+// animations
+
+@keyframes fadeInSection {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -253,5 +275,14 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes fadeOutModal {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
