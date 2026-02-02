@@ -66,7 +66,7 @@ export default function ChatPage() {
 
       // ✅ Fix: Handle response structure properly
       const responseData = response.data || response;
-      
+      console.log(responseData)
       setPostId(responseData.id);
       
       localStorage.setItem('postId', responseData.id);
@@ -79,7 +79,7 @@ export default function ChatPage() {
       localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
 
       // Navigate
-      router.push(authToken ? '/brief' : '/register');
+      router.push(authToken ? '/preview?postId=' + responseData.id : '/register?postId=' + responseData.id);
 
     } catch (error) {
       console.error('Error al enviar la conversación al backend:', error);
@@ -128,11 +128,8 @@ export default function ChatPage() {
 
         // ✅ Set state for UI display
         setExperienceData(experienceDataToSave);
-
-        // ✅ Call save immediately with the data (don't rely on state)
-        setTimeout(() => {
-          saveAndNavigate(experienceDataToSave);
-        }, 1500); // Give user time to see the pills
+        saveAndNavigate(experienceDataToSave);
+        console.log(experienceDataToSave)
 
         // Scroll to bottom
         const container = messagesContainerRef.current;
@@ -168,7 +165,7 @@ export default function ChatPage() {
     setMessages([]);
     hasNavigated.current = false; // ✅ Reset navigation flag
 
-    sendMessage(
+    /* sendMessage(
       {
         role: "user",
         parts: [{ type: "text", text: "Hola Wanna!" }]
@@ -181,7 +178,7 @@ export default function ChatPage() {
           }
         }
       }
-    );
+    ); */
   }, []);
 
   useEffect(() => {

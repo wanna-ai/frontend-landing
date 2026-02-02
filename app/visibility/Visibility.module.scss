@@ -1,12 +1,12 @@
 @use "@/app/_breakpoints" as bp;
-.edit {
+.visibility {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
   gap: var(--space-6);
 
-  padding: 0px var(--space-5);
+  padding: var(--header-height) var(--space-5);
 
   /* &__title {
     text-transform: uppercase;

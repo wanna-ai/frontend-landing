@@ -1,11 +1,11 @@
-.brief {
+.preview {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 100%;
   gap: var(--space-6);
 
-  padding: 0px var(--space-5);
+  padding: var(--header-height) var(--space-5);
   padding-bottom: var(--space-10);
 
   &__title {
@@ -31,7 +31,7 @@
       cursor: pointer;
       font-weight: 500;
       text-decoration: underline;
-      color: var(--color-yellow);
+      color: var(--color-main);
     }
   }
 
