@@ -37,6 +37,7 @@ COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
+RUN apk add curl
 RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
