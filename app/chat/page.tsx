@@ -146,6 +146,24 @@ export default function ChatPage() {
   });
 
   useEffect(() => {
+    const preventScrollOnFocus = (e: Event) => {
+      e.preventDefault();
+      window.scrollTo(0, 0);
+    };
+  
+    const editable = editableRef.current;
+    if (editable) {
+      editable.addEventListener('focus', preventScrollOnFocus);
+    }
+  
+    return () => {
+      if (editable) {
+        editable.removeEventListener('focus', preventScrollOnFocus);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     // ✅ Prevenir doble ejecución
     if (hasInitialized.current) {
       console.log('Already initialized, skipping');

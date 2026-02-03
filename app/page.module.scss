@@ -54,7 +54,7 @@
           /* max-width: 400px; */
           margin-bottom: var(--space-4);
           
-          @include bp.respond-to(md) {
+          @include bp.respond-to(xl) {
             font-size: var(--font-size-2-5xl);
           }
 
@@ -162,6 +162,8 @@
     }
 
     &__our_stories {
+      max-width: var(--max-width-container-medium);
+      margin: 0 auto;
       padding: 0 var(--space-5);
     }
 
