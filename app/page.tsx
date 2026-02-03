@@ -139,7 +139,7 @@ export default function Home() {
 
             {/* <Image className={styles.home__content__hero__image} src="/example_square_3.png" alt="Home Image Chat" width={747} height={747} /> */}
             <div className={styles.home__content__hero__animation}>
-              <LottieAnimation animationData={animationData} />
+              <LottieAnimation animationData={animationData} style={{borderRadius: 'var(--space-4)', overflow: 'hidden', boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px'}} />
             </div>
             
           </div>

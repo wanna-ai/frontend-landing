@@ -18,7 +18,7 @@ const checks = [
 const Checks = () => {
   return (
     <div className={styles.checks}>
-      <h2 className={styles.checks__title}>Tus historias son tuyas. Tú decides</h2>
+      <h2 className={styles.checks__title}>Tus historias son tuyas. <span className={styles.checks__title__span}>Tú decides</span></h2>
       <div className={styles.checks__items}>
         {checks.map((check, index) => (
           <div key={index} className={styles.checks__items__item}>

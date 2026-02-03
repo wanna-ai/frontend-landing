@@ -2,7 +2,6 @@
 // O con validación más robusta:
 const API_BASE_URL = (() => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-  console.log("baseUrl", baseUrl);
   
   if (!baseUrl) {
     console.warn('NEXT_PUBLIC_API_BASE_URL no está definida, usando fallback')
@@ -11,6 +10,7 @@ const API_BASE_URL = (() => {
   
   return baseUrl
 })()
+console.log("API_BASE_URL", API_BASE_URL);
 
 
 interface RequestOptions {
