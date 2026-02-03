@@ -79,7 +79,7 @@ export default function ChatPage() {
       localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
 
       // Navigate
-      router.push(authToken ? '/preview?postId=' + responseData.id : '/register?postId=' + responseData.id);
+      router.push('/register?postId=' + responseData.id);
 
     } catch (error) {
       console.error('Error al enviar la conversación al backend:', error);
@@ -146,6 +146,24 @@ export default function ChatPage() {
   });
 
   useEffect(() => {
+    const preventScrollOnFocus = (e: Event) => {
+      e.preventDefault();
+      window.scrollTo(0, 0);
+    };
+  
+    const editable = editableRef.current;
+    if (editable) {
+      editable.addEventListener('focus', preventScrollOnFocus);
+    }
+  
+    return () => {
+      if (editable) {
+        editable.removeEventListener('focus', preventScrollOnFocus);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     // ✅ Prevenir doble ejecución
     if (hasInitialized.current) {
       console.log('Already initialized, skipping');
@@ -165,7 +183,7 @@ export default function ChatPage() {
     setMessages([]);
     hasNavigated.current = false; // ✅ Reset navigation flag
 
-    /* sendMessage(
+    sendMessage(
       {
         role: "user",
         parts: [{ type: "text", text: "Hola Wanna!" }]
@@ -178,7 +196,7 @@ export default function ChatPage() {
           }
         }
       }
-    ); */
+    );
   }, []);
 
   useEffect(() => {

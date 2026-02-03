@@ -1,3 +1,6 @@
+@use "@/app/_breakpoints" as bp;
+
+
 .checks {
 
   animation: fadeInChecks 1s ease forwards;
@@ -5,7 +8,30 @@
   opacity: 0;
 
   &__title {
+    font-size: var(--font-size-3xl);
     margin-bottom: var(--space-4);
+    
+    @include bp.respond-to(md) {
+      font-size: var(--font-size-2xl);
+    }
+
+    &__span {
+      position: relative;
+      overflow: hidden;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        height: 100%;
+        background-color: var(--color-yellow);
+        border-radius: var(--border-radius);
+        animation: increaseWidth 0.3s ease forwards;
+        animation-delay: 3.5s;
+        z-index: -1;
+      }
+    }
+
+
   }
 
   &__items {
@@ -30,5 +56,14 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes increaseWidth {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
   }
 }

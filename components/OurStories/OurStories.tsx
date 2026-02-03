@@ -13,7 +13,7 @@ const members = [
     Durante ese tiempo dejé de pedir permiso para sentir. Dejé de justificar mis límites. Entendí que descansar no es rendirse, que decir "no puedo" no es decepcionar, y que cuidarme no es egoísmo. La enfermedad me obligó a escucharme de una forma radical, sin escapatorias.
     Hoy sé que la felicidad no es una meta lejana ni un estado permanente. A veces es algo muy pequeño: una conversación honesta, una risa inesperada, un día sin dolor, una tarde tranquila sin culpa. Y la gente que me quiere de verdad celebra esas pequeñas cosas conmigo, sin exigirme nada más.
     El cáncer no me hizo mejor persona ni más sabio. Me hizo más consciente. Me enseñó que el amor auténtico no pide heroicidades. Sólo pide verdad. Y que, al final, lo único que importa es esto: que esté vivo, que esté aquí… y que, dentro de lo posible, sea feliz.`,
-    image: "/members/agus.jpg" 
+    image: "/members/agus.webp" 
   },
   {
     name: "Adrià",
@@ -24,7 +24,7 @@ const members = [
     También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
     Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
-    image: "/members/jordi.jpg"
+    image: "/members/adria.webp"
   },
   {
     name: "Marta",
@@ -35,7 +35,7 @@ const members = [
     También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
     Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
-    image: "/members/pau.jpg"
+    image: "/members/marta.webp"
   },
   {
     name: "Miguel",
@@ -46,7 +46,7 @@ const members = [
     También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
     Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
-    image: "/members/agus.jpg"
+    image: "/members/miguel.jpg"
   },
   {
     name: "Jordi",
@@ -79,7 +79,7 @@ const members = [
     También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
     Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
-    image: "/members/agus.jpg"
+    image: "/members/miguel.jpg"
   },
   {
     name: "Sergio",
@@ -101,6 +101,7 @@ interface ModalProps {
 
 const Modal = ({ member, onClose }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   // Lock body scroll when modal is open
   useEffect(() => {
     if (member) {
@@ -135,14 +136,19 @@ const Modal = ({ member, onClose }: ModalProps) => {
   }, [member, onClose]);
 
   const handleClose = () => {
-    onClose();
-    document.body.style.overflow = '';
+    setIsClosing(true);
+
+    // Wait for animation to finish
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300); // same duration as CSS animation
   };
 
   if (!member) return null;
 
   return (
-    <div className={`${styles.modal} ${isOpen ? styles.open : ''}`} onClick={handleClose}>
+    <div className={`${styles.modal} ${isOpen ? styles.open : ''} ${isClosing ? styles.closing : ''}`} onClick={handleClose}>
       <div className={styles.modal__overlay}></div>
       <div className={styles.modal__content} onClick={(e) => e.stopPropagation()}>
         
@@ -153,7 +159,7 @@ const Modal = ({ member, onClose }: ModalProps) => {
           </div>
           <button 
             className={styles.modal__header__close} 
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close modal"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,10 +191,6 @@ const OurStories = () => {
 
   const closeModal = () => {
     setSelectedMember(null);
-  };
-
-  const toggleExpand = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
   };
 
   const getTruncatedText = (text: string, maxWords: number = 20) => {

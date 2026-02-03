@@ -1,5 +1,17 @@
 // src/services/api.ts
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+// O con validación más robusta:
+const API_BASE_URL = (() => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+  
+  if (!baseUrl) {
+    console.warn('NEXT_PUBLIC_API_BASE_URL no está definida, usando fallback')
+    return 'https://api.playground.wannna.ai'
+  }
+  
+  return baseUrl
+})()
+console.log("API_BASE_URL", API_BASE_URL);
+
 
 interface RequestOptions {
   headers?: Record<string, string>;
