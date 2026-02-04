@@ -45,7 +45,7 @@ const Footer = () => {
 
   const pathname = usePathname()
   
-  if (pathname === '/chat') {
+  if (pathname === '/chat' || pathname === '/login/success' || pathname === '/preview' || pathname === '/register' || pathname === '/visibility') {
     return null
   }
 
