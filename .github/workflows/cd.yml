@@ -54,8 +54,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-          --build-arg DEPLOYMENT_LAYER=${{ steps.deployment.outputs.deployment_layer }} \
-          .
+          --build-arg NEXT_PUBLIC_API_BASE_URL="https://api.playground.wannna.ai" .  #### CHANGE THIS TO ENVIRONMENT INSIDE THE GITHUB REPO
 
           docker tag $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $REGISTRY/$ECR_REPOSITORY:latest
           
