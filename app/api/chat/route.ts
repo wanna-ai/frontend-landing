@@ -8,7 +8,6 @@ export async function POST(req: Request) {
   try {
     const { messages, data } = await req.json();
     const { interviewerPrompt, editorPrompt } = data;
-    console.log(interviewerPrompt, editorPrompt);
     const prompt = `${interviewerPrompt}\n\n${editorPrompt}`;
   
     const result = streamText({

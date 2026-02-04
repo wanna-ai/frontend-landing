@@ -21,7 +21,7 @@
     padding-left: 0;
     padding-right: 0;
     overflow-y: auto;
-    height: calc(100dvh - var(--header-height));
+    height: calc(100dvh - var(--header-height) - 50px);
     scroll-behavior: smooth;
     padding-bottom: var(--space-12);
 
@@ -124,7 +124,7 @@
     bottom: var(--space-5);
     left: 50%;
     transform: translateX(-50%);
-    width: 95%;
+    width: 100%;
     max-width: var(--max-width-container-small);
     z-index: 10;
 

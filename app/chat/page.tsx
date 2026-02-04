@@ -31,7 +31,6 @@ export default function ChatPage() {
   const hasInitialized = useRef<boolean>(false);
 
   // states
-  const [initMessage, setInitMessage] = useState("");
   const [isEditableEmpty, setIsEditableEmpty] = useState(true);
   const [isInputVisible, setIsInputVisible] = useState(true);
 
@@ -90,7 +89,6 @@ export default function ChatPage() {
 
   const { messages, setMessages, sendMessage, status, stop } = useChat({
     onFinish: ({ message }) => {
-      console.time('onFinish processing');
       let textParts = "";
       let toolResult = null;
   
@@ -115,8 +113,6 @@ export default function ChatPage() {
           story_valuable: string 
         };
         
-        console.log('Tool result:', result);
-
         const experienceDataToSave = {
           title: result.title,
           experience: result.experience,
@@ -129,7 +125,6 @@ export default function ChatPage() {
         // ✅ Set state for UI display
         setExperienceData(experienceDataToSave);
         saveAndNavigate(experienceDataToSave);
-        console.log(experienceDataToSave)
 
         // Scroll to bottom
         const container = messagesContainerRef.current;
@@ -139,9 +134,6 @@ export default function ChatPage() {
           });
         }
       }
-
-      console.timeEnd('onFinish processing');
-      console.log('Conversation length:', conversationRef.current.length);
     }
   });
 
@@ -166,12 +158,21 @@ export default function ChatPage() {
 
   // send message when component mounts
   useEffect(() => {
+    // ✅ Guard: solo ejecutar si tenemos los prompts necesarios
+    if (!promptData?.interviewerPromp || !promptData?.editorPrompt) {
+      console.log('Waiting for prompt data...');
+      return;
+    }
+
     // ✅ Prevenir doble ejecución
     if (hasInitialized.current) {
       console.log('Already initialized, skipping');
       return;
     }
+    
+    console.log('Initializing chat for the first time');
     hasInitialized.current = true;
+    
     // Clear localStorage and state on mount
     localStorage.removeItem('title');
     localStorage.removeItem('content');
@@ -183,28 +184,25 @@ export default function ChatPage() {
 
     setExperienceData(null);
     setMessages([]);
-    hasNavigated.current = false; // ✅ Reset navigation flag
+    hasNavigated.current = false;
 
-    if(promptData?.interviewerPromp && promptData?.editorPrompt) {
-      sendMessage(
-        {
-          role: "user",
-          parts: [{ type: "text", text: "Hola Wanna!" }]
-        },
-        {
-          body: {
-            data: {
-              interviewerPrompt: promptData?.interviewerPromp,
-              editorPrompt: promptData?.editorPrompt
-            }
+    // ✅ Enviar mensaje inicial
+    sendMessage(
+      {
+        role: "user",
+        parts: [{ type: "text", text: "Hola Wanna!" }]
+      },
+      {
+        body: {
+          data: {
+            interviewerPrompt: promptData.interviewerPromp,
+            editorPrompt: promptData.editorPrompt
           }
         }
-      );
-    }
+      }
+    );
 
-    
-
-  }, []);
+  }, [promptData?.interviewerPromp, promptData?.editorPrompt]); // ✅ Dependencias correctas
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -252,7 +250,6 @@ export default function ChatPage() {
     );
 
     editableRef.current.innerText = "";
-    setInitMessage("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -281,7 +278,6 @@ export default function ChatPage() {
       );
   
       editableRef.current.innerText = "";
-      setInitMessage("");
       setIsEditableEmpty(true);
     }
   };

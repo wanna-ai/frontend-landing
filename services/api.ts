@@ -10,7 +10,6 @@ const API_BASE_URL = (() => {
   
   return baseUrl
 })()
-console.log("API_BASE_URL", API_BASE_URL);
 
 
 interface RequestOptions {

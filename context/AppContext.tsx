@@ -80,7 +80,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     if (!promptData) {
       fetchPromptData();
     }
-  }, []);
+  }, [ promptData ]);
   
   return (
     <AppContext.Provider value={{ 
