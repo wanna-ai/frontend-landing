@@ -13,7 +13,13 @@ const Header = () => {
     <header className={styles.header}>
       <Link href={communityId ? `/?c=${communityId}` : "/"} className={styles.header__link}>
         <Image src="/wanna-logo.svg" alt="Logo" width={28} height={12} loading="eager"/>{/* <span>V.1</span> */}
+
       </Link>
+
+      <div className={styles.header__user}>
+        <div className={styles.header__user__avatar} />
+        <p className={styles.header__user__name}>Tú</p>
+      </div>
     </header>
   )
 }
