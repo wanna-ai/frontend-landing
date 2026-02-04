@@ -1,0 +1,71 @@
+name: Build and Push to ECR
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - develop
+
+env:
+  AWS_REGION: eu-west-1
+  ECR_REPOSITORY: frontend
+  AWS_ECR_ROLE: ${{ vars.AWS_ECR_ROLE }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine deployment layer
+        id: deployment
+        run: |
+          if [[ "${{ github.ref }}" == "refs/tags/develop" ]]; then
+            echo "deployment_layer=develop" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "deployment_layer=develop" >> $GITHUB_OUTPUT               ###### CHANGE THIS WHEN SEVERAL ENVIRONMENTS
+            # echo "deployment_layer=preprod" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" =~ refs/tags/v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "deployment_layer=production" >> $GITHUB_OUTPUT
+          else
+            echo "deployment_layer=unknown" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ECR_ROLE }} ##### CHANGE THE ECR ROLE TO BE PER REPO INSTEAD ONE PER ORGANIZATION
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+          --build-arg NEXT_PUBLIC_API_BASE_URL="https://api.playground.wannna.ai" .  #### CHANGE THIS TO ENVIRONMENT INSIDE THE GITHUB REPO
+
+          docker tag $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $REGISTRY/$ECR_REPOSITORY:latest
+          
+          docker push --all-tags $REGISTRY/$ECR_REPOSITORY
+      
+      - name: Trigger deployment in wanna-backend-infra
+        if: steps.deployment.outputs.deployment_layer != 'unknown'
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.TRIGGER_REPOSITORY_DISPATCH }}
+          repository: ${{ github.repository_owner }}/frontend-infra
+          event-type: deploy
+          client-payload: '{"image_sha": "${{ github.sha }}", "repository": "${{ github.repository }}", "deployment_layer": "${{ steps.deployment.outputs.deployment_layer }}"}'
+
