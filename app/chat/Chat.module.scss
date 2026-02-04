@@ -3,10 +3,14 @@
   position: relative;
   height: 100dvh;
 
-  width: 95%;
+  width: 90%;
   max-width: var(--max-width-container-small);
   margin: 0 auto;
   padding: var(--header-height) var(--space-5);
+
+  * {
+    font-family: var(--font-open-sans);
+  }
 
   @include bp.respond-to(md) {
     padding: var(--header-height) 0;
@@ -15,7 +19,7 @@
   &__messages {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-2);
     margin: 0 auto;
     margin-bottom: calc(var(--space-6) * -1);
     padding-left: 0;
@@ -33,7 +37,7 @@
       display: flex;
       flex-direction: column;
       font-family: var(--font-family-base);
-      padding-top: var(--space-4);
+      /* padding-top: var(--space-4); */
       gap: var(--space-6);
       width: 100%;
       margin: 0 auto;
@@ -56,6 +60,7 @@
           background-color: var(--color-gray-light);
           border-radius: var(--border-radius-small);
           padding: var(--space-2) var(--space-4);
+
         }
 
         &__avatar {
@@ -68,6 +73,11 @@
               font-size: var(--font-size-sm);
               margin-left: var(--space-2);
             }
+          }
+
+          p {
+            margin-top: var(--space-4 );
+            margin-bottom: var(--space-4 );
           }
         }
 
@@ -278,12 +288,9 @@
       margin: 0 auto;
       padding: var(--space-2) var(--space-3);
       transition: border 0.3s ease;
+      border: none;
 
       box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
-      &:hover {
-        border: 1px solid var(--color-gray-dark);
-      }
 
       @include bp.respond-to(md) {
         padding: var(--space-1) var(--space-2);
@@ -340,7 +347,7 @@
   
         svg {
           circle {
-            fill: var(--color-main);
+            fill: var(--color-black);
             transition: fill 0.3s ease;
           }
           path {

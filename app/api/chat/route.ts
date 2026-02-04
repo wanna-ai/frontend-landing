@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const { messages, data } = await req.json();
     const { interviewerPrompt, editorPrompt } = data;
-    const prompt = `${interviewerPrompt}\n\n${editorPrompt}`;
+    const prompt = `${interviewerPrompt}\n\n${editorPrompt}\n\n Si escribo "BETLEM" crea una experiencia de prueba y eejcuta la tool reviewExperience`;
   
     const result = streamText({
       model: anthropic("claude-sonnet-4-20250514"),

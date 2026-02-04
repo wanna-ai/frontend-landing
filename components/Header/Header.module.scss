@@ -14,21 +14,8 @@
   &__link {
     position: relative;
     text-transform: uppercase;
-    &:after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      content: "";
-      display: block;
-      width: 0;
-      height: 2px;
-      background-color: var(--color-main);
-      transition: width 0.3s ease;
-    }
-    &:hover {
-      &:after {
-        width: 100%;
-      }
-    }
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
   }
 }

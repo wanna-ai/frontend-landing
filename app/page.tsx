@@ -38,6 +38,7 @@ export default function Home() {
             <div className={styles.home__content__hero__content}>
               
               <h1 className={styles.home__content__hero__content__title}>Conócete mejor con <span className={styles.home__content__hero__content__title__span}>Wanna</span></h1>
+              <h2>y comparte lo vivido</h2>
           
               <div className={styles.home__content__hero__content__steps}>
                 <Steps />

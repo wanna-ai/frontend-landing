@@ -11,8 +11,8 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <Link href={communityId ? `/?c=${communityId}` : "/"}>
-        <Image src="/wanna-logo.svg" alt="Logo" width={28} height={12} />
+      <Link href={communityId ? `/?c=${communityId}` : "/"} className={styles.header__link}>
+        <Image src="/wanna-logo.svg" alt="Logo" width={28} height={12} />{/* <span>V.1</span> */}
       </Link>
     </header>
   )

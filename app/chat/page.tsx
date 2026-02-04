@@ -46,6 +46,7 @@ export default function ChatPage() {
     // Prevent double navigation
     if (hasNavigated.current) {
       console.log('Navigation already in progress');
+      alert('Navigation already in progress');
       return;
     }
     
@@ -56,16 +57,15 @@ export default function ChatPage() {
       const response = await apiService.post('/api/v1/landing/posts/interview', {
         title: data.title,
         content: data.experience,
-        communityId: communityId,
         pills: data.pildoras.join(' - '),
         reflection: data.reflection,
         story_valuable: data.story_valuable,
         rawInterviewText: data.rawInterviewText
       });
 
+      
       // ✅ Fix: Handle response structure properly
       const responseData = response.data || response;
-      console.log(responseData)
       setPostId(responseData.id);
       
       localStorage.setItem('postId', responseData.id);
@@ -105,6 +105,7 @@ export default function ChatPage() {
       }
   
       if (toolResult) {
+        console.log(toolResult, conversationRef.current);
         const result = toolResult as { 
           title: string; 
           experience: string; 
@@ -159,10 +160,10 @@ export default function ChatPage() {
   // send message when component mounts
   useEffect(() => {
     // ✅ Guard: solo ejecutar si tenemos los prompts necesarios
-    if (!promptData?.interviewerPromp || !promptData?.editorPrompt) {
+    /* if (!promptData?.interviewerPromp || !promptData?.editorPrompt) {
       console.log('Waiting for prompt data...');
       return;
-    }
+    } */
 
     // ✅ Prevenir doble ejecución
     if (hasInitialized.current) {
@@ -195,14 +196,14 @@ export default function ChatPage() {
       {
         body: {
           data: {
-            interviewerPrompt: promptData.interviewerPromp,
-            editorPrompt: promptData.editorPrompt
+            interviewerPrompt: promptData?.interviewerPromp,
+            editorPrompt: promptData?.editorPrompt
           }
         }
       }
     );
 
-  }, [promptData?.interviewerPromp, promptData?.editorPrompt]); // ✅ Dependencias correctas
+  }, [promptData]); // ✅ Dependencias correctas
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -354,7 +355,11 @@ export default function ChatPage() {
           <div className={styles.chat__input__form__buttons}>
             {status === "submitted" || status === "streaming" ? (
               <button type="button" className={styles.chat__input__form__button} onClick={stop}>
-                <Image src="/svg/pause.svg" alt="Pause" width={32} height={32} />
+                <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16.6265" cy="16.6265" r="16.6265" fill="var(--color-black)"/>
+                <rect x="11.6265" y="11.6265" width="10" height="10" rx="1" fill="white"/>
+                </svg>
+
               </button>
             ) : (
               <button

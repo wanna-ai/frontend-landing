@@ -33,6 +33,22 @@ const diatypeTrialHeavyFont = localFont({
   display: "swap",
 });
 
+const interFont = localFont({
+  src: [
+    { path: "./fonts/Inter/Inter.ttf" },
+  ],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const openSansFont = localFont({
+  src: [
+    { path: "./fonts/OpenSans/OpenSans.ttf" },
+  ],
+  variable: "--font-open-sans",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Wanna",
   description: "Una plataforma para compartir y descubrir historias reales.",
@@ -61,7 +77,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${diatypeSemiMonoFont.variable} ${diatypeExpandedFont.variable} ${diatypeTrialHeavyFont.variable}`}>
+      <body className={`${diatypeSemiMonoFont.variable} ${diatypeExpandedFont.variable} ${diatypeTrialHeavyFont.variable} ${interFont.variable} ${openSansFont.variable}`}>
         <AppProvider>
           <Suspense fallback={null}>
             <Header />
