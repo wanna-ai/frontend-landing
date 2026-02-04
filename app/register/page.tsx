@@ -7,7 +7,6 @@ import { useContext } from 'react'
 import { apiService } from '@/services/api'
 import { useRouter } from 'next/navigation'
 import LoginOAuth from '@/components/LoginOAuth/LoginOAuth'
-import LoginMail from '@/components/LoginMail/LoginMail'
 import { useState, useEffect } from 'react'
 
 const RegisterPage = () => {
@@ -152,7 +151,7 @@ const RegisterPage = () => {
             </div>
           ) : (
             <>
-              <LoginOAuth _url={'/brief'} />
+              <LoginOAuth _url={'/preview'} />
               {/* <LoginMail handleEmailSignIn={() => setShowLoginMail(true)} /> */}
             </>
           )}

@@ -3,6 +3,7 @@
 import { useEffect, useContext } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { AppContext } from '@/context/AppContext'
+import { API_BASE_URL } from '@/services/config/api'
 
 const LoginSuccessPage = () => {
   const router = useRouter()
@@ -28,11 +29,12 @@ const LoginSuccessPage = () => {
 
         console.log('PostId:', postId)
         console.log('Token:', token)
+        console.log('API_BASE_URL:', API_BASE_URL)
 
         // Vincular el post con el usuario si existe postId
         if (postId) {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/landing/interview/assign`,
+            `${API_BASE_URL}/api/v1/landing/interview/assign`,
             {
               method: 'POST',
               headers: {

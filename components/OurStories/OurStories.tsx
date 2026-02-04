@@ -210,11 +210,7 @@ const OurStories = () => {
     <>
       <div className={styles.our_stories}>
         <div className={styles.our_stories__header}>
-          <h2 className={styles.our_stories__header__title}>Algunas experiencias de nuestro equipo generadas con Wanna</h2>
-          {/* <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3.32858 11.3536C3.52384 11.5488 3.84042 11.5488 4.03568 11.3536L7.21766 8.17157C7.41292 7.97631 7.41292 7.65973 7.21766 7.46447C7.0224 7.2692 6.70582 7.2692 6.51056 7.46447L3.68213 10.2929L0.853702 7.46447C0.658439 7.2692 0.341857 7.2692 0.146595 7.46447C-0.0486675 7.65973 -0.0486675 7.97631 0.146595 8.17157L3.32858 11.3536ZM3.68213 0L3.18213 -2.18557e-08L3.18213 11L3.68213 11L4.18213 11L4.18213 2.18557e-08L3.68213 0Z" fill="var(--color-gray)"/>
-          </svg> */}
-
+          <h2 className={styles.our_stories__header__title}>Algunas <span className={styles.our_stories__header__title__span}>experiencias</span> de nuestro equipo generadas con Wanna</h2>
         </div>
 
         <div className={styles.our_stories__items}>

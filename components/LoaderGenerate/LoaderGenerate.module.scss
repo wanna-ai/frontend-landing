@@ -3,7 +3,7 @@
 }
 
 .loaderGenerate {
-  height: 100dvh;
+  height: calc(100dvh - var(--header-height) - 50px);
   margin-top: var(--space-10);
   display: flex;
   align-items: center;

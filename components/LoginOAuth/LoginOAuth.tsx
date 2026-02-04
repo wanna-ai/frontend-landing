@@ -1,6 +1,7 @@
 import styles from './LoginOAuth.module.scss'
 import { useRouter } from 'next/navigation'
 import { apiService } from '@/services/api'
+import { API_BASE_URL } from '@/services/config/api'
 
 
 const LoginOAuth = ( {_url}: {_url: string}) => {
@@ -9,7 +10,7 @@ const LoginOAuth = ( {_url}: {_url: string}) => {
 
   const handleGoogleSignIn = async () => {
     const endpoint = "/oauth2/authorization/google"
-    router.push(`${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}`)
+    router.push(`${API_BASE_URL}${endpoint}`)
   }
 
   return (
