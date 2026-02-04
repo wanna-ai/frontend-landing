@@ -145,6 +145,7 @@ export default function ChatPage() {
     }
   });
 
+  // scroll to top when clicking on input
   useEffect(() => {
     const preventScrollOnFocus = (e: Event) => {
       e.preventDefault();
@@ -163,6 +164,7 @@ export default function ChatPage() {
     };
   }, []);
 
+  // send message when component mounts
   useEffect(() => {
     // ✅ Prevenir doble ejecución
     if (hasInitialized.current) {
@@ -183,20 +185,25 @@ export default function ChatPage() {
     setMessages([]);
     hasNavigated.current = false; // ✅ Reset navigation flag
 
-    sendMessage(
-      {
-        role: "user",
-        parts: [{ type: "text", text: "Hola Wanna!" }]
-      },
-      {
-        body: {
-          data: {
-            interviewerPrompt: promptData?.interviewerPromp,
-            editorPrompt: promptData?.editorPrompt
+    if(promptData?.interviewerPromp && promptData?.editorPrompt) {
+      sendMessage(
+        {
+          role: "user",
+          parts: [{ type: "text", text: "Hola Wanna!" }]
+        },
+        {
+          body: {
+            data: {
+              interviewerPrompt: promptData?.interviewerPromp,
+              editorPrompt: promptData?.editorPrompt
+            }
           }
         }
-      }
-    );
+      );
+    }
+
+    
+
   }, []);
 
   useEffect(() => {

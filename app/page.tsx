@@ -26,7 +26,7 @@ export default function Home() {
   const { setPromptData } = useContext(AppContext);
 
   const handleGoToChat = async (_url: string) => {
-    try {
+    /* try {
       const endpoint = communityId ? `/api/v1/landing/${communityId}/interview-ai-configs` : `/api/v1/landing/interview-ai-configs/default`
       const data = await apiService.get(endpoint)
       console.log(data)
@@ -108,7 +108,7 @@ export default function Home() {
         Si quieres, puedes enviar una imagen que represente tu historia y autorizar su publicación para que pueda inspirar a otros”
         `
       })
-    }
+    } */
     router.push(_url)
   }
   
