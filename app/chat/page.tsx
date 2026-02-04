@@ -229,10 +229,20 @@ export default function ChatPage() {
 
     conversationRef.current += "user: " + content + "\n\n";
 
-    sendMessage({
-      role: "user",
-      parts: [{ type: "text", text: content }],
-    });
+    sendMessage(
+      {
+        role: "user",
+        parts: [{ type: "text", text: content }]
+      },
+      {
+        body: {
+          data: {
+            interviewerPrompt: promptData?.interviewerPromp,
+            editorPrompt: promptData?.editorPrompt
+          }
+        }
+      }
+    );
 
     editableRef.current.innerText = "";
     setInitMessage("");
