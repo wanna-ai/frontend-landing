@@ -10,6 +10,7 @@ on:
 env:
   AWS_REGION: eu-west-1
   ECR_REPOSITORY: frontend
+  AWS_ECR_ROLE: ${{ vars.AWS_ECR_ROLE }}
 
 jobs:
   build-and-push:
