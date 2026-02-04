@@ -60,7 +60,7 @@ jobs:
           
           docker push --all-tags $REGISTRY/$ECR_REPOSITORY
       
-      - name: Trigger deployment in wanna-backend-infra
+      - name: Trigger deployment in frontend-infra
         if: steps.deployment.outputs.deployment_layer != 'unknown'
         uses: peter-evans/repository-dispatch@v3
         with:
