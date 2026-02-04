@@ -41,7 +41,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.AWS_ECR_ROLE }}. ##### CHANGE THE ECR ROLE TO BE PER REPO INSTEAD ONE PER ORGANIZATION
+          role-to-assume: ${{ env.AWS_ECR_ROLE }} ##### CHANGE THE ECR ROLE TO BE PER REPO INSTEAD ONE PER ORGANIZATION
           aws-region: ${{ env.AWS_REGION }}
       
       - name: Login to Amazon ECR
