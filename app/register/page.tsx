@@ -17,7 +17,7 @@ const RegisterPage = () => {
 
   const router = useRouter();
 
-  const { experienceData, token } = useContext(AppContext);
+  const { experienceData, setExperienceData, token } = useContext(AppContext);
 
   const [showLoginMail, setShowLoginMail] = useState(false)
   const [showLoginPassword, setShowLoginPassword] = useState(false)
@@ -44,6 +44,14 @@ const RegisterPage = () => {
           throw new Error('Failed to fetch post')
         }
         console.log('postResponse', postResponse)
+        setExperienceData({
+          title: postResponse.title,
+          experience: postResponse.experience,
+          pildoras: postResponse.pildoras,
+          reflection: postResponse.reflection,
+          story_valuable: postResponse.story_valuable,
+          rawInterviewText: postResponse.rawInterviewText,
+        })
   
         
       } catch (err) {
@@ -53,7 +61,11 @@ const RegisterPage = () => {
       }
     }
   
-    fetchPost()
+    if (postId) {
+      fetchPost()
+    } else {
+      router.push('/')
+    }
   }, [postId])
 
   const getTruncatedText = (text: string, maxWords: number = 20) => {

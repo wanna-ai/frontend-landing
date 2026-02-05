@@ -31,24 +31,43 @@ const VisibilityPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        
-        const response = await apiService.get(`/api/v1/landing/posts/${postId}`)
-  
-        if (response.error) {
-          router.push('/')
-          return
+        const tokenResponse = await fetch('/api/auth/get-cookie', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to fetch token')
         }
-  
-        console.log('Post fetched:', response)
-        
+        const tokenData = await tokenResponse.json()
+        const token = tokenData.token
+        console.log('token', token)
+
+
+        const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
+        console.log('response', response)
+
+        setExperienceData({
+          title: response.title,
+          experience: response.experience,
+          pildoras: response.pildoras,
+          reflection: response.reflection,
+          story_valuable: response.story_valuable,
+          rawInterviewText: response.rawInterviewText,
+        })
+
       } catch (err) {
         console.error('Error fetching post:', err)
         router.push('/')
-      } finally {
       }
     }
   
-    fetchPost()
+    if (postId) {
+      fetchPost()
+    } else {
+      router.push('/')
+    }
   }, [postId])
 
 
