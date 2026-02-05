@@ -9,29 +9,44 @@ const LoginSuccessPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { postId: contextPostId } = useContext(AppContext)
-  
+
   useEffect(() => {
     const processLogin = async () => {
       try {
         const token = searchParams.get('token')
-        
+
         if (!token) {
           router.push('/register')
           return
         }
 
-        // Guardar el token
-        localStorage.setItem('authToken', token)
+        /**
+         * 1️⃣ Store token securely in HttpOnly cookie
+         */
+        const cookieRes = await fetch('/api/auth/set-cookie', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: 'authToken', token }),
+        })
 
-        // Obtener postId del localStorage o del contexto
+        if (!cookieRes.ok) {
+          throw new Error('Failed to set auth cookie')
+        }
+
+        /**
+         * 2️⃣ Get postId (still from localStorage or context)
+         */
         const storedPostId = localStorage.getItem('postId')
         const postId = storedPostId || contextPostId
 
         console.log('PostId:', postId)
-        console.log('Token:', token)
         console.log('API_BASE_URL:', API_BASE_URL)
 
-        // Vincular el post con el usuario si existe postId
+        /**
+         * 3️⃣ Assign post to user (token still used here once)
+         */
         if (postId) {
           const response = await fetch(
             `${API_BASE_URL}/api/v1/landing/interview/assign`,
@@ -39,9 +54,9 @@ const LoginSuccessPage = () => {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
               },
-              body: JSON.stringify({ postId })
+              body: JSON.stringify({ postId }),
             }
           )
 
@@ -51,32 +66,14 @@ const LoginSuccessPage = () => {
             throw new Error(`Error al vincular el post: ${response.status}`)
           }
 
-          // Obtener la respuesta como texto primero
           const responseText = await response.text()
           console.log('Response text:', responseText)
-
-          // Intentar parsearlo como JSON si no está vacío
-          let data = null
-          if (responseText) {
-            try {
-              data = JSON.parse(responseText)
-              console.log('Parsed JSON:', data)
-            } catch (e) {
-              // Si no es JSON, usar el texto tal cual
-              console.log('Response is plain text:', responseText)
-              data = responseText
-            }
-          }
-
-          // Limpiar el postId del localStorage después de asignarlo
-          // localStorage.removeItem('postId')
-          
-          // Redirigir solo si todo fue exitoso
-          router.push('/preview?postId=' + postId)
-        } else {
-          // Si no hay postId, redirigir igualmente
-          router.push('/preview?postId=' + postId)
         }
+
+        /**
+         * 4️⃣ Redirect
+         */
+        router.push(`/preview?postId=${postId ?? ''}`)
 
       } catch (error) {
         console.error('Error durante el login:', error)

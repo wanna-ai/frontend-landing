@@ -51,7 +51,6 @@ export default function ChatPage() {
     }
     
     hasNavigated.current = true;
-    const authToken = localStorage.getItem('authToken');
 
     try {
       const response = await apiService.post('/api/v1/landing/posts/interview', {
