@@ -1,22 +1,12 @@
 'use client'
 
 import { useState, useContext, useEffect } from 'react'
-import Image from 'next/image'
 import styles from './Visibility.module.scss'
 import { AppContext } from '@/context/AppContext'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { apiService } from '@/services/api'
 
 type PrivacyOption = 'public' | 'private'
-
-type ExperienceData = {
-  title: string
-  experience: string
-  pildoras: string[]
-  reflection: string
-  story_valuable: string
-  rawInterviewText: string
-}
 
 const VisibilityPage = () => {
   const router = useRouter()
@@ -73,22 +63,10 @@ const VisibilityPage = () => {
 
   const handlePublish = async () => {
     try {
-      /* const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/landing/posts/${postId}/visibility`,
-        {
-          method: 'PUT',
-          credentials: 'include', // 👈 sends HttpOnly cookie
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ visibility: privacy }),
-        }
-      ) */
+      console.log('postId', postId)
+      console.log('token', token)
       const response = await apiService.put(`/api/v1/landing/posts/${postId}/visibility`, { visibility: privacy }, { token: token })
-  
-      if (!response.ok) {
-        throw new Error('Error updating visibility')
-      }
+      console.log('response', response)
   
       console.log('Visibilidad del post:', privacy)
       router.push('/succeed')
