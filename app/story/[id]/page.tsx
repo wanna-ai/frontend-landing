@@ -66,7 +66,7 @@ const StoryPage = () => {
         if (!token) {
           setState({ screen: 'login' })
         } else if (response.isOwner) {
-          setState({ screen: 'not-owner' })
+          setState({ screen: 'is-owner' })
         } else {
           setState({ screen: 'not-owner' })
         }

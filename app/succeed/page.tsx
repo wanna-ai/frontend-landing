@@ -108,7 +108,7 @@ const SucceedPage = () => {
 
           </div>
 
-          <p className={styles.succeed__content__story__subtitle}>En este <Link className={styles.succeed__content__story__header__link} href={`#`} target='_blank'>enlace privado</Link> podrás ver tu historia, quién la ha leido y los coemntarios</p>
+          <p className={styles.succeed__content__story__subtitle}>En este <Link className={styles.succeed__content__story__header__link} href={`/story/${localStorage.getItem('postId')}`} target='_blank'>enlace privado</Link> podrás ver tu historia, quién la ha leido y los coemntarios</p>
           
         </div>
 
