@@ -58,7 +58,7 @@ const StoryPage = () => {
         })
 
         // Determine screen based on token and ownership
-        if (token) {
+        if (!token) {
           setState({ screen: 'login' })
         } else if (response.isOwner) {
           setState({ screen: 'is-owner' })

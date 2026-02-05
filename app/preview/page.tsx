@@ -24,6 +24,10 @@ export default function PreviewPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
+
+        /**
+         * 1️⃣ Get token from cookie
+         */
         const tokenResponse = await fetch('/api/auth/get-cookie', {
           credentials: 'include',
           headers: {
@@ -38,6 +42,15 @@ export default function PreviewPage() {
         console.log('token', token)
 
 
+        /**
+         * 2️⃣ Get user info
+         */
+        const userInfo = await apiService.get('/api/v1/users/me', { token: token })
+        console.log('userInfo', userInfo)
+
+        /**
+         * 3️⃣ Get post
+         */
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
         console.log('response', response)
 

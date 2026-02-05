@@ -38,7 +38,14 @@ const LoginSuccessPage = () => {
         }
 
         /**
-         * 2️⃣ Get postId (still from localStorage or context)
+         * 2️⃣ Get user info (still from localStorage or context)
+         */
+
+        const userInfo = await apiService.get('/api/v1/users/me', { token: token })
+        console.log('userInfo', userInfo)
+
+        /**
+         * 3️⃣ Get postId (still from localStorage or context)
          */
         const storedPostId = localStorage.getItem('postId')
         const postId = storedPostId || contextPostId
@@ -48,7 +55,7 @@ const LoginSuccessPage = () => {
         console.log('token', token)
 
         /**
-         * 3️⃣ Assign post to user (token still used here once)
+         * 4️⃣ Assign post to user (token still used here once)
          */
         if (postId) {
           console.log("here")
@@ -57,7 +64,7 @@ const LoginSuccessPage = () => {
         }
 
         /**
-         * 4️⃣ Redirect
+         * 5️⃣ Redirect
          */
         router.push(`/preview?postId=${postId}`)
 
