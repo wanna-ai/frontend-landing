@@ -51,16 +51,18 @@ const LoginSuccessPage = () => {
          * 3️⃣ Assign post to user (token still used here once)
          */
         if (postId) {
-          const response = await apiService.post('/api/v1/landing/interview/assign', { postId }, { token: token })
+          console.log("here")
+          const response = await apiService.post('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
+          console.log('response', response)
 
-          if (!response.ok) {
+          /* if (!response.ok) {
             const errorText = await response.text()
             console.error('Error response:', errorText)
             throw new Error(`Error al vincular el post: ${response.status}`)
-          }
+          } */
 
-          const responseText = await response.text()
-          console.log('Response text:', responseText)
+          /* const responseText = await response.text()
+          console.log('responseText', responseText) */
         }
 
         /**
