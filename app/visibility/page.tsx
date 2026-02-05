@@ -26,6 +26,7 @@ const VisibilityPage = () => {
 
   const { experienceData, setExperienceData } = useContext(AppContext)
   const [privacy, setPrivacy] = useState<PrivacyOption>('private')
+  const [token, setToken] = useState<string>('')
 
 
   useEffect(() => {
@@ -42,8 +43,7 @@ const VisibilityPage = () => {
         }
         const tokenData = await tokenResponse.json()
         const token = tokenData.token
-        console.log('token', token)
-
+        setToken(token)
 
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
         console.log('response', response)
@@ -73,7 +73,7 @@ const VisibilityPage = () => {
 
   const handlePublish = async () => {
     try {
-      const response = await fetch(
+      /* const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/landing/posts/${postId}/visibility`,
         {
           method: 'PUT',
@@ -83,7 +83,8 @@ const VisibilityPage = () => {
           },
           body: JSON.stringify({ visibility: privacy }),
         }
-      )
+      ) */
+      const response = await apiService.put(`/api/v1/landing/posts/${postId}/visibility`, { visibility: privacy }, { token: token })
   
       if (!response.ok) {
         throw new Error('Error updating visibility')
