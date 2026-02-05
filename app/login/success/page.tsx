@@ -18,7 +18,7 @@ const LoginSuccessPage = () => {
         const token = searchParams.get('token')
 
         if (!token) {
-          router.push('/register')
+          router.push('/')
           return
         }
 
@@ -45,12 +45,13 @@ const LoginSuccessPage = () => {
 
         console.log('PostId:', postId)
         console.log('API_BASE_URL:', API_BASE_URL)
+        console.log('token', token)
 
         /**
          * 3️⃣ Assign post to user (token still used here once)
          */
         if (postId) {
-          const response = await apiService.post('/api/v1/landing/interview/assign', { postId }, { token })
+          const response = await apiService.post('/api/v1/landing/interview/assign', { postId }, { token: token })
 
           if (!response.ok) {
             const errorText = await response.text()
@@ -65,7 +66,7 @@ const LoginSuccessPage = () => {
         /**
          * 4️⃣ Redirect
          */
-        router.push(`/preview?postId=${postId ?? ''}`)
+        router.push(`/preview?postId=${postId}`)
 
       } catch (error) {
         console.error('Error durante el login:', error)
