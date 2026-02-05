@@ -152,7 +152,7 @@ export default function PreviewPage() {
 
       <div className={styles.preview__fixed}>
         <button className={styles.preview__button} onClick={() => router.push(`/visibility?postId=${postId}`)}>
-          <p>Más sobre mi historia</p>
+          <p>Elige quién ve tu historia</p>
         </button>
       </div>
 

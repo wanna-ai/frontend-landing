@@ -1,13 +1,31 @@
 'use client'
 import styles from './Succeed.module.scss'
 import { useRouter } from 'next/navigation'
+import { useContext } from 'react'
+import { AppContext } from '@/context/AppContext'
+import Link from 'next/link'
+
+interface ExperienceData {
+  title: string
+  experience: string
+  pildoras: string[]
+  reflection: string
+  story_valuable: string
+  rawInterviewText: string
+}
 
 const SucceedPage = () => {
   const router = useRouter()
 
-  const handleShareWhatsApp = () => {
+  const { experienceData } = useContext(AppContext)
+
+  const handleShareWhatsApp = (experienceData: ExperienceData) => {
+    console.log('experienceData', experienceData)
+    const postId = localStorage.getItem('postId')
     const message = encodeURIComponent(
-      '¡Acabo de probar Wanna! Una plataforma para compartir experiencias auténticas. Únete a la lista de espera: https://wannna.ai'
+      `¡Mira lo que acabo de escribir con Wanna!
+      \n _${experienceData?.title}_
+      \nhttps://frontend.playground.wannna.ai/story/${postId}`
     )
     const whatsappUrl = `https://wa.me/?text=${message}`
     window.open(whatsappUrl, '_blank')
@@ -16,26 +34,96 @@ const SucceedPage = () => {
   return (
     <div className={styles.succeed}>
       <div className={styles.succeed__content}>
-        <div className={styles.succeed__content__text}>
-          <h1 className={styles.succeed__content__text__title}>
-            <span>Gracias por probar Wanna!</span>
-          </h1>
-          <p>Te hemos enviado <strong>tu historia</strong> por mail.</p>
-          <p>Cuando lancemos Wanna al 100%, te avisaremos.</p>
+        <div className={styles.succeed__content__header}>
+          
+          {/* <svg className={styles.succeed__content__header__svg} width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12.5C9 12.5 10.7234 14.5 11 14.5C11.2766 14.5 15 9 15 9" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
+            <rect x="2.7" y="2.7" width="18.6" height="18.6" rx="9.3" stroke="var(--color-black)" strokeWidth="1.4"/>
+          </svg> */}
+
+          <div className={styles.succeed__content__header__text}>
+
+            {/* <h3 className={styles.succeed__content__header__text__title}>
+              Gracias por probar <span className="highlight">Wanna</span>
+            </h3> */}
+
+            <div className={styles.succeed__content__header__text__info}>
+              <div className={ `${styles.succeed__content__header__text__info__item} ${styles.succeed__content__header__text__info__item__highlight}`}>
+                {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12.5C9 12.5 10.7234 14.5 11 14.5C11.2766 14.5 15 9 15 9" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
+                  <rect x="2.7" y="2.7" width="18.6" height="18.6" rx="9.3" stroke="var(--color-black)" strokeWidth="1.4"/>
+                </svg> */}
+                <p><span className="highlight">Gracias</span> por probar Wanna</p>
+              </div>
+              <div className={styles.succeed__content__header__text__info__item}>
+                {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2" y="4" width="20" height="16" rx="5" stroke="var(--color-gray)" strokeWidth="1.4"/>
+                  <path d="M21 6C21 6 13.125 12 12 12C10.875 12 3 6 3 6" stroke="var(--color-gray)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg> */}
+                <p>Te hemos enviado <strong>tu historia</strong> por mail. Cuando lancemos Wanna al 100%, te avisaremos.</p>
+              </div>
+              {/* <div className={styles.succeed__content__header__text__info__item}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.26836 14.4091L5.88799 9.25747M7.26836 14.4091L5.01454 15.013M7.26836 14.4091L8.62335 14.5575M5.88799 9.25747L2.34627 10.2065C1.8128 10.3494 1.49622 10.8978 1.63916 11.4312L2.50189 14.651C2.64483 15.1844 3.19317 15.501 3.72663 15.3581L5.01454 15.013M5.88799 9.25747L12.6295 3.22613C13.5296 2.42084 14.6123 1.84693 15.784 1.55402C15.9048 1.52384 16.0279 1.59415 16.0632 1.7135L19.9222 14.75C19.9652 14.8955 19.8827 15.0484 19.7375 15.0922C18.5912 15.4384 17.3864 15.5476 16.1965 15.4131L8.62335 14.5575M5.01454 15.013L7.3621 20.4041C7.55972 20.8579 8.05963 21.0989 8.53776 20.9708L9.83885 20.6222C10.4173 20.4672 10.7307 19.842 10.5089 19.2858L8.62335 14.5575" stroke="var(--color-gray)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M17.8716 6.65375C17.8716 6.65375 19.882 6.2391 20.3779 8.08975C20.8738 9.94039 18.9254 10.5865 18.9254 10.5865" stroke="var(--color-gray)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+
+                <p>Cuando lancemos Wanna al 100%, te avisaremos.</p>
+              </div> */}
+            </div>
+            
+          </div>
         </div>
 
-        <div className={styles.succeed__buttons}>
-          <h2 className={styles.succeed__buttons__text}>¡Recomiéndale a un amigo una charla con Wanna!</h2>
-          <button className={`${styles.succeed__buttons__button} ${styles.succeed__buttons__button__whatsapp}`} onClick={handleShareWhatsApp}>
-            
-            <div className={styles.succeed__buttons__button__whatsapp__share}>
-              <p>Compartir</p>
-              <svg className={styles.succeed__buttons__button__whatsapp__svg} fill="transparent" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <div className={styles.succeed__content__separator} />
+
+        <div className={styles.succeed__content__story}>
+          <div className={styles.succeed__content__story__header}>
+            <h1 className={styles.succeed__content__story__header__title}>Déjate conocer más por las personas que te aprecian &#10084;&#65039;</h1>
+          </div>
+          
+          <div className={styles.succeed__content__story__story} onClick={() => handleShareWhatsApp(experienceData ?? { title: '', experience: '', pildoras: [], reflection: '', story_valuable: '', rawInterviewText: '' })}>
+            <div className={styles.succeed__content__story__story__content}>
+              <div className={styles.succeed__content__story__story__header}>
+                <svg className={styles.succeed__content__story__story__header__svg} width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.74999 1.75571V16.9415M9.74999 1.75571L10.7401 1.38414C12.9932 0.538619 15.5067 0.538619 17.7599 1.38414C18.3579 1.60855 18.75 2.15192 18.75 2.75616V15.2217C18.75 16.0515 17.8568 16.6188 17.0356 16.3107C15.2474 15.6396 13.2526 15.6396 11.4644 16.3107L9.76234 16.9494C9.75642 16.9516 9.74999 16.9475 9.74999 16.9415M9.74999 1.75571L8.75987 1.38414C6.50674 0.538619 3.99326 0.538619 1.74012 1.38414C1.14212 1.60855 0.75 2.15192 0.75 2.75616V15.2217C0.75 16.0515 1.64322 16.6188 2.46436 16.3107C4.25258 15.6396 6.24742 15.6396 8.03563 16.3107L9.73765 16.9494C9.74356 16.9516 9.74999 16.9475 9.74999 16.9415" stroke="var(--color-white)" strokeWidth="1.5"/>
+                </svg>
+                <p>Tu historia</p>
+              </div>
+              
+              <p className={styles.succeed__content__story__story__title}>{experienceData?.title || localStorage.getItem('title')}</p>
+              <p className={styles.succeed__content__story__story__by}>by Agus</p>
+            </div>
+
+            <button className={`${styles.succeed__content__story__button} ${styles.succeed__content__story__button__whatsapp}`}> 
+              <div className={styles.succeed__content__story__button__whatsapp}>
+                <p>Compartir</p>
+                <div className={styles.succeed__content__story__button__whatsapp__svg}>
+                  <svg className={styles.succeed__content__story__button__whatsapp__svg__icon} fill="transparent" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <path fill='var(--color-white)' stroke='var(--color-white)' d="M26.576 5.363c-2.69-2.69-6.406-4.354-10.511-4.354-8.209 0-14.865 6.655-14.865 14.865 0 2.732 0.737 5.291 2.022 7.491l-0.038-0.070-2.109 7.702 7.879-2.067c2.051 1.139 4.498 1.809 7.102 1.809h0.006c8.209-0.003 14.862-6.659 14.862-14.868 0-4.103-1.662-7.817-4.349-10.507l0 0zM16.062 28.228h-0.005c-0 0-0.001 0-0.001 0-2.319 0-4.489-0.64-6.342-1.753l0.056 0.031-0.451-0.267-4.675 1.227 1.247-4.559-0.294-0.467c-1.185-1.862-1.889-4.131-1.889-6.565 0-6.822 5.531-12.353 12.353-12.353s12.353 5.531 12.353 12.353c0 6.822-5.53 12.353-12.353 12.353h-0zM22.838 18.977c-0.371-0.186-2.197-1.083-2.537-1.208-0.341-0.124-0.589-0.185-0.837 0.187-0.246 0.371-0.958 1.207-1.175 1.455-0.216 0.249-0.434 0.279-0.805 0.094-1.15-0.466-2.138-1.087-2.997-1.852l0.010 0.009c-0.799-0.74-1.484-1.587-2.037-2.521l-0.028-0.052c-0.216-0.371-0.023-0.572 0.162-0.757 0.167-0.166 0.372-0.434 0.557-0.65 0.146-0.179 0.271-0.384 0.366-0.604l0.006-0.017c0.043-0.087 0.068-0.188 0.068-0.296 0-0.131-0.037-0.253-0.101-0.357l0.002 0.003c-0.094-0.186-0.836-2.014-1.145-2.758-0.302-0.724-0.609-0.625-0.836-0.637-0.216-0.010-0.464-0.012-0.712-0.012-0.395 0.010-0.746 0.188-0.988 0.463l-0.001 0.002c-0.802 0.761-1.3 1.834-1.3 3.023 0 0.026 0 0.053 0.001 0.079l-0-0.004c0.131 1.467 0.681 2.784 1.527 3.857l-0.012-0.015c1.604 2.379 3.742 4.282 6.251 5.564l0.094 0.043c0.548 0.248 1.25 0.513 1.968 0.74l0.149 0.041c0.442 0.14 0.951 0.221 1.479 0.221 0.303 0 0.601-0.027 0.889-0.078l-0.031 0.004c1.069-0.223 1.956-0.868 2.497-1.749l0.009-0.017c0.165-0.366 0.261-0.793 0.261-1.242 0-0.185-0.016-0.366-0.047-0.542l0.003 0.019c-0.092-0.155-0.34-0.247-0.712-0.434z"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+
+          </div>
+
+          <p className={styles.succeed__content__story__subtitle}>En este <Link className={styles.succeed__content__story__header__link} href={`#`} target='_blank'>enlace privado</Link> podrás ver tu historia, quién la ha leido y los coemntarios</p>
+          
+        </div>
+
+        <div className={styles.succeed__content__separator} />
+        
+        <div className={styles.succeed__content__recommend}>
+          <button className={styles.succeed__content__recommend__button}>
+            <p className={styles.succeed__content__recommend__button__text}>¡Recomiéndale a un amigo una charla con Wanna!</p>
+
+            <div className={styles.succeed__content__recommend__button__svg}>
+              <svg className={styles.succeed__content__recommend__button__svg__icon} fill="transparent" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
                 <path fill='var(--color-white)' stroke='var(--color-white)' d="M26.576 5.363c-2.69-2.69-6.406-4.354-10.511-4.354-8.209 0-14.865 6.655-14.865 14.865 0 2.732 0.737 5.291 2.022 7.491l-0.038-0.070-2.109 7.702 7.879-2.067c2.051 1.139 4.498 1.809 7.102 1.809h0.006c8.209-0.003 14.862-6.659 14.862-14.868 0-4.103-1.662-7.817-4.349-10.507l0 0zM16.062 28.228h-0.005c-0 0-0.001 0-0.001 0-2.319 0-4.489-0.64-6.342-1.753l0.056 0.031-0.451-0.267-4.675 1.227 1.247-4.559-0.294-0.467c-1.185-1.862-1.889-4.131-1.889-6.565 0-6.822 5.531-12.353 12.353-12.353s12.353 5.531 12.353 12.353c0 6.822-5.53 12.353-12.353 12.353h-0zM22.838 18.977c-0.371-0.186-2.197-1.083-2.537-1.208-0.341-0.124-0.589-0.185-0.837 0.187-0.246 0.371-0.958 1.207-1.175 1.455-0.216 0.249-0.434 0.279-0.805 0.094-1.15-0.466-2.138-1.087-2.997-1.852l0.010 0.009c-0.799-0.74-1.484-1.587-2.037-2.521l-0.028-0.052c-0.216-0.371-0.023-0.572 0.162-0.757 0.167-0.166 0.372-0.434 0.557-0.65 0.146-0.179 0.271-0.384 0.366-0.604l0.006-0.017c0.043-0.087 0.068-0.188 0.068-0.296 0-0.131-0.037-0.253-0.101-0.357l0.002 0.003c-0.094-0.186-0.836-2.014-1.145-2.758-0.302-0.724-0.609-0.625-0.836-0.637-0.216-0.010-0.464-0.012-0.712-0.012-0.395 0.010-0.746 0.188-0.988 0.463l-0.001 0.002c-0.802 0.761-1.3 1.834-1.3 3.023 0 0.026 0 0.053 0.001 0.079l-0-0.004c0.131 1.467 0.681 2.784 1.527 3.857l-0.012-0.015c1.604 2.379 3.742 4.282 6.251 5.564l0.094 0.043c0.548 0.248 1.25 0.513 1.968 0.74l0.149 0.041c0.442 0.14 0.951 0.221 1.479 0.221 0.303 0 0.601-0.027 0.889-0.078l-0.031 0.004c1.069-0.223 1.956-0.868 2.497-1.749l0.009-0.017c0.165-0.366 0.261-0.793 0.261-1.242 0-0.185-0.016-0.366-0.047-0.542l0.003 0.019c-0.092-0.155-0.34-0.247-0.712-0.434z"></path>
               </svg>
             </div>
           </button>
-
         </div>
         
         <div className={styles.succeed__fixed}>

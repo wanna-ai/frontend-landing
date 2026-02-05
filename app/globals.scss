@@ -10,7 +10,7 @@
   --color-gray-light-2: #f0f0eb;
   --color-gray-dark: #90A1B9;
   --color-separator: #F5F5F5;
-  --color-green:#47A964;
+  --color-green:#25d366;
   --color-yellow: #FFC842;
 
   // fonts
@@ -192,3 +192,28 @@ textarea {
   }
 }
 
+span.highlight {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background-color: var(--color-yellow);
+    border-radius: var(--border-radius);
+    animation: increaseWidthHighlight 0.3s ease forwards;
+    animation-delay: 0.5s;
+    z-index: -1;
+  }
+}
+
+@keyframes increaseWidthHighlight {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
