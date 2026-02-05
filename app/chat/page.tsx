@@ -69,19 +69,17 @@ export default function ChatPage() {
 
       console.log("responseData", responseData)
 
-      if (!token) {
-        // set cookie authToken
-        const cookieRes = await fetch('/api/auth/set-cookie', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name: 'authToken', token: responseData.token }),
-        })
-  
-        if (!cookieRes.ok) {
-          throw new Error('Failed to set auth cookie')
-        }
+      // set cookie authToken
+      const cookieRes = await fetch('/api/auth/set-cookie', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: 'fakeAuthToken', token: responseData.token }),
+      })
+
+      if (!cookieRes.ok) {
+        throw new Error('Failed to set auth cookie')
       }
       
       localStorage.setItem('postId', responseData.id);

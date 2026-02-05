@@ -3,11 +3,10 @@
 import styles from './Register.module.scss'
 import { useSearchParams } from 'next/navigation'
 import { AppContext } from '@/context/AppContext'
-import { useContext } from 'react'
 import { apiService } from '@/services/api'
 import { useRouter } from 'next/navigation'
 import LoginOAuth from '@/components/LoginOAuth/LoginOAuth'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 
 const RegisterPage = () => {
 
@@ -22,24 +21,34 @@ const RegisterPage = () => {
   const [showLoginMail, setShowLoginMail] = useState(false)
   const [showLoginPassword, setShowLoginPassword] = useState(false)
 
+  // Fetch token helper
+  const fetchAuthToken = useCallback(async (): Promise<string> => {
+    const tokenResponse = await fetch('/api/auth/get-cookie', {
+      method: 'POST', // Should be POST if you're sending a body
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: 'fakeAuthToken' }),
+    })
+
+    if (!tokenResponse.ok) {
+      throw new Error('Failed to fetch authentication token')
+    }
+
+    const tokenData = await tokenResponse.json()
+    return tokenData.token
+  }, [])
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        // Get token if not available
+        const authToken = token || await fetchAuthToken()
 
-        const tokenResponse = await fetch('/api/auth/get-cookie', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        if (!tokenResponse.ok) {
-          throw new Error('Failed to fetch token')
-        }
-        const tokenData = await tokenResponse.json()
-        const token = tokenData.token
         console.log('token', token)
         
-        const postResponse = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
+        const postResponse = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: authToken })
         if (postResponse.error) {
           throw new Error('Failed to fetch post')
         }
