@@ -54,15 +54,6 @@ const LoginSuccessPage = () => {
           console.log("here")
           const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
           console.log('response', response)
-
-          /* if (!response.ok) {
-            const errorText = await response.text()
-            console.error('Error response:', errorText)
-            throw new Error(`Error al vincular el post: ${response.status}`)
-          } */
-
-          /* const responseText = await response.text()
-          console.log('responseText', responseText) */
         }
 
         /**

@@ -13,13 +13,13 @@ export default function PreviewPage() {
 
   const router = useRouter()
 
-  const { experienceData, setExperienceData } = useContext(AppContext);
-
-  const localTitle = localStorage.getItem('title')
-  const localContent = localStorage.getItem('content')
-  const localPills = localStorage.getItem('pills')
-  const localReflection = localStorage.getItem('reflection')
-  const localValue = localStorage.getItem('story_valuable')
+  const [data, setData] = useState({
+    title: '',
+    content: '',
+    pills: [],
+    reflection: '',
+    story_valuable: '',
+  })
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -41,13 +41,12 @@ export default function PreviewPage() {
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
         console.log('response', response)
 
-        setExperienceData({
+        setData({
           title: response.title,
-          experience: response.experience,
-          pildoras: response.pildoras,
+          content: response.content,
+          pills: response.pildoras,
           reflection: response.reflection,
           story_valuable: response.story_valuable,
-          rawInterviewText: response.rawInterviewText,
         })
 
       } catch (err) {
@@ -62,15 +61,6 @@ export default function PreviewPage() {
       router.push('/')
     }
   }, [postId])
-
-
-  const [data, setData] = useState({
-    title: experienceData?.title || localTitle,
-    content: experienceData?.experience || localContent,
-    pills: localPills?.split(' - '),
-    reflection: localReflection,
-    story_valuable: localValue,
-  })
 
   const [isExpanded, setIsExpanded] = useState(false)
 

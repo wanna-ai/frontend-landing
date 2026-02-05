@@ -70,7 +70,7 @@ const members = [
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
     image: "/members/pau.jpg"
   },
-  {
+  /* {
     name: "Rafa",
     profession: "former lead designer at wallapop",
     story: `Acabo de ser padre y todo se siente como una nube: amor, cansancio y desconcierto mezclados. Estar tanto en casa pesa, pero me ha enseñado a frenar y estar presente.
@@ -91,7 +91,7 @@ const members = [
     Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
     image: "/members/pau.jpg"
-  },
+  }, */
 ]
 
 interface ModalProps {

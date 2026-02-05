@@ -1,4 +1,103 @@
 .story {
   min-height: 100vh;
   padding: var(--header-height) var(--space-5);
+
+  // LOGIN SCREEN
+  &__login {
+    &__title {
+      margin-bottom: var(--space-4);
+    }
+  
+    &__content {
+      position: relative;
+      background-color: var(--color-black);
+      border: 0px;
+      border-radius: var(--border-radius-small);
+      
+      color: var(--color-white);
+      width: 85%;
+      margin: 0 auto;
+      
+      margin-bottom: var(--space-4);
+      box-shadow: rgba(149, 157, 165, 0.7) 0px 8px 24px;
+      padding: var(--space-4) var(--space-5);
+  
+      overflow: hidden;
+  
+      &__header {
+        display: flex;
+        gap: var(--space-4);
+        flex-direction: row;
+        opacity: 0.6;
+        margin-bottom: var(--space-2);
+      }
+  
+      &__content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+      }
+    }
+  }
+
+  // IS OWNER SCREEN
+  &__isowner {
+    &__title {
+      margin-bottom: var(--space-4);
+    }
+  }
+
+  // NOT OWNER SCREEN
+  &__notowner {
+    &__header {
+      &__title {
+        margin-bottom: var(--space-4);
+      }
+  
+      &__subtitle {
+      }
+      margin-bottom: var(--space-6);
+    }
+
+    &__story {
+      margin-bottom: var(--space-6);
+
+      &__header {
+        display: flex;
+        gap: var(--space-4);
+        flex-direction: row;
+        opacity: 0.6;
+        margin-bottom: var(--space-2);
+        &__title {
+          margin-bottom: var(--space-4);
+        }
+      }
+  
+      &__more {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--color-main);
+      }
+    }
+
+    &__comment {
+      position: relative;
+      border: 1px solid var(--color-gray);
+      border-radius: var(--border-radius-small);
+      min-height: calc(100% + 28px);
+      display: flex;
+      flex-direction: column;
+      &__textarea {
+        border: none;
+      }
+      &__svg {
+        align-self: flex-end;
+        margin-bottom: var(--space-2);
+        margin-right: var(--space-2);
+      }
+    }
+  }
+
 }
