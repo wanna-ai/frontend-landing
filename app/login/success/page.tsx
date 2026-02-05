@@ -52,7 +52,7 @@ const LoginSuccessPage = () => {
          */
         if (postId) {
           console.log("here")
-          const response = await apiService.post('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
+          const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
           console.log('response', response)
 
           /* if (!response.ok) {

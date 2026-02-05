@@ -7,7 +7,7 @@ interface RequestOptions {
 }
 
 export const apiService = {
-  // POST request
+  // POST request - return json
   async post(endpoint: string, data: any, options?: RequestOptions) {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -29,6 +29,30 @@ export const apiService = {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     return await response.json()
+  },
+  
+  // POST request - return text
+  async postText(endpoint: string, data: any, options?: RequestOptions) {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...options?.headers
+    }
+    
+    // Si viene token explícito (desde client), úsalo
+    if (options?.token) {
+      headers['Authorization'] = `Bearer ${options.token}`
+    }
+    
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(data)
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return await response.text()
   },
   
   // GET request
