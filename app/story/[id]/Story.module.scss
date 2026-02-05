@@ -91,6 +91,7 @@
       flex-direction: column;
       &__textarea {
         border: none;
+        min-height: 50px;
       }
       &__svg {
         align-self: flex-end;

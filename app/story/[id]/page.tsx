@@ -1,9 +1,10 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import styles from './Story.module.scss'
 import { apiService } from '@/services/api'
 import LoginProviders from '@/components/LoginProviders/LoginProviders'
+import { AppContext } from '@/context/AppContext'
 
 interface Story {
   title: string
@@ -20,6 +21,9 @@ const StoryPage = () => {
   const params = useParams()
   const id = params.id // '2903932'
   const router = useRouter()
+
+  const { token, userInfo } = useContext(AppContext)
+  console.log('userInfo', userInfo)
 
   const [story, setStory] = useState<Story | null>(null)
   const [state, setState] = useState<State>({ screen: 'login' })
@@ -41,6 +45,7 @@ const StoryPage = () => {
         }
         const tokenData = await tokenResponse.json()
         const token = tokenData.token
+        console.log('token', token)
 
         // Fetch story data
         const response = await apiService.get(`/api/v1/landing/posts/${id}`, { 
@@ -61,7 +66,7 @@ const StoryPage = () => {
         if (!token) {
           setState({ screen: 'login' })
         } else if (response.isOwner) {
-          setState({ screen: 'is-owner' })
+          setState({ screen: 'not-owner' })
         } else {
           setState({ screen: 'not-owner' })
         }
@@ -94,7 +99,7 @@ const StoryPage = () => {
     <div className={styles.story}>
       {state.screen === 'login' && (
         <div className={styles.story__login}>
-          <h1 className={styles.story__login__title}><span className="highlight">{story?.username}</span> desea compartir contigo una historia personal</h1>
+          <h1 className={styles.story__login__title}><span className="highlight">{userInfo?.fullName}</span> desea compartir contigo una historia personal</h1>
 
           {story && (
             <div className={styles.story__login__content}>
@@ -113,6 +118,8 @@ const StoryPage = () => {
             </div>
           )}
 
+          <p>Para poder leer la historia completa, registrate</p>
+
           <div className={styles.story__login__login}>
             <LoginProviders />
           </div>
@@ -129,7 +136,7 @@ const StoryPage = () => {
       {state.screen === 'not-owner' && (
         <div className={styles.story__notowner}>
           <div className={styles.story__notowner__header}>
-            <h1 className={styles.story__notowner__header__title}>Agus generó esta historia charlando 2 minutos con Wanna</h1>
+            <h1 className={styles.story__notowner__header__title}><span className="highlight">{userInfo?.fullName}</span> generó esta historia charlando 2 minutos con Wanna</h1>
             <h3 className={styles.story__notowner__header__subtitle}>También le dió una reflexió... pero eso ya es privado :) </h3>
           </div>
 
@@ -167,7 +174,7 @@ const StoryPage = () => {
 
           <div className={styles.story__notowner__comment}>
 
-            <textarea className={styles.story__notowner__comment__textarea} placeholder='Escribe tu comentario' />
+            <textarea className={styles.story__notowner__comment__textarea} placeholder='Escribe tu comentario...' />
             
             <svg className={styles.story__notowner__comment__svg} width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="28" y="28" width="27" height="27" rx="13.5" transform="rotate(180 28 28)" stroke="var(--color-main)" fill="var(--color-main)" strokeWidth="2"/>
@@ -178,7 +185,11 @@ const StoryPage = () => {
 
           </div>
 
+          <p>añadir tope de carateres si hay</p>
+
+          <button>Hablar con Wanna</button>
         </div>
+
       )}
     </div>
   )

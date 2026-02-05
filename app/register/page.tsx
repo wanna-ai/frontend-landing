@@ -8,6 +8,7 @@ import { apiService } from '@/services/api'
 import { useRouter } from 'next/navigation'
 import LoginOAuth from '@/components/LoginOAuth/LoginOAuth'
 import { useState, useEffect } from 'react'
+import { API_BASE_URL } from '@/services/config/api'
 
 const RegisterPage = () => {
 
@@ -26,7 +27,7 @@ const RegisterPage = () => {
     const fetchPost = async () => {
       try {
 
-        const tokenResponse = await fetch('/api/auth/get-cookie', {
+        const tokenResponse = await fetch('/api/auth/get-cookie-fake-auth', {
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
@@ -109,6 +110,20 @@ const RegisterPage = () => {
     console.log('Register')
   }
 
+  const handleGoogle = async () => {
+
+    console.log('token', token)
+    if (!token) {
+      console.log("no hay token / registrarse con google")
+      const endpoint = "/oauth2/authorization/google"
+      router.push(`${API_BASE_URL}${endpoint}`)
+    } else {
+      console.log("ya existe un token")
+      const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
+      console.log('response', response)
+    }
+  }
+
   return (
     <div className={styles.register}>
       <h1 className={styles.register__title}>Esto es lo que Wanna ha empezado a escribir contigo...</h1>
@@ -173,7 +188,7 @@ const RegisterPage = () => {
             </div>
           ) : (
             <>
-              <LoginOAuth _url={'/preview'} />
+              <LoginOAuth _url={'/preview'} handleGoogle={handleGoogle} />
               {/* <LoginMail handleEmailSignIn={() => setShowLoginMail(true)} /> */}
             </>
           )}

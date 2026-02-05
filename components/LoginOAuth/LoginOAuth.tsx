@@ -1,20 +1,13 @@
 import styles from './LoginOAuth.module.scss'
-import { useRouter } from 'next/navigation'
-import { apiService } from '@/services/api'
-import { API_BASE_URL } from '@/services/config/api'
 
+const LoginOAuth = ({ _url, handleGoogle }: { _url: string, handleGoogle: () => void }) => {
 
-const LoginOAuth = ( {_url}: {_url: string}) => {
-
-  const router = useRouter()
-
-  const handleGoogleSignIn = async () => {
-    const endpoint = "/oauth2/authorization/google"
-    router.push(`${API_BASE_URL}${endpoint}`)
+  const handleGoogleSignIn = () => {
+    handleGoogle()
   }
 
   return (
-    <form className={styles.login} action={handleGoogleSignIn}>
+    <div className={styles.login} onClick={handleGoogleSignIn}>
       <button
         data-type="primary"
         className={styles.login__button}
@@ -46,7 +39,7 @@ const LoginOAuth = ( {_url}: {_url: string}) => {
         </svg>
         <p>Continuar con Google</p>
       </button>
-    </form>
+    </div>
   )
 }
 

@@ -53,6 +53,7 @@ export default function ChatPage() {
     hasNavigated.current = true;
 
     try {
+
       const response = await apiService.post('/api/v1/landing/posts/interview', {
         title: data.title,
         content: data.experience,

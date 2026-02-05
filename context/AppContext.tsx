@@ -117,7 +117,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(token)
   }
 
-  // Opcional: Cargar prompts default al montar el provider
   useEffect(() => {
     if (!promptData) {
       fetchPromptData();
