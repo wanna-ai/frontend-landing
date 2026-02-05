@@ -17,6 +17,82 @@ interface State {
   screen: "login" | "is-owner" | "not-owner"
 }
 
+const Modal = ({ story, onClose }: { story: Story, onClose: () => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (story) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        // Restore scroll position
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [story]);
+
+  // Close modal on ESC key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    
+    if (story) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [story, onClose]);
+
+  const handleClose = () => {
+    setIsClosing(true);
+
+    // Wait for animation to finish
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300); // same duration as CSS animation
+  };
+
+  if (!story) return null;
+
+  return (
+    <div className={`${styles.modal} ${isOpen ? styles.open : ''} ${isClosing ? styles.closing : ''}`} onClick={handleClose}>
+      <div className={styles.modal__overlay}></div>
+      <div className={styles.modal__content} onClick={(e) => e.stopPropagation()}>
+        
+        <div className={styles.modal__header}>
+          <div className={styles.modal__header__info}>
+            <h2 className={styles.modal__header__info__name}>{story.title}</h2>
+          </div>
+          <button 
+            className={styles.modal__header__close} 
+            onClick={handleClose}
+            aria-label="Close modal"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div className={styles.modal__story}>
+          <p className={styles.modal__story__text}>{story.content}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const StoryPage = () => {
   const params = useParams()
   const id = params.id // '2903932'
@@ -28,6 +104,7 @@ const StoryPage = () => {
   const [story, setStory] = useState<Story | null>(null)
   const [state, setState] = useState<State>({ screen: 'login' })
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     let isMounted = true
@@ -130,6 +207,24 @@ const StoryPage = () => {
       {state.screen === 'is-owner' && (
         <div className={styles.story__isowner}>
           <h1 className={styles.story__isowner__title}>Eres el dueño de esta historia</h1>
+
+          <div className={styles.story__isowner__snippet} onClick={() => setIsModalOpen(true)}>
+            <p className={styles.story__isowner__snippet__title}>{story?.title}</p>
+            <div className={styles.story__isowner__snippet__buttons}>
+              <button className={styles.story__isowner__snippet__buttons__button}>
+
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5C8 5 5 8 2.5 12C5 16 8 19 12 19C16 19 19 16 21.5 12C19 8 16 5 12 5Z" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="12" cy="12" r="3" stroke="var(--color-black)" strokeWidth="1.4"/>
+                </svg>
+
+              </button>
+            </div>
+          </div>
+
+          {isModalOpen && (
+            <Modal story={story!} onClose={() => setIsModalOpen(false)} />
+          )}
         </div>
       )}
 
