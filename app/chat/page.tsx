@@ -66,6 +66,21 @@ export default function ChatPage() {
       // ✅ Fix: Handle response structure properly
       const responseData = response.data || response;
       setPostId(responseData.id);
+
+      console.log("responseData", responseData)
+
+      // set cookie authToken
+      const cookieRes = await fetch('/api/auth/set-cookie', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: 'authToken', token: responseData.token }),
+      })
+
+      if (!cookieRes.ok) {
+        throw new Error('Failed to set auth cookie')
+      }
       
       localStorage.setItem('postId', responseData.id);
       localStorage.setItem('title', responseData.title);

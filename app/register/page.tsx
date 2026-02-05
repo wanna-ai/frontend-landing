@@ -25,18 +25,29 @@ const RegisterPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        
-        const response = await apiService.get(`/api/v1/landing/posts/${postId}`)
-  
-        if (response.error) {
-          router.push('/')
-          return
+
+        const tokenResponse = await fetch('/api/auth/get-cookie', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to fetch token')
         }
+        const tokenData = await tokenResponse.json()
+        const token = tokenData.token
+        console.log('token', token)
+        
+        const postResponse = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
+        if (postResponse.error) {
+          throw new Error('Failed to fetch post')
+        }
+        console.log('postResponse', postResponse)
   
-        console.log('Post fetched:', response)
         
       } catch (err) {
-        console.error('Error fetching post:', err)
+        console.error('Error fetching token:', err)
         router.push('/')
       } finally {
       }
@@ -78,7 +89,7 @@ const RegisterPage = () => {
     const password = formData.get('password') as string
 
     //const response = await apiService.post('/api/v1/landing/user', { email, username, password })
-    const response = await apiService.withAuth(token).post('/api/v1/landing/user', { email, username, password })
+    const response = await apiService.post('/api/v1/landing/user', { email, username, password }, { token: token })
     console.log(response)
     if (response.error) {
       console.error('Error al registrar el usuario:', response.error)

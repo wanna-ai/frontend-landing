@@ -4,6 +4,7 @@ import { useEffect, useContext } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { AppContext } from '@/context/AppContext'
 import { API_BASE_URL } from '@/services/config/api'
+import { apiService } from '@/services/api'
 
 const LoginSuccessPage = () => {
   const router = useRouter()
@@ -13,6 +14,7 @@ const LoginSuccessPage = () => {
   useEffect(() => {
     const processLogin = async () => {
       try {
+        //get token from search params
         const token = searchParams.get('token')
 
         if (!token) {
@@ -48,17 +50,7 @@ const LoginSuccessPage = () => {
          * 3️⃣ Assign post to user (token still used here once)
          */
         if (postId) {
-          const response = await fetch(
-            `${API_BASE_URL}/api/v1/landing/interview/assign`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-              body: JSON.stringify({ postId }),
-            }
-          )
+          const response = await apiService.post('/api/v1/landing/interview/assign', { postId }, { token })
 
           if (!response.ok) {
             const errorText = await response.text()

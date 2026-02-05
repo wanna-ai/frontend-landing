@@ -7,7 +7,6 @@ import { apiService } from '@/services/api'
 import { AppContext } from "@/context/AppContext";
 import { useRouter } from 'next/navigation'
 
-
 export default function PreviewPage() {
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId') ?? undefined
@@ -22,33 +21,34 @@ export default function PreviewPage() {
   const localReflection = localStorage.getItem('reflection')
   const localValue = localStorage.getItem('story_valuable')
 
-  /* useEffect(() => {
+  useEffect(() => {
     const fetchPost = async () => {
       try {
-        
-        const response = await apiService.get(`/api/v1/landing/posts/${postId}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/landing/posts/${postId}`,
+          {
+            credentials: 'include', // 👈 THIS IS THE MAGIC
           }
-        })
+        )
   
-        if (response.error) {
+        if (!response.ok) {
           router.push('/')
           return
         }
   
-        console.log('Post fetched:', response)
-        
+        const data = await response.json()
+        console.log('Post fetched:', data)
+  
       } catch (err) {
         console.error('Error fetching post:', err)
         router.push('/')
-      } finally {
       }
     }
   
-    fetchPost()
-  }, [postId]) */
-  
+    if (postId) fetchPost()
+  }, [postId])
+
+
   const [data, setData] = useState({
     title: experienceData?.title || localTitle,
     content: experienceData?.experience || localContent,

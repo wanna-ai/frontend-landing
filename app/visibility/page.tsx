@@ -53,31 +53,35 @@ const VisibilityPage = () => {
 
 
   const handlePublish = async () => {
-
-    /**
-     * TODO: Visibilidad del post
-     */
-
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/landing/posts/${localStorage.getItem('postId')}/visibility`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      },
-      body: JSON.stringify({ visibility: privacy })
-    })
-
-    console.log('Visibilidad del post:', privacy)
-    router.push('/succeed')
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/landing/posts/${postId}/visibility`,
+        {
+          method: 'PUT',
+          credentials: 'include', // 👈 sends HttpOnly cookie
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ visibility: privacy }),
+        }
+      )
+  
+      if (!response.ok) {
+        throw new Error('Error updating visibility')
+      }
+  
+      console.log('Visibilidad del post:', privacy)
+      router.push('/succeed')
+  
+    } catch (error) {
+      console.error('Error publishing post:', error)
+    }
   }
+  
 
   return (
     <>
       <div className={styles.visibility}>
-        {/* <h1 className={styles.visibility__title}>El valor de tu historia</h1> */}
-
-        
-
         <div className={styles.visibility__privacy}>
           <h2 className={styles.visibility__privacy__title}>Decide quién puede verla</h2>
           <div className={styles.visibility__privacy__options}>
