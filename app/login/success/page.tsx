@@ -6,10 +6,11 @@ import { AppContext } from '@/context/AppContext'
 import { API_BASE_URL } from '@/services/config/api'
 import { apiService } from '@/services/api'
 
+
 const LoginSuccessPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { postId: contextPostId } = useContext(AppContext)
+  const { postId: contextPostId, setUserInfo } = useContext(AppContext)
 
   useEffect(() => {
     const processLogin = async () => {
@@ -43,6 +44,9 @@ const LoginSuccessPage = () => {
 
         const userInfo = await apiService.get('/api/v1/users/me', { token: token })
         console.log('userInfo', userInfo)
+        if (userInfo) {
+          setUserInfo(userInfo)
+        }
 
         /**
          * 3️⃣ Get postId (still from localStorage or context)

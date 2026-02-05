@@ -21,7 +21,7 @@ export default function ChatPage() {
 
   const { promptData } = useContext(AppContext);
   const router = useRouter();
-  const { setExperienceData, setPostId } = useContext(AppContext);
+  const { setExperienceData, setPostId, token, userInfo } = useContext(AppContext);
 
   // refs
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -69,17 +69,19 @@ export default function ChatPage() {
 
       console.log("responseData", responseData)
 
-      // set cookie authToken
-      const cookieRes = await fetch('/api/auth/set-cookie', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: 'authToken', token: responseData.token }),
-      })
-
-      if (!cookieRes.ok) {
-        throw new Error('Failed to set auth cookie')
+      if (!token) {
+        // set cookie authToken
+        const cookieRes = await fetch('/api/auth/set-cookie', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: 'authToken', token: responseData.token }),
+        })
+  
+        if (!cookieRes.ok) {
+          throw new Error('Failed to set auth cookie')
+        }
       }
       
       localStorage.setItem('postId', responseData.id);

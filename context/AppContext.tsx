@@ -16,6 +16,13 @@ interface PromptData {
   editorPrompt: string;
 }
 
+interface UserInfo {
+  id: string;
+  fullName: string;
+  pictureUrl: string;
+  username: string;
+}
+
 interface ContextData {
   experienceData: ExperienceData | null;
   setExperienceData: (experienceData: ExperienceData | null) => void;  
@@ -27,6 +34,8 @@ interface ContextData {
   setPostId: (postId: string | null) => void;
   isLoadingPrompts: boolean;
   fetchPromptData: (communityId?: string) => Promise<void>;
+  userInfo: UserInfo | null;
+  setUserInfo: (userInfo: UserInfo | null) => void;
 }
 
 export const AppContext = createContext<ContextData>({
@@ -40,6 +49,8 @@ export const AppContext = createContext<ContextData>({
   setPostId: () => {},
   isLoadingPrompts: false,
   fetchPromptData: async () => {},
+  userInfo: null,
+  setUserInfo: () => {},
 });
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -48,6 +59,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [postId, setPostId] = useState<string | null>(null);
   const [isLoadingPrompts, setIsLoadingPrompts] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   // Función para fetchear los prompts
   const fetchPromptData = async (communityId?: string) => {
@@ -75,12 +87,46 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // Function to get user info
+  const getUserInfo = async (token: string) => {
+    const userInfoResponse = await apiService.get('/api/v1/users/me', { token: token })
+    console.log('userInfoResponse', userInfoResponse)
+
+    if (userInfoResponse) {
+      setUserInfo(userInfoResponse)
+    }
+  }
+
+  // Function to get cookie authToken
+  const getCookieAuthToken = async () => {
+    const tokenResponse = await fetch('/api/auth/get-cookie', {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const tokenData = await tokenResponse.json()
+    console.log('tokenData', tokenData)
+
+    if (tokenData.token) {
+      setToken(tokenData.token)
+      getUserInfo(tokenData.token);
+    }
+
+    const token = tokenData.token
+    setToken(token)
+  }
+
   // Opcional: Cargar prompts default al montar el provider
   useEffect(() => {
     if (!promptData) {
       fetchPromptData();
     }
   }, [ promptData ]);
+
+  useEffect(() => {
+    getCookieAuthToken();
+  }, []);
   
   return (
     <AppContext.Provider value={{ 
@@ -93,7 +139,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       postId, 
       setPostId,
       isLoadingPrompts,
-      fetchPromptData
+      fetchPromptData,
+      userInfo,
+      setUserInfo,
     }}>
       {children}
     </AppContext.Provider>

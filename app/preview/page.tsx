@@ -4,7 +4,6 @@ import styles from './Preview.module.scss'
 import { useState, useContext, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { apiService } from '@/services/api'
-import { AppContext } from "@/context/AppContext";
 import { useRouter } from 'next/navigation'
 
 export default function PreviewPage() {
@@ -12,6 +11,7 @@ export default function PreviewPage() {
   const postId = searchParams.get('postId') ?? undefined
 
   const router = useRouter()
+
 
   const [data, setData] = useState({
     title: '',
@@ -41,15 +41,8 @@ export default function PreviewPage() {
         const token = tokenData.token
         console.log('token', token)
 
-
         /**
-         * 2️⃣ Get user info
-         */
-        const userInfo = await apiService.get('/api/v1/users/me', { token: token })
-        console.log('userInfo', userInfo)
-
-        /**
-         * 3️⃣ Get post
+         * 2️⃣ Get post
          */
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
         console.log('response', response)
