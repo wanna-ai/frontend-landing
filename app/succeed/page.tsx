@@ -1,9 +1,10 @@
 'use client'
 import styles from './Succeed.module.scss'
-import { useRouter } from 'next/navigation'
-import { useContext } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '@/context/AppContext'
 import Link from 'next/link'
+import { apiService } from '@/services/api'
 
 interface ExperienceData {
   title: string
@@ -17,7 +18,66 @@ interface ExperienceData {
 const SucceedPage = () => {
   const router = useRouter()
 
-  const { experienceData } = useContext(AppContext)
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('postId') ?? undefined
+
+  const { experienceData, setExperienceData, userInfo, setUserInfo } = useContext(AppContext)
+
+  const [token, setToken] = useState<string>('')
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        /*
+         * 1️⃣ Get token from cookie
+         */
+        const tokenResponse = await fetch('/api/auth/get-cookie', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to fetch token')
+        }
+        const tokenData = await tokenResponse.json()
+        const token = tokenData.token
+        setToken(token)
+
+        /*
+         * 2️⃣ Get user info
+         */
+        const userInfo = await apiService.get('/api/v1/users/me', { token: token })
+        console.log('userInfo', userInfo)
+        setUserInfo(userInfo)
+
+        /*
+         * 3️⃣ Get post
+         */
+        const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
+        console.log('response', response)
+
+        setExperienceData({
+          title: response.title,
+          experience: response.experience,
+          pildoras: response.pildoras,
+          reflection: response.reflection,
+          story_valuable: response.story_valuable,
+          rawInterviewText: response.rawInterviewText,
+        })
+
+      } catch (err) {
+        console.error('Error fetching post:', err)
+        router.push('/')
+      }
+    }
+  
+    if (postId) {
+      fetchPost()
+    } else {
+      router.push('/')
+    }
+  }, [postId])
 
   const handleShareWhatsApp = (experienceData: ExperienceData) => {
     console.log('experienceData', experienceData)
@@ -35,43 +95,15 @@ const SucceedPage = () => {
     <div className={styles.succeed}>
       <div className={styles.succeed__content}>
         <div className={styles.succeed__content__header}>
-          
-          {/* <svg className={styles.succeed__content__header__svg} width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 12.5C9 12.5 10.7234 14.5 11 14.5C11.2766 14.5 15 9 15 9" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
-            <rect x="2.7" y="2.7" width="18.6" height="18.6" rx="9.3" stroke="var(--color-black)" strokeWidth="1.4"/>
-          </svg> */}
-
           <div className={styles.succeed__content__header__text}>
-
-            {/* <h3 className={styles.succeed__content__header__text__title}>
-              Gracias por probar <span className="highlight">Wanna</span>
-            </h3> */}
-
             <div className={styles.succeed__content__header__text__info}>
               <div className={ `${styles.succeed__content__header__text__info__item} ${styles.succeed__content__header__text__info__item__highlight}`}>
-                {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 12.5C9 12.5 10.7234 14.5 11 14.5C11.2766 14.5 15 9 15 9" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
-                  <rect x="2.7" y="2.7" width="18.6" height="18.6" rx="9.3" stroke="var(--color-black)" strokeWidth="1.4"/>
-                </svg> */}
                 <p><span className="highlight">Gracias</span> por probar Wanna</p>
               </div>
               <div className={styles.succeed__content__header__text__info__item}>
-                {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="2" y="4" width="20" height="16" rx="5" stroke="var(--color-gray)" strokeWidth="1.4"/>
-                  <path d="M21 6C21 6 13.125 12 12 12C10.875 12 3 6 3 6" stroke="var(--color-gray)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg> */}
                 <p>Te hemos enviado <strong>tu historia</strong> por mail. Cuando lancemos Wanna al 100%, te avisaremos.</p>
               </div>
-              {/* <div className={styles.succeed__content__header__text__info__item}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M7.26836 14.4091L5.88799 9.25747M7.26836 14.4091L5.01454 15.013M7.26836 14.4091L8.62335 14.5575M5.88799 9.25747L2.34627 10.2065C1.8128 10.3494 1.49622 10.8978 1.63916 11.4312L2.50189 14.651C2.64483 15.1844 3.19317 15.501 3.72663 15.3581L5.01454 15.013M5.88799 9.25747L12.6295 3.22613C13.5296 2.42084 14.6123 1.84693 15.784 1.55402C15.9048 1.52384 16.0279 1.59415 16.0632 1.7135L19.9222 14.75C19.9652 14.8955 19.8827 15.0484 19.7375 15.0922C18.5912 15.4384 17.3864 15.5476 16.1965 15.4131L8.62335 14.5575M5.01454 15.013L7.3621 20.4041C7.55972 20.8579 8.05963 21.0989 8.53776 20.9708L9.83885 20.6222C10.4173 20.4672 10.7307 19.842 10.5089 19.2858L8.62335 14.5575" stroke="var(--color-gray)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M17.8716 6.65375C17.8716 6.65375 19.882 6.2391 20.3779 8.08975C20.8738 9.94039 18.9254 10.5865 18.9254 10.5865" stroke="var(--color-gray)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-
-                <p>Cuando lancemos Wanna al 100%, te avisaremos.</p>
-              </div> */}
             </div>
-            
           </div>
         </div>
 
@@ -91,8 +123,8 @@ const SucceedPage = () => {
                 <p>Tu historia</p>
               </div>
               
-              <p className={styles.succeed__content__story__story__title}>{experienceData?.title || localStorage.getItem('title')}</p>
-              <p className={styles.succeed__content__story__story__by}>by Agus</p>
+              <p className={styles.succeed__content__story__story__title}>{experienceData?.title}</p>
+              <p className={styles.succeed__content__story__story__by}>by {userInfo?.fullName}</p>
             </div>
 
             <button className={`${styles.succeed__content__story__button} ${styles.succeed__content__story__button__whatsapp}`}> 
@@ -108,7 +140,7 @@ const SucceedPage = () => {
 
           </div>
 
-          <p className={styles.succeed__content__story__subtitle}>En este <Link className={styles.succeed__content__story__header__link} href={`/story/${localStorage.getItem('postId')}`} target='_blank'>enlace privado</Link> podrás ver tu historia, quién la ha leido y los coemntarios</p>
+          <p className={styles.succeed__content__story__subtitle}>En este <Link className={styles.succeed__content__story__header__link} href={`/story/${localStorage.getItem('postId')}`} target='_blank'>enlace privado</Link> podrás ver tu historia, quién la ha leido y los comentarios</p>
           
         </div>
 

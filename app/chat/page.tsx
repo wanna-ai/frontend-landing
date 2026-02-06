@@ -77,7 +77,7 @@ export default function ChatPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: 'fakeAuthToken', token: responseData.token }),
+        body: JSON.stringify({ name: 'authToken', token: responseData.token }),
       })
 
       if (!cookieRes.ok) {
@@ -212,6 +212,17 @@ export default function ChatPage() {
       }
     },
   });
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const toolParts = messages.filter(message => message.parts.some(part => part.type === "tool-reviewExperience"));
+      if (toolParts.length > 0) {
+        setIsGenerating(true);
+        setIsInputVisible(false);
+        return;
+      }
+    }
+  }, [messages]);
 
   // scroll to top when clicking on input
   useEffect(() => {
@@ -364,7 +375,6 @@ export default function ChatPage() {
         {messages.map((message) => {
           // ✅ Filtrar solo las partes de texto una vez
           const textParts = message.parts.filter(part => part.type === "text");
-          
           // ✅ Si no hay texto, no renderizar nada
           if (textParts.length === 0) return null;
 
@@ -402,6 +412,7 @@ export default function ChatPage() {
               ))}
             </div>
           );
+
         })}
         
         {status === "submitted" && (

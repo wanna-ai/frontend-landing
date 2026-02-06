@@ -33,6 +33,7 @@ const VisibilityPage = () => {
         }
         const tokenData = await tokenResponse.json()
         const token = tokenData.token
+        console.log('token', token)
         setToken(token)
 
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
@@ -65,11 +66,12 @@ const VisibilityPage = () => {
     try {
       console.log('postId', postId)
       console.log('token', token)
+      console.log('privacy', privacy)
       const response = await apiService.put(`/api/v1/landing/posts/${postId}/visibility`, { visibility: privacy }, { token: token })
       console.log('response', response)
   
       console.log('Visibilidad del post:', privacy)
-      router.push('/succeed')
+      router.push(`/succeed?postId=${postId}`)
   
     } catch (error) {
       console.error('Error publishing post:', error)
@@ -130,7 +132,7 @@ const VisibilityPage = () => {
             </svg>
             <h2>¿Por qué compartirla?</h2>
           </div>
-          <p>{experienceData?.story_valuable || localStorage.getItem('story_valuable')}</p>
+          <p>{experienceData?.story_valuable}</p>
         </div>
 
 

@@ -50,7 +50,7 @@ export default function PreviewPage() {
         setData({
           title: response.title,
           content: response.content,
-          pills: response.pildoras,
+          pills: response.pills.split(' - '),
           reflection: response.reflection,
           story_valuable: response.story_valuable,
         })
@@ -148,7 +148,7 @@ export default function PreviewPage() {
 
       <div className={styles.preview__fixed}>
         <button className={styles.preview__button} onClick={() => router.push(`/visibility?postId=${postId}`)}>
-          <p>Elige quién ve tu historia</p>
+          <p>Decide quién ve tu historia</p>
         </button>
       </div>
 

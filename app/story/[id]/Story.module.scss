@@ -117,6 +117,45 @@
         align-self: flex-end;
         margin-bottom: var(--space-2);
         margin-right: var(--space-2);
+        padding: 0;
+        width: 29px;
+        height: 29px;
+        border: none;
+      }
+    }
+
+    &__button {
+      position: fixed;
+      background-color: var(--color-black);
+      bottom: var(--space-5);
+      right: var(--space-5);
+      
+      width: fit-content;
+      z-index: 1;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-4);
+      
+      transform-origin: center center;
+      
+
+      display: none;
+
+      
+      p {
+        font-size: var(--font-size-md);
+        display: none;
+        @include bp.respond-to(md) {
+          display: block;
+        }
+      }
+      
+      @include bp.respond-to(md) {
+        display: flex;
+        min-width: 270px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
       }
     }
   }

@@ -27,7 +27,7 @@ const RegisterPage = () => {
     const fetchPost = async () => {
       try {
 
-        const tokenResponse = await fetch('/api/auth/get-cookie-fake-auth', {
+        const tokenResponse = await fetch('/api/auth/get-cookie', {
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
@@ -111,6 +111,17 @@ const RegisterPage = () => {
   }
 
   const handleGoogle = async () => {
+
+    // set cookie lastpage
+
+    const cookieRes = await fetch('/api/auth/set-cookie', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: 'lastpage', value: 'register' }),
+    })
+
 
     console.log('token', token)
     if (!token) {

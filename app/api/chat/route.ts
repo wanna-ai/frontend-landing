@@ -1,14 +1,13 @@
 import { streamText, convertToModelMessages } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
-import systemPrompt from "@/app/lib/prompt";
 
 export async function POST(req: Request) {
   
   try {
     const { messages, data } = await req.json();
     const { interviewerPrompt, editorPrompt } = data;
-    const prompt = `${interviewerPrompt}\n\n${editorPrompt}\n\n Si escribo "BETLEM" crea una experiencia de prueba y eejcuta la tool reviewExperience
+    const prompt = `${interviewerPrompt}\n\n${editorPrompt}\n\n Si escribo "BETLEM" crea una experiencia de prueba y ejecuta la tool reviewExperience
     `;
   
     const result = streamText({
@@ -22,28 +21,17 @@ export async function POST(req: Request) {
       ],
       tools: {
         reviewExperience: {
-          description: `${systemPrompt.tools.reviewExperience.description}`,
+          description: `${editorPrompt}`,
         
           inputSchema: z.object({
-            title: z.string().describe(systemPrompt.tools.reviewExperience.parameters.title.description),
-            experience: z.string().describe(systemPrompt.tools.reviewExperience.parameters.experience.description),
-            pildoras: z.array(z.string()).describe(systemPrompt.tools.reviewExperience.parameters.pildoras.description),
-            reflection: z.string().describe(systemPrompt.tools.reviewExperience.parameters.reflection.description),
-            story_valuable: z.string().describe(systemPrompt.tools.reviewExperience.parameters.story_valuable.description),
+            title: z.string(),
+            experience: z.string(),
+            pildoras: z.array(z.string()),
+            reflection: z.string(),
+            story_valuable: z.string(),
           }),
 
           execute: async (params) => params,
-        
-          /* execute: async ({ title, experience, pildoras, reflection, story_valuable }) => {
-            return {
-              success: true,
-              title,
-              experience,
-              pildoras,
-              reflection,
-              story_valuable,
-            };
-          }, */
         },
       },
     });

@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./Header.module.scss";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useSyncExternalStore } from "react";
 import { AppContext } from "@/context/AppContext"
 
 const Header = () => {
@@ -11,14 +11,20 @@ const Header = () => {
   const searchParams = useSearchParams()
   const communityId = searchParams.get('c') ?? undefined
 
+  // This hook is designed exactly for this use case
+  const isClient = useSyncExternalStore(
+    () => () => {}, // subscribe (no-op)
+    () => true,      // getSnapshot (client)
+    () => false      // getServerSnapshot (server)
+  );
+
   return (
     <header className={styles.header}>
       <Link href={communityId ? `/?c=${communityId}` : "/"} className={styles.header__link}>
-        <Image src="/wanna-logo.svg" alt="Logo" width={28} height={12} loading="eager"/>{/* <span>V.1</span> */}
-
+        <Image src="/wanna-logo.svg" alt="Logo" width={28} height={12} loading="eager"/>
       </Link>
 
-      {userInfo && (
+      {isClient && userInfo && (
         <div className={styles.header__user}>
           {userInfo.pictureUrl && (
             <div className={styles.header__user__avatar}>

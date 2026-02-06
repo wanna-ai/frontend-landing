@@ -13,6 +13,13 @@ interface Story {
   isOwner: boolean
 }
 
+interface UserInfo {
+  id: string
+  fullName: string
+  pictureUrl: string
+  username: string
+}
+
 interface State {
   screen: "login" | "is-owner" | "not-owner"
 }
@@ -99,18 +106,29 @@ const StoryPage = () => {
   const router = useRouter()
 
   const { token, userInfo } = useContext(AppContext)
-  console.log('userInfo', userInfo)
 
   const [story, setStory] = useState<Story | null>(null)
   const [state, setState] = useState<State>({ screen: 'login' })
   const [isExpanded, setIsExpanded] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [comment, setComment] = useState('')
+
+
+  /*
+   * Handle go to chat
+   */
+  const handleGoToChat = async (_url: string) => {
+    router.push(_url)
+  }
 
   useEffect(() => {
     let isMounted = true
 
     const fetchStory = async () => {
       try {
+        /*
+         * 1️⃣ Get token from cookie
+         */
         const tokenResponse = await fetch('/api/auth/get-cookie', {
           credentials: 'include',
           headers: {
@@ -124,8 +142,10 @@ const StoryPage = () => {
         const token = tokenData.token
         console.log('token', token)
 
-        // Fetch story data
-        const response = await apiService.get(`/api/v1/landing/posts/${id}`, { 
+        /*
+         * 2️⃣ Fetch story data
+         */
+        const response = await apiService.get(`/api/v1/landing/posts/${id}/preview`, { 
           token: token 
         })
         console.log('response', response)
@@ -139,7 +159,9 @@ const StoryPage = () => {
           isOwner: response.isOwner,
         })
 
-        // Determine screen based on token and ownership
+        /*
+         * 3️⃣ Determine screen based on token and ownership
+         */
         if (!token) {
           setState({ screen: 'login' })
         } else if (response.isOwner) {
@@ -170,7 +192,38 @@ const StoryPage = () => {
 
   const contentWordCount = story?.content?.split(' ').length || 0
   const shouldShowMore = contentWordCount > 100
+
+  /*
+  * Handle send comment
+  */
+  const handleSendComment = async (token: string, userInfo: UserInfo) => {
+    const commentText = comment.trim()
   
+    if (!commentText) {
+      console.log('No hay comentario para enviar')
+      return
+    }
+
+    console.log(token)
+    console.log("userInfo", userInfo)
+    console.log("postId",id)
+    
+    console.log('Enviando comentario:', commentText)
+
+    try {
+      await apiService.post(`/api/v1/posts/comments`, {
+        content: commentText,
+        postId: id,
+        userId: userInfo?.id,
+      }, { token: token })
+
+      setComment('')
+    } catch (error) {
+      console.error('Error al enviar comentario:', error)
+    }
+
+  }
+    
 
   return (
     <div className={styles.story}>
@@ -231,7 +284,7 @@ const StoryPage = () => {
       {state.screen === 'not-owner' && (
         <div className={styles.story__notowner}>
           <div className={styles.story__notowner__header}>
-            <h1 className={styles.story__notowner__header__title}><span className="highlight">{userInfo?.fullName}</span> generó esta historia charlando 2 minutos con Wanna</h1>
+            <h1 className={styles.story__notowner__header__title}><span className="highlight">{story?.username}</span> generó esta historia charlando 2 minutos con Wanna</h1>
             <h3 className={styles.story__notowner__header__subtitle}>También le dió una reflexió... pero eso ya es privado :) </h3>
           </div>
 
@@ -269,20 +322,32 @@ const StoryPage = () => {
 
           <div className={styles.story__notowner__comment}>
 
-            <textarea className={styles.story__notowner__comment__textarea} placeholder='Escribe tu comentario...' />
+            <textarea 
+              className={styles.story__notowner__comment__textarea} 
+              placeholder='Escribe tu comentario...'
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
             
-            <svg className={styles.story__notowner__comment__svg} width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="28" y="28" width="27" height="27" rx="13.5" transform="rotate(180 28 28)" stroke="var(--color-main)" fill="var(--color-main)" strokeWidth="2"/>
-              <path d="M14 22L14 9.5" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
-              <line x1="14" y1="8.394" x2="10.0607" y2="12.3333" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
-              <line x1="0.75" y1="-0.75" x2="6.32107" y2="-0.75" transform="matrix(0.707107 0.707107 0.707107 -0.707107 14 7.33334)" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
+            <button className={styles.story__notowner__comment__svg} onClick={() => handleSendComment(token!, userInfo)}>
+              <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="28" y="28" width="27" height="27" rx="13.5" transform="rotate(180 28 28)" stroke="var(--color-main)" fill="var(--color-main)" strokeWidth="2"/>
+                <path d="M14 22L14 9.5" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="14" y1="8.394" x2="10.0607" y2="12.3333" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="0.75" y1="-0.75" x2="6.32107" y2="-0.75" transform="matrix(0.707107 0.707107 0.707107 -0.707107 14 7.33334)" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </button>
 
           </div>
 
-          <p>añadir tope de carateres si hay</p>
+          <button className={styles.story__notowner__button} onClick={() => handleGoToChat(`/chat`)}>
+            <p>Hablar con Wanna</p>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 8.5H16.5M7.5 12.5H13" stroke="var(--color-green)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 10.5C2 9.72921 2.01346 8.97679 2.03909 8.2503C2.12282 5.87683 2.16469 4.69009 3.13007 3.71745C4.09545 2.74481 5.3157 2.6926 7.7562 2.58819C9.09517 2.5309 10.5209 2.5 12 2.5C13.4791 2.5 14.9048 2.5309 16.2438 2.58819C18.6843 2.6926 19.9046 2.74481 20.8699 3.71745C21.8353 4.69009 21.8772 5.87683 21.9609 8.2503C21.9865 8.97679 22 9.72921 22 10.5C22 11.2708 21.9865 12.0232 21.9609 12.7497C21.8772 15.1232 21.8353 16.3099 20.8699 17.2826C19.9046 18.2552 18.6843 18.3074 16.2437 18.4118C15.5098 18.4432 14.7498 18.4667 13.9693 18.4815C13.2282 18.4955 12.8576 18.5026 12.532 18.6266C12.2064 18.7506 11.9325 18.9855 11.3845 19.4553L9.20503 21.3242C9.07273 21.4376 8.90419 21.5 8.72991 21.5C8.32679 21.5 8 21.1732 8 20.7701V18.4219C7.91842 18.4186 7.83715 18.4153 7.75619 18.4118C5.31569 18.3074 4.09545 18.2552 3.13007 17.2825C2.16469 16.3099 2.12282 15.1232 2.03909 12.7497C2.01346 12.0232 2 11.2708 2 10.5Z" stroke="var(--color-green)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
 
-          <button>Hablar con Wanna</button>
+          </button>
         </div>
 
       )}
