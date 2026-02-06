@@ -6,7 +6,7 @@ import { AppContext } from '@/context/AppContext'
 import { useContext } from 'react'
 import { apiService } from '@/services/api'
 import { useRouter } from 'next/navigation'
-import LoginOAuth from '@/components/LoginOAuth/LoginOAuth'
+import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { useState, useEffect } from 'react'
 import { API_BASE_URL } from '@/services/config/api'
 
@@ -110,31 +110,6 @@ const RegisterPage = () => {
     console.log('Register')
   }
 
-  const handleGoogle = async () => {
-
-    // set cookie lastpage
-
-    const cookieRes = await fetch('/api/auth/set-cookie', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: 'lastpage', value: 'register' }),
-    })
-
-
-    console.log('token', token)
-    if (!token) {
-      console.log("no hay token / registrarse con google")
-      const endpoint = "/oauth2/authorization/google"
-      router.push(`${API_BASE_URL}${endpoint}`)
-    } else {
-      console.log("ya existe un token")
-      const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
-      console.log('response', response)
-    }
-  }
-
   return (
     <div className={styles.register}>
       <h1 className={styles.register__title}>Esto es lo que Wanna ha empezado a escribir contigo...</h1>
@@ -199,8 +174,7 @@ const RegisterPage = () => {
             </div>
           ) : (
             <>
-              <LoginOAuth _url={'/preview'} handleGoogle={handleGoogle} />
-              {/* <LoginMail handleEmailSignIn={() => setShowLoginMail(true)} /> */}
+              <LoginProviders lastpage="register" />
             </>
           )}
         </div>

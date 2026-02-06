@@ -31,12 +31,25 @@ const LoginSuccessPage = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: 'authToken', token }),
+          body: JSON.stringify({ name: 'authToken', value: token }),
         })
 
         if (!cookieRes.ok) {
           throw new Error('Failed to set auth cookie')
         }
+
+        /*
+         * Get cookie lastpage
+         */
+        const lastpageResponse = await fetch('/api/auth/get-cookie-lastpage', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        const lastpageData = await lastpageResponse.json()
+        const lastpage = lastpageData.lastpage
+        console.log('lastpage', lastpage)
 
         /**
          * 2️⃣ Get user info (still from localStorage or context)
@@ -57,20 +70,20 @@ const LoginSuccessPage = () => {
         console.log('PostId:', postId)
         console.log('API_BASE_URL:', API_BASE_URL)
         console.log('token', token)
-
-        /**
-         * 4️⃣ Assign post to user (token still used here once)
-         */
-        if (postId) {
-          console.log("here")
-          const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
-          console.log('response', response)
-        }
-
+        
         /**
          * 5️⃣ Redirect
-         */
-        router.push(`/preview?postId=${postId}`)
+        */
+       if (lastpage === 'register') {
+          if (postId) {
+            console.log("here")
+            const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
+            console.log('response', response)
+          }
+          router.push(`/preview?postId=${postId}`)
+        } else {
+          router.push(`/story/${postId}`)
+        }
 
       } catch (error) {
         console.error('Error durante el login:', error)

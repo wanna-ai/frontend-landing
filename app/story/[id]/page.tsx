@@ -241,9 +241,12 @@ const StoryPage = () => {
                 <p>{story.title}</p>
               </div>
 
-              <div className={styles.story__login__content__content}>
-                <p>{story.content.split(' ').slice(0, 20).join(' ')}...</p>
-              </div>
+              {story.content && (
+                <div className={styles.story__login__content__content}>
+                  <p>{story.content.split(' ').slice(0, 20).join(' ')}...</p>
+                </div>
+              )}
+                
 
             </div>
           )}
@@ -251,7 +254,7 @@ const StoryPage = () => {
           <p>Para poder leer la historia completa, registrate</p>
 
           <div className={styles.story__login__login}>
-            <LoginProviders />
+            <LoginProviders lastpage="story" />
           </div>
           
         </div>

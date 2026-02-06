@@ -35,6 +35,12 @@ export default function ChatPage() {
   const [isInputVisible, setIsInputVisible] = useState(true);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  };
+
   // ✅ Improved: Pass data directly, handle response properly
   const saveAndNavigate = async (data: {
     title: string;
@@ -55,6 +61,18 @@ export default function ChatPage() {
 
     try {
 
+      const tokenResponse = await fetch('/api/auth/get-cookie', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (!tokenResponse.ok) {
+        throw new Error('Failed to fetch token')
+      }
+      const tokenData = await tokenResponse.json()
+      const token = tokenData.token
+
       const response = await apiService.post('/api/v1/landing/posts/interview', {
         title: data.title,
         content: data.experience,
@@ -62,7 +80,7 @@ export default function ChatPage() {
         reflection: data.reflection,
         story_valuable: data.story_valuable,
         rawInterviewText: data.rawInterviewText
-      });
+      }, { token: token });
 
       
       // ✅ Fix: Handle response structure properly
@@ -77,7 +95,7 @@ export default function ChatPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: 'authToken', token: responseData.token }),
+        body: JSON.stringify({ name: 'authToken', value: responseData.token }),
       })
 
       if (!cookieRes.ok) {
@@ -94,7 +112,7 @@ export default function ChatPage() {
       localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
 
       // Navigate
-      router.push('/register?postId=' + responseData.id);
+      router.push(token ? '/preview?postId=' + responseData.id : '/register?postId=' + responseData.id);
 
     } catch (error) {
       console.error('Error al enviar la conversación al backend:', error);
@@ -219,8 +237,13 @@ export default function ChatPage() {
       if (toolParts.length > 0) {
         setIsGenerating(true);
         setIsInputVisible(false);
+        
+        
         return;
       }
+      requestAnimationFrame(() => {
+        scrollToBottom();
+      });
     }
   }, [messages]);
 
@@ -366,11 +389,6 @@ export default function ChatPage() {
   return (
     <div className={styles.chat}>
       <div className={styles.chat__messages} ref={messagesContainerRef}>
-        {isGenerating && (
-          <div className={styles.chat__messages__message__reviewExperience}>
-            <LoaderGenerate />
-          </div>
-        )}
         
         {messages.map((message) => {
           // ✅ Filtrar solo las partes de texto una vez
@@ -414,6 +432,12 @@ export default function ChatPage() {
           );
 
         })}
+        
+        {isGenerating && (
+          <div className={styles.chat__messages__message__reviewExperience}>
+            <LoaderGenerate />
+          </div>
+        )}
         
         {status === "submitted" && (
           <div className={styles.chat__messages__message__loading}>
