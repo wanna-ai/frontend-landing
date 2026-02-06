@@ -211,14 +211,14 @@ const StoryPage = () => {
           <div className={styles.story__isowner__snippet} onClick={() => setIsModalOpen(true)}>
             <p className={styles.story__isowner__snippet__title}>{story?.title}</p>
             <div className={styles.story__isowner__snippet__buttons}>
-              <button className={styles.story__isowner__snippet__buttons__button}>
+              <div className={styles.story__isowner__snippet__buttons__button}>
 
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 5C8 5 5 8 2.5 12C5 16 8 19 12 19C16 19 19 16 21.5 12C19 8 16 5 12 5Z" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                   <circle cx="12" cy="12" r="3" stroke="var(--color-black)" strokeWidth="1.4"/>
                 </svg>
 
-              </button>
+              </div>
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 'use client'
 import styles from "./Chat.module.scss";
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, useMemo } from 'react';
 import { AppContext } from "@/context/AppContext";
 import { useSearchParams } from 'next/navigation'
 import { useChat } from "@ai-sdk/react";
@@ -33,6 +33,7 @@ export default function ChatPage() {
   // states
   const [isEditableEmpty, setIsEditableEmpty] = useState(true);
   const [isInputVisible, setIsInputVisible] = useState(true);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   // ✅ Improved: Pass data directly, handle response properly
   const saveAndNavigate = async (data: {
@@ -102,7 +103,7 @@ export default function ChatPage() {
     }
   };
 
-  const { messages, setMessages, sendMessage, status, stop } = useChat({
+  /* const { messages, setMessages, sendMessage, status, stop } = useChat({
     onFinish: ({ message }) => {
       let textParts = "";
       let toolResult = null;
@@ -151,6 +152,65 @@ export default function ChatPage() {
         }
       }
     }
+  }); */
+  const { messages, setMessages, sendMessage, status, stop } = useChat({
+    onFinish: ({ message }) => {
+      setIsGenerating(false);
+
+      // ✅ Process in parallel, not sequentially
+      const textParts: string[] = [];
+      let toolResult = null;
+  
+      message.parts.forEach((part) => {
+        if (part.type === "text") {
+          textParts.push(part.text);
+        } else if (part.type === "tool-reviewExperience") {
+          toolResult = (part as unknown as ToolResultPart).output;
+        }
+      });
+  
+      // ✅ Build conversation string only once
+      if (textParts.length > 0) {
+        conversationRef.current += `${message.role}: ${textParts.join('')}\n\n`;
+      }
+  
+      // ✅ Handle tool result immediately without blocking
+      if (toolResult) {
+        const result = toolResult as { 
+          title: string; 
+          experience: string; 
+          pildoras: string[]; 
+          reflection: string; 
+          story_valuable: string 
+        };
+        
+        const experienceDataToSave = {
+          title: result.title,
+          experience: result.experience,
+          pildoras: result.pildoras,
+          reflection: result.reflection,
+          story_valuable: result.story_valuable,
+          rawInterviewText: conversationRef.current
+        };
+  
+        // ✅ Update UI immediately (non-blocking)
+        setExperienceData(experienceDataToSave);
+        
+        // ✅ Hide input immediately
+        setIsInputVisible(false);
+        
+        // ✅ Save in background (don't await)
+        saveAndNavigate(experienceDataToSave);
+      }
+    },
+
+    onToolCall: async ({ toolCall }) => {
+      console.log('toolCall', toolCall);
+      if (toolCall.toolName === 'reviewExperience') {
+        setIsGenerating(true);
+        setIsInputVisible(false);
+      }
+    },
   });
 
   // scroll to top when clicking on input
@@ -174,15 +234,15 @@ export default function ChatPage() {
 
   // send message when component mounts
   useEffect(() => {
-    // ✅ Guard: solo ejecutar si tenemos los prompts necesarios
-    /* if (!promptData?.interviewerPromp || !promptData?.editorPrompt) {
-      console.log('Waiting for prompt data...');
-      return;
-    } */
-
     // ✅ Prevenir doble ejecución
     if (hasInitialized.current) {
       console.log('Already initialized, skipping');
+      return;
+    }
+
+    // ✅ Prevenir doble ejecución
+    if (!promptData) {
+      console.log('No prompt data, skipping');
       return;
     }
     
@@ -190,13 +250,8 @@ export default function ChatPage() {
     hasInitialized.current = true;
     
     // Clear localStorage and state on mount
-    localStorage.removeItem('title');
-    localStorage.removeItem('content');
-    localStorage.removeItem('communityId');
-    localStorage.removeItem('pills');
-    localStorage.removeItem('reflection');
-    localStorage.removeItem('story_valuable');
-    localStorage.removeItem('rawInterviewText');
+    ['title', 'content', 'communityId', 'pills', 'reflection', 'story_valuable', 'rawInterviewText']
+      .forEach(key => localStorage.removeItem(key));
 
     setExperienceData(null);
     setMessages([]);
@@ -220,26 +275,19 @@ export default function ChatPage() {
 
   }, [promptData]); // ✅ Dependencias correctas
 
+  // ✅ Solo mantén el scroll en un useEffect separado y más ligero
   useEffect(() => {
-    if (messages.length > 0) {
-      const hasReviewExperience = messages.some(message => 
-        message.parts.some(part => part.type === "tool-reviewExperience")
-      );
-
-      if (hasReviewExperience) {
-        setTimeout(() => {
-          setIsInputVisible(false);
-        }, 10);
-      }
-  
-      const container = messagesContainerRef.current;
-      if (container) {
-        requestAnimationFrame(() => {
-          container.scrollTop = container.scrollHeight;
-        });
+    if (messages.length === 0) return;
+    
+    const container = messagesContainerRef.current;
+    if (container) {
+      // ✅ Solo hacer scroll si no estamos generando
+      if (!isGenerating) {
+        container.scrollTop = container.scrollHeight;
       }
     }
-  }, [messages]);
+  }, [messages.length, isGenerating]); // ✅ Dependencia solo del length, no del array completo
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -307,46 +355,54 @@ export default function ChatPage() {
   return (
     <div className={styles.chat}>
       <div className={styles.chat__messages} ref={messagesContainerRef}>
-        {messages.map((message) => (
-          <div className={styles.chat__messages__message} key={message.id}>
-            {message.parts.map((part, index) =>
-                part.type === "text" ? (
-                  <div
-                    key={`${message.id}-${index}`}
-                    className={`${styles.chat__messages__message__content} ${
-                      message.role === "user"
-                        ? styles.chat__messages__message__content__user
-                        : styles.chat__messages__message__content__avatar
-                    }`}
-                  >
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      rehypePlugins={[rehypeRaw]}
-                      components={{
-                        p: ({ children }) => <p className={styles.markdown_paragraph}>{children}</p>,
-                        strong: ({ children }) => <strong className={styles.markdown_bold}>{children}</strong>,
-                        em: ({ children }) => <em className={styles.markdown_italic}>{children}</em>,
-                        code: ({ children }) => <code className={styles.markdown_code}>{children}</code>,
-                        pre: ({ children }) => <pre className={styles.markdown_pre}>{children}</pre>,
-                        ul: ({ children }) => <ul className={styles.markdown_ul}>{children}</ul>,
-                        ol: ({ children }) => <ol className={styles.markdown_ol}>{children}</ol>,
-                        li: ({ children }) => <li className={styles.markdown_li}>{children}</li>,
-                        h1: ({ children }) => <h1 className={styles.markdown_h1}>{children}</h1>,
-                        h2: ({ children }) => <h2 className={styles.markdown_h2}>{children}</h2>,
-                        h3: ({ children }) => <h3 className={styles.markdown_h3}>{children}</h3>
-                      }}
-                    >
-                      {part.text}
-                    </ReactMarkdown>
-                  </div>
-                ) : part.type === "tool-reviewExperience" ? (
-                  <div key={`${message.id}-${index}`} className={styles.chat__messages__message__reviewExperience}>
-                    <LoaderGenerate />
-                  </div>
-                ) : null
-            )}
+        {isGenerating && (
+          <div className={styles.chat__messages__message__reviewExperience}>
+            <LoaderGenerate />
           </div>
-        ))}
+        )}
+        
+        {messages.map((message) => {
+          // ✅ Filtrar solo las partes de texto una vez
+          const textParts = message.parts.filter(part => part.type === "text");
+          
+          // ✅ Si no hay texto, no renderizar nada
+          if (textParts.length === 0) return null;
+
+          return (
+            <div className={styles.chat__messages__message} key={message.id}>
+              {textParts.map((part, index) => (
+                <div
+                  key={`${message.id}-${index}`}
+                  className={`${styles.chat__messages__message__content} ${
+                    message.role === "user"
+                      ? styles.chat__messages__message__content__user
+                      : styles.chat__messages__message__content__avatar
+                  }`}
+                >
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeRaw]}
+                    components={{
+                      p: ({ children }) => <p className={styles.markdown_paragraph}>{children}</p>,
+                      strong: ({ children }) => <strong className={styles.markdown_bold}>{children}</strong>,
+                      em: ({ children }) => <em className={styles.markdown_italic}>{children}</em>,
+                      code: ({ children }) => <code className={styles.markdown_code}>{children}</code>,
+                      pre: ({ children }) => <pre className={styles.markdown_pre}>{children}</pre>,
+                      ul: ({ children }) => <ul className={styles.markdown_ul}>{children}</ul>,
+                      ol: ({ children }) => <ol className={styles.markdown_ol}>{children}</ol>,
+                      li: ({ children }) => <li className={styles.markdown_li}>{children}</li>,
+                      h1: ({ children }) => <h1 className={styles.markdown_h1}>{children}</h1>,
+                      h2: ({ children }) => <h2 className={styles.markdown_h2}>{children}</h2>,
+                      h3: ({ children }) => <h3 className={styles.markdown_h3}>{children}</h3>
+                    }}
+                  >
+                    {part.text}
+                  </ReactMarkdown>
+                </div>
+              ))}
+            </div>
+          );
+        })}
         
         {status === "submitted" && (
           <div className={styles.chat__messages__message__loading}>

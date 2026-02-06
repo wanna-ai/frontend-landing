@@ -8,7 +8,8 @@ export async function POST(req: Request) {
   try {
     const { messages, data } = await req.json();
     const { interviewerPrompt, editorPrompt } = data;
-    const prompt = `${interviewerPrompt}\n\n${editorPrompt}\n\n Si escribo "BETLEM" crea una experiencia de prueba y eejcuta la tool reviewExperience`;
+    const prompt = `${interviewerPrompt}\n\n${editorPrompt}\n\n Si escribo "BETLEM" crea una experiencia de prueba y eejcuta la tool reviewExperience
+    `;
   
     const result = streamText({
       model: anthropic("claude-sonnet-4-20250514"),
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
       ],
       tools: {
         reviewExperience: {
-          description: systemPrompt.tools.reviewExperience.description,
+          description: `${systemPrompt.tools.reviewExperience.description}`,
         
           inputSchema: z.object({
             title: z.string().describe(systemPrompt.tools.reviewExperience.parameters.title.description),
@@ -30,8 +31,10 @@ export async function POST(req: Request) {
             reflection: z.string().describe(systemPrompt.tools.reviewExperience.parameters.reflection.description),
             story_valuable: z.string().describe(systemPrompt.tools.reviewExperience.parameters.story_valuable.description),
           }),
+
+          execute: async (params) => params,
         
-          execute: async ({ title, experience, pildoras, reflection, story_valuable }) => {
+          /* execute: async ({ title, experience, pildoras, reflection, story_valuable }) => {
             return {
               success: true,
               title,
@@ -40,7 +43,7 @@ export async function POST(req: Request) {
               reflection,
               story_valuable,
             };
-          },
+          }, */
         },
       },
     });
