@@ -69,13 +69,7 @@
 
       display: flex;
       gap: var(--space-4);
-      flex-direction: row;
-
-
-
-      @include bp.respond-to(md) {
-        flex-direction: column;
-      }
+      flex-direction: column;
 
       &__header {
         margin-bottom: var(--space-4);
