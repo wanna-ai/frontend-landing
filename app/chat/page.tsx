@@ -237,7 +237,10 @@ export default function ChatPage() {
       if (toolParts.length > 0) {
         setIsGenerating(true);
         setIsInputVisible(false);
-        
+
+        requestAnimationFrame(() => {
+          scrollToBottom();
+        });
         
         return;
       }
@@ -332,6 +335,8 @@ export default function ChatPage() {
 
     conversationRef.current += "user: " + content + "\n\n";
 
+    if (status === "streaming") return;
+
     sendMessage(
       {
         role: "user",
@@ -360,6 +365,8 @@ export default function ChatPage() {
 
       conversationRef.current += "user: " + content + "\n\n";
   
+      if (status === "streaming") return;
+
       sendMessage(
         {
           role: "user",
@@ -481,12 +488,6 @@ export default function ChatPage() {
             )}
           </div>
         </form>
-        
-        {/* <div className={styles.chat__input__disclaimer}>
-          <p className={styles.chat__input__disclaimer__text}>
-            Wanna puede cometer errores. Considera verificar la información importante.
-          </p>
-        </div> */}
       </div>
     </div>
   )

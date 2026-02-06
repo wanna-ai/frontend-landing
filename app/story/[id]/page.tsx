@@ -179,10 +179,7 @@ const StoryPage = () => {
         }
 
       } catch (error) {
-        console.error('Error fetching token:', error)
-        if (isMounted) {
-          router.push('/')
-        }
+        setState({ screen: 'login' })
       }
     }
 
