@@ -1,15 +1,15 @@
 /* HTML: <div class="loader"></div> */
-.loader {
+/* .loader {
   height: 50px;
   aspect-ratio: 2;
   scale: .4;
   border: 10px solid var(--color-black);
   box-sizing: border-box;
   background: 
-    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) left/20px 20px,
-    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) left/20px 20px,
-    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) center/20px 20px,
-    radial-gradient(farthest-side,var(--color-white) 98%, var(--color-black)) right/20px 20px,
+    radial-gradient(farthest-side,var(--color-white) 98%, transparent) left/20px 20px,
+    radial-gradient(farthest-side,var(--color-white) 98%, transparent) left/20px 20px,
+    radial-gradient(farthest-side,var(--color-white) 98%, transparent) center/20px 20px,
+    radial-gradient(farthest-side,var(--color-white) 98%, transparent) right/20px 20px,
     var(--color-black);
   background-repeat: no-repeat;
   filter: blur(4px) contrast(10) invert(1);
@@ -17,4 +17,22 @@
 }
 @keyframes l14 {
   100%  {background-position:right,left,center,right}
+} */
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 60px;
+  aspect-ratio: 5;
+  --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
+  background: 
+    var(--_g) 0%   50%,
+    var(--_g) 50%  50%,
+    var(--_g) 100% 50%;
+  background-size: calc(100%/3) 100%;
+  animation: l7 1.2s infinite linear;
+}
+@keyframes l7 {
+    33%{background-size:calc(100%/3) 0%  ,calc(100%/3) 100%,calc(100%/3) 100%}
+    50%{background-size:calc(100%/3) 100%,calc(100%/3) 0%  ,calc(100%/3) 100%}
+    66%{background-size:calc(100%/3) 100%,calc(100%/3) 100%,calc(100%/3) 0%  }
 }

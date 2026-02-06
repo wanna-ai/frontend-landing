@@ -1,0 +1,19 @@
+.pinClave {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: center;
+}
+
+.digitBox {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-gray);
+  border-radius: var(--border-radius-x-small);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  background-color: var(--color-white);
+}

@@ -1,6 +1,9 @@
+'use client'
 import styles from './Footer.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+
 
 const brand = {
   name: "WANNA",
@@ -39,6 +42,13 @@ const legal = {
 };
 
 const Footer = () => {
+
+  const pathname = usePathname()
+  
+  if (pathname.includes('/chat') || pathname.includes('/login/success') || pathname.includes('/preview') || pathname.includes('/register') || pathname.includes('/visibility') || pathname.includes('/story')) {
+    return null
+  }
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__container}>

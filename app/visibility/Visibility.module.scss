@@ -2,24 +2,25 @@
 .visibility {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 100%;
   gap: var(--space-6);
 
   padding: var(--header-height) var(--space-5);
-
-  /* &__title {
-    text-transform: uppercase;
-  } */
+  padding-bottom: var(--space-16);
+  min-height: 100dvh;
 
   &__value {
     background-color: var(--color-separator);
-    border-radius: var(--border-radius-small);
+    border-radius: var(--border-radius-x-small);
     padding: var(--space-4);
     &__header {
       display: flex;
       gap: var(--space-4);
       margin-bottom: var(--space-4);
+
+      &__svg {
+        margin-top: 4px;
+      }
     }
   }
 
@@ -37,8 +38,10 @@
 
   &__privacy {
     &__title {
+      font-size: var(--font-size-2xl);
       margin-bottom: var(--space-4);
     }
+
     &__options {
       display: flex;
       gap: 1rem;
@@ -61,7 +64,7 @@
           display: flex;
           align-items: flex-start;
           gap: 1rem;
-          padding: 1.25rem;
+          padding: var(--space-4);
           border: 2px solid #e0e0e0;
           border-radius: 12px;
           transition: all 0.2s;
@@ -72,8 +75,8 @@
         }
 
         input[type="radio"]:checked ~ &__content {
-          border-color: var(--color-yellow);
-          background-color: #fff3d6;
+          border-color: var(--color-main);
+          background-color: rgba(255, 0, 187, 0.066);
         }
 
         &__radio {
@@ -95,13 +98,13 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background-color: var(--color-yellow);
+            background-color: var(--color-main);
             transition: transform 0.2s;
           }
         }
 
         input[type="radio"]:checked ~ &__content &__radio {
-          border-color: var(--color-yellow);
+          border-color: var(--color-main);
 
           &::after {
             transform: translate(-50%, -50%) scale(1);
@@ -123,8 +126,22 @@
     }
   }
 
+  &__fixed {
+    background-color: var(--color-white);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-4);
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
   &__button {
     background: var(--color-black);
     color: var(--color-white);
+    margin: 0 auto;
   }
 }

@@ -1,10 +1,13 @@
 import styles from "./Steps.module.scss"
 
 const MessageIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7.5 8.5H16.5M7.5 12.5H13" stroke="var(--color-black)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M2 10.5C2 9.72921 2.01346 8.97679 2.03909 8.2503C2.12282 5.87683 2.16469 4.69009 3.13007 3.71745C4.09545 2.74481 5.3157 2.6926 7.7562 2.58819C9.09517 2.5309 10.5209 2.5 12 2.5C13.4791 2.5 14.9048 2.5309 16.2438 2.58819C18.6843 2.6926 19.9046 2.74481 20.8699 3.71745C21.8353 4.69009 21.8772 5.87683 21.9609 8.2503C21.9865 8.97679 22 9.72921 22 10.5C22 11.2708 21.9865 12.0232 21.9609 12.7497C21.8772 15.1232 21.8353 16.3099 20.8699 17.2826C19.9046 18.2552 18.6843 18.3074 16.2437 18.4118C15.5098 18.4432 14.7498 18.4667 13.9693 18.4815C13.2282 18.4955 12.8576 18.5026 12.532 18.6266C12.2064 18.7506 11.9325 18.9855 11.3845 19.4553L9.20503 21.3242C9.07273 21.4376 8.90419 21.5 8.72991 21.5C8.32679 21.5 8 21.1732 8 20.7701V18.4219C7.91842 18.4186 7.83715 18.4153 7.75619 18.4118C5.31569 18.3074 4.09545 18.2552 3.13007 17.2825C2.16469 16.3099 2.12282 15.1232 2.03909 12.7497C2.01346 12.0232 2 11.2708 2 10.5Z" stroke="var(--color-black)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.071 3H14.2303C8.15516 3 3.2303 7.92487 3.23029 14L3.23029 14.2563L3.41827 22.9402C3.45495 24.6345 3.20426 26.3227 2.67685 27.9332L2.57755 28.2364C2.32979 28.993 3.02244 29.7216 3.79059 29.5125L5.39447 29.0758C6.76263 28.7033 8.17669 28.5267 9.59443 28.5513L15.3 28.65H20.2C25.6124 28.65 30 24.2624 30 18.85V12.929C30 7.44538 25.5546 3 20.071 3Z" stroke="var(--color-black)" strokeWidth="2"/>
+    <circle cx="12" cy="16" r="1" fill="var(--color-black)"/>
+    <circle cx="16" cy="16" r="1" fill="var(--color-black)"/>
+    <circle cx="20" cy="16" r="1" fill="var(--color-black)"/>
+    </svg>
+
 )
 
 const BookIcon = () => (
@@ -14,27 +17,25 @@ const BookIcon = () => (
 )
 
 const BulbIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M3.5 22.5C2.23036 20.4143 1.5 17.9706 1.5 15.358C1.5 7.70444 7.76801 1.5 15.5 1.5C23.232 1.5 29.5 7.70444 29.5 15.358C29.5 17.9706 28.7696 20.4143 27.5 22.5" stroke="var(--color-black)" strokeWidth="3" strokeLinecap="round"/>
-<path d="M7.42003 27.9219C7.25926 27.4378 7.17887 27.1958 7.18823 26.9997C7.20804 26.585 7.46949 26.2209 7.85525 26.0709C8.03763 26 8.29184 26 8.80025 26H22.1998C22.7082 26 22.9624 26 23.1448 26.0709C23.5305 26.2209 23.792 26.585 23.8118 26.9997C23.8211 27.1958 23.7407 27.4378 23.58 27.9219C23.2828 28.8165 23.1343 29.2638 22.9051 29.6261C22.4251 30.3849 21.6725 30.9292 20.8035 31.1464C20.3886 31.25 19.9188 31.25 18.9792 31.25H12.0208C11.0812 31.25 10.6114 31.25 10.1965 31.1464C9.32745 30.9292 8.57492 30.3849 8.09487 29.6261C7.86572 29.2638 7.71715 28.8165 7.42003 27.9219Z" stroke="var(--color-black)" strokeWidth="3"/>
-<path d="M20.75 31.25L20.5237 32.3816C20.2762 33.6189 20.1525 34.2376 19.8752 34.7265C19.4465 35.4825 18.7519 36.0519 17.9266 36.324C17.3928 36.5 16.7618 36.5 15.5 36.5C14.2382 36.5 13.6072 36.5 13.0734 36.324C12.2481 36.0519 11.5535 35.4825 11.1248 34.7265C10.8475 34.2376 10.7238 33.6189 10.4763 32.3816L10.25 31.25" stroke="var(--color-black)" strokeWidth="3"/>
-<path d="M15.5 26V17.25" stroke="var(--color-black)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-</svg>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M2.39147 11.5983C1.00006 7.5 3.5 4.13839 6.28413 3.28632C9.00001 2.45515 11 3.30167 12 4.5C13 3.30167 15 2.45842 17.7053 3.28632C20.6709 4.1939 23 7.5 21.6074 11.5983C19.8495 16.9083 13.0001 20.9983 12 20.9983C10.9999 20.9984 4.20833 16.9703 2.39147 11.5983Z" stroke="var(--color-black)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+
 
 )
 
 const steps = [
   {
     icon: MessageIcon,
-    description: "Cuéntale a Wanna algo que te haya pasado."
+    description: "Cuéntale a Wanna algo que te haya pasado. <strong>(2 minutos)</strong>"
   },
   {
     icon: BookIcon,
-    description: "Creará tu propia historia."
+    description: "Creará tu propia <strong>historia</strong> y una <strong>reflexión</strong> sobre ti."
   },
   {
     icon: BulbIcon,
-    description: "Descubre, en su reflexión, algo sobre ti."
+    description: "<strong>Compártela</strong>, si así lo sientes."
   }
 ]
 
@@ -46,7 +47,7 @@ const Steps = () => {
         return (
           <div key={index} className={styles.steps__step}>
             <Icon />
-            <p>{step.description}</p>
+            <p dangerouslySetInnerHTML={{ __html: step.description }} />
           </div>
         )
       })}

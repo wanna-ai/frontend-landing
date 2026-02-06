@@ -5,7 +5,7 @@ import styles from "./OurStories.module.scss";
 const members = [
   {
     name: "Agus",
-    profession: "cofounder of wallapop",
+    profession: "CEO of <strong>WANNA</strong><br/>cofounder of <strong>WALLAPOP</strong>",
     story: `Un cáncer a los 39 me enseñó algo muy sencillo: la gente a la que le importo de verdad sólo quiere verme feliz.
     No quiere que sea fuerte todo el tiempo, ni valiente, ni ejemplar. No quiere discursos, ni grandes lecciones de vida. Quiere que esté bien. Y si no lo estoy, quiere que pueda decirlo sin sentir que fallo a nadie.
     Antes de enfermar pensaba que querer a alguien era acompañarlo en los éxitos, celebrar las buenas noticias, estar presente cuando todo va hacia arriba. El cáncer me desmontó esa idea con una crudeza que aún hoy me sorprende. Querer, de verdad, era quedarse cuando ya no había nada que admirar: cuando tenía miedo, cuando estaba cansado, cuando mi cuerpo no respondía y mi cabeza se llenaba de preguntas que no tenían respuesta.
@@ -70,7 +70,7 @@ const members = [
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
     image: "/members/pau.jpg"
   },
-  {
+  /* {
     name: "Rafa",
     profession: "former lead designer at wallapop",
     story: `Acabo de ser padre y todo se siente como una nube: amor, cansancio y desconcierto mezclados. Estar tanto en casa pesa, pero me ha enseñado a frenar y estar presente.
@@ -91,7 +91,7 @@ const members = [
     Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
     No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
     image: "/members/pau.jpg"
-  },
+  }, */
 ]
 
 interface ModalProps {
@@ -155,7 +155,7 @@ const Modal = ({ member, onClose }: ModalProps) => {
         <div className={styles.modal__header}>
           <div className={styles.modal__header__info}>
             <h2 className={styles.modal__header__info__name}>{member.name}</h2>
-            <p className={styles.modal__header__info__profession}>{member.profession}</p>
+            <p className={styles.modal__header__info__profession} dangerouslySetInnerHTML={{ __html: member.profession }} />
           </div>
           <button 
             className={styles.modal__header__close} 
@@ -210,11 +210,7 @@ const OurStories = () => {
     <>
       <div className={styles.our_stories}>
         <div className={styles.our_stories__header}>
-          <p className={styles.our_stories__header__title}>Aquí va algunas experiencias de nuestro equipo:</p>
-          <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3.32858 11.3536C3.52384 11.5488 3.84042 11.5488 4.03568 11.3536L7.21766 8.17157C7.41292 7.97631 7.41292 7.65973 7.21766 7.46447C7.0224 7.2692 6.70582 7.2692 6.51056 7.46447L3.68213 10.2929L0.853702 7.46447C0.658439 7.2692 0.341857 7.2692 0.146595 7.46447C-0.0486675 7.65973 -0.0486675 7.97631 0.146595 8.17157L3.32858 11.3536ZM3.68213 0L3.18213 -2.18557e-08L3.18213 11L3.68213 11L4.18213 11L4.18213 2.18557e-08L3.68213 0Z" fill="var(--color-gray)"/>
-          </svg>
-
+          <h2 className={styles.our_stories__header__title}>Algunas <span className={styles.our_stories__header__title__span}>experiencias</span> de nuestro equipo generadas con Wanna</h2>
         </div>
 
         <div className={styles.our_stories__items}>
@@ -230,7 +226,7 @@ const OurStories = () => {
               >
                 <div className={styles.our_stories__items__item__header}>
                   <h3 className={styles.our_stories__items__item__header__name}>{member.name}</h3>
-                  <p className={styles.our_stories__items__item__header__profession}>{member.profession}</p>
+                  <p className={styles.our_stories__items__item__header__profession} dangerouslySetInnerHTML={{ __html: member.profession }} />
                 </div>
 
                 <div 

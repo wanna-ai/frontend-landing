@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.scss";
 import Header from "@/components/Header/Header";
-import { AppProvider } from "@/context/AppContext";
 import Footer from "@/components/Footer/Footer";
 import { Suspense } from "react";
+import { AppProvider } from "@/context/AppContext";
 
 const diatypeSemiMonoFont = localFont({
   src: [
@@ -30,6 +30,14 @@ const diatypeTrialHeavyFont = localFont({
     { path: "./fonts/Diatype-Trial/ABCDiatype-Heavy-Trial.woff2" },
   ],
   variable: "--font-diatype-trial-heavy",
+  display: "swap",
+});
+
+const openSansFont = localFont({
+  src: [
+    { path: "./fonts/OpenSans/OpenSans.ttf" },
+  ],
+  variable: "--font-open-sans",
   display: "swap",
 });
 
@@ -61,16 +69,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${diatypeSemiMonoFont.variable} ${diatypeExpandedFont.variable} ${diatypeTrialHeavyFont.variable}`}>
+      <body className={`${diatypeSemiMonoFont.variable} ${diatypeExpandedFont.variable} ${diatypeTrialHeavyFont.variable} ${openSansFont.variable}`}>
         <AppProvider>
           <Suspense fallback={null}>
-            <Header />
-            <main className="main">
-              <div className="main__content">
-                {children}
-              </div>
-            </main>
-            <Footer />
+              <Header />
+              <main className="main">
+                <div className="main__content">
+                  {children}
+                </div>
+              </main>
+              <Footer />
           </Suspense>
         </AppProvider>
       </body>
