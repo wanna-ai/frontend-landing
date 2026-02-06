@@ -6,6 +6,8 @@ on:
       - main
     tags:
       - develop
+      - 'v*.*'
+      - 'v*.*.*'
 
 env:
   AWS_REGION: eu-west-1
@@ -30,7 +32,7 @@ jobs:
           if [[ "${{ github.ref }}" == "refs/tags/develop" ]]; then
             echo "deployment_layer=develop" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "deployment_layer=develop" >> $GITHUB_OUTPUT               ###### CHANGE THIS WHEN SEVERAL ENVIRONMENTS
+            echo "deployment_layer=develop" >> $GITHUB_OUTPUT               ###### CHANGE THIS WHEN SEVERAL ENVIRONMENTS
             # echo "deployment_layer=preprod" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" =~ refs/tags/v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
             echo "deployment_layer=production" >> $GITHUB_OUTPUT
@@ -47,14 +49,14 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+    
       
       - name: Build, tag, and push image to Amazon ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-          --build-arg NEXT_PUBLIC_API_BASE_URL="https://api.playground.wannna.ai" .  #### CHANGE THIS TO ENVIRONMENT INSIDE THE GITHUB REPO
+          docker build -t $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 
           docker tag $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $REGISTRY/$ECR_REPOSITORY:latest
           
@@ -68,4 +70,3 @@ jobs:
           repository: ${{ github.repository_owner }}/frontend-infra
           event-type: deploy
           client-payload: '{"image_sha": "${{ github.sha }}", "repository": "${{ github.repository }}", "deployment_layer": "${{ steps.deployment.outputs.deployment_layer }}"}'
-
