@@ -208,7 +208,8 @@ export default function ChatPage() {
           pildoras: result.pildoras,
           reflection: result.reflection,
           story_valuable: result.story_valuable,
-          rawInterviewText: conversationRef.current
+          rawInterviewText: conversationRef.current,
+          visibility: 'PRIVATE'
         };
   
         // ✅ Update UI immediately (non-blocking)
