@@ -129,7 +129,7 @@ const SucceedPage = () => {
             </h1>
           </div>
           
-          <div className={styles.succeed__content__story__story} onClick={() => handleShareWhatsApp(experienceData ?? { title: '', experience: '', pildoras: [], reflection: '', story_valuable: '', rawInterviewText: '' })}>
+          <div className={styles.succeed__content__story__story} onClick={() => handleShareWhatsApp(experienceData ?? { title: '', experience: '', pildoras: [], reflection: '', story_valuable: '', rawInterviewText: '', visibility: 'PRIVATE' })}>
             <div className={styles.succeed__content__story__story__content}>
               <div className={styles.succeed__content__story__story__header}>
                 <svg className={styles.succeed__content__story__story__header__svg} width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
