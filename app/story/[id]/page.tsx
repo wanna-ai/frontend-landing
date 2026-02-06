@@ -31,6 +31,7 @@ interface Story {
   title: string
   content: string
   username: string
+  fullname: string
   isOwner: boolean
   contributions: Contributions[]
 }
@@ -39,6 +40,7 @@ interface PreviewStory {
   title: string
   content: string
   username: string
+  fullname: string
 }
 
 interface UserInfo {
@@ -159,6 +161,8 @@ const StoryPage = () => {
 
       setIsLoading(true)
 
+      localStorage.setItem('postId', id as string)
+
       try {
         /*
          * 1️⃣ Get token from cookie
@@ -192,6 +196,7 @@ const StoryPage = () => {
           username: response.userName,
           isOwner: response.isOwner,
           contributions: response.contributions,
+          fullname: response.fullName,
         })
 
         /*
@@ -216,6 +221,7 @@ const StoryPage = () => {
           title: previewResponse.title,
           content: previewResponse.content,
           username: previewResponse.userName,
+          fullname: previewResponse.fullName,
         })
 
         setState({ screen: 'login' })
@@ -282,7 +288,7 @@ const StoryPage = () => {
     <div className={styles.story}>
       {state.screen === 'login' && (
         <div className={styles.story__login}>
-          <h1 className={styles.story__login__title}><span className="highlight">{previewStory?.username}</span> desea compartir contigo una historia personal</h1>
+          <h1 className={styles.story__login__title}><span className="highlight">{previewStory?.fullname}</span> desea compartir contigo una historia personal</h1>
 
           {previewStory && (
             <div className={styles.story__login__content}>
@@ -388,7 +394,7 @@ const StoryPage = () => {
       {state.screen === 'not-owner' && (
         <div className={styles.story__notowner}>
           <div className={styles.story__notowner__header}>
-            <h1 className={styles.story__notowner__header__title}><span className="highlight">{story?.username}</span> generó esta historia charlando 2 minutos con Wanna</h1>
+            <h1 className={styles.story__notowner__header__title}><span className="highlight">{story?.fullname}</span> generó esta historia charlando 2 minutos con Wanna</h1>
             <h3 className={styles.story__notowner__header__subtitle}>También le dió una reflexió... pero eso ya es privado :) </h3>
           </div>
 

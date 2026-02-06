@@ -121,56 +121,6 @@ export default function ChatPage() {
     }
   };
 
-  /* const { messages, setMessages, sendMessage, status, stop } = useChat({
-    onFinish: ({ message }) => {
-      let textParts = "";
-      let toolResult = null;
-  
-      message.parts.forEach((part) => {
-        if (part.type === "text") {
-          textParts += part.text;
-        } else if (part.type === "tool-reviewExperience") {
-          toolResult = (part as unknown as ToolResultPart).output;
-        }
-      });
-  
-      if (textParts) {
-        conversationRef.current += message.role + ": " + textParts + "\n\n";
-      }
-  
-      if (toolResult) {
-        console.log(toolResult, conversationRef.current);
-        const result = toolResult as { 
-          title: string; 
-          experience: string; 
-          pildoras: string[]; 
-          reflection: string; 
-          story_valuable: string 
-        };
-        
-        const experienceDataToSave = {
-          title: result.title,
-          experience: result.experience,
-          pildoras: result.pildoras,
-          reflection: result.reflection,
-          story_valuable: result.story_valuable,
-          rawInterviewText: conversationRef.current
-        };
-
-        // ✅ Set state for UI display
-        setExperienceData(experienceDataToSave);
-        saveAndNavigate(experienceDataToSave);
-
-        // Scroll to bottom
-        const container = messagesContainerRef.current;
-        if (container) {
-          requestAnimationFrame(() => {
-            container.scrollTop = container.scrollHeight;
-          });
-        }
-      }
-    }
-  }); */
   const { messages, setMessages, sendMessage, status, stop } = useChat({
     onFinish: ({ message }) => {
       setIsGenerating(false);
