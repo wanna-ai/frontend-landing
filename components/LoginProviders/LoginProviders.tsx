@@ -17,6 +17,13 @@ const LoginProviders = ({ lastpage }: { lastpage: string }) => {
       },
       body: JSON.stringify({ name: 'lastpage', value: lastpage }),
     })
+    /* const cookieModeRes = await fetch('/api/auth/set-cookie', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: 'mode', value: 'testing' }),
+    }) */
     console.log("no hay token / registrarse con google")
     const endpoint = "/oauth2/authorization/google"
     router.push(`${API_BASE_URL}${endpoint}`)

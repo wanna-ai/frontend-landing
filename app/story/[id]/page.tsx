@@ -5,12 +5,19 @@ import styles from './Story.module.scss'
 import { apiService } from '@/services/api'
 import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { AppContext } from '@/context/AppContext'
+import Image from 'next/image'
+
+interface Attribution {
+  fullName: string
+  pictureUrl: string
+}
 
 interface Story {
   title: string
   content: string
   username: string
   isOwner: boolean
+  attributions: Attribution[]
 }
 
 interface UserInfo {
@@ -145,7 +152,7 @@ const StoryPage = () => {
         /*
          * 2️⃣ Fetch story data
          */
-        const response = await apiService.get(`/api/v1/landing/posts/${id}/preview`, { 
+        const response = await apiService.get(`/api/v1/landing/posts/${id}`, { 
           token: token 
         })
         console.log('response', response)
@@ -157,6 +164,7 @@ const StoryPage = () => {
           content: response.content,
           username: response.userName,
           isOwner: response.isOwner,
+          attributions: response.attributions,
         })
 
         /*
@@ -278,6 +286,18 @@ const StoryPage = () => {
             </div>
           </div>
 
+          {story?.attributions && story.attributions.length > 0 && (
+            <div className={styles.story__isowner__attributions}>
+              <h3>Personas que han leído tu historia:</h3>
+              {story.attributions.map((attribution) => (
+                <div className={styles.story__isowner__attributions__attribution} key={attribution.fullName}>
+                  <Image src={attribution.pictureUrl} alt={attribution.fullName} width={32} height={32} className={styles.story__isowner__attributions__attribution__image} />
+                  <p>{attribution.fullName}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
           {isModalOpen && (
             <Modal story={story!} onClose={() => setIsModalOpen(false)} />
           )}
@@ -332,7 +352,7 @@ const StoryPage = () => {
               onChange={(e) => setComment(e.target.value)}
             />
             
-            <button className={styles.story__notowner__comment__svg} onClick={() => handleSendComment(token!, userInfo)}>
+            <button className={styles.story__notowner__comment__svg} onClick={() => handleSendComment(token!, userInfo!)}>
               <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="28" y="28" width="27" height="27" rx="13.5" transform="rotate(180 28 28)" stroke="var(--color-main)" fill="var(--color-main)" strokeWidth="2"/>
                 <path d="M14 22L14 9.5" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
