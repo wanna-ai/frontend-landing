@@ -60,7 +60,8 @@ jobs:
           fi
           
           echo "NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL" > .env
-          echo "Created .env with API URL: $NEXT_PUBLIC_API_BASE_URL"
+          echo "Created .env with the following content:"
+          cat .env
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
