@@ -89,4 +89,4 @@ jobs:
           token: ${{ secrets.TRIGGER_REPOSITORY_DISPATCH }}
           repository: ${{ github.repository_owner }}/frontend-infra
           event-type: deploy
-          client-payload: '{"image_sha": "${{ github.sha }}", "repository": "${{ github.repository }}", "environment": "${{ matrix.environment }}"}'
+          client-payload: '{"image_sha": "${{ github.sha }}-${{ matrix.environment }}", "repository": "${{ github.repository }}", "environment": "${{ matrix.environment }}"}'
