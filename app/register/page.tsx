@@ -52,6 +52,7 @@ const RegisterPage = () => {
           reflection: postResponse.reflection,
           story_valuable: postResponse.story_valuable,
           rawInterviewText: postResponse.rawInterviewText,
+          visibility: postResponse.visibility,
         })
   
         

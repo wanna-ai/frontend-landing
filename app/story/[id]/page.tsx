@@ -7,17 +7,40 @@ import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { AppContext } from '@/context/AppContext'
 import Image from 'next/image'
 
+const MAX_COMMENT_LENGTH = 160
+
 interface Attribution {
   fullName: string
   pictureUrl: string
+}
+
+interface Comment {
+  content: string
+  postId: string
+  userId: string
+  username: string
+  id: string
+}
+
+interface Contributions {
+  attribution: Attribution
+  comments: Comment[]
 }
 
 interface Story {
   title: string
   content: string
   username: string
+  fullname: string
   isOwner: boolean
-  attributions: Attribution[]
+  contributions: Contributions[]
+}
+
+interface PreviewStory {
+  title: string
+  content: string
+  username: string
+  fullname: string
 }
 
 interface UserInfo {
@@ -114,7 +137,10 @@ const StoryPage = () => {
 
   const { token, userInfo } = useContext(AppContext)
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const [story, setStory] = useState<Story | null>(null)
+  const [previewStory, setPreviewStory] = useState<PreviewStory | null>(null)
   const [state, setState] = useState<State>({ screen: 'login' })
   const [isExpanded, setIsExpanded] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -132,6 +158,11 @@ const StoryPage = () => {
     let isMounted = true
 
     const fetchStory = async () => {
+
+      setIsLoading(true)
+
+      localStorage.setItem('postId', id as string)
+
       try {
         /*
          * 1️⃣ Get token from cookie
@@ -164,7 +195,8 @@ const StoryPage = () => {
           content: response.content,
           username: response.userName,
           isOwner: response.isOwner,
-          attributions: response.attributions,
+          contributions: response.contributions,
+          fullname: response.fullName,
         })
 
         /*
@@ -179,10 +211,22 @@ const StoryPage = () => {
         }
 
       } catch (error) {
-        console.error('Error fetching token:', error)
-        if (isMounted) {
-          router.push('/')
-        }
+
+        const previewResponse = await apiService.get(`/api/v1/landing/posts/${id}/preview`)
+        console.log('previewResponse', previewResponse)
+
+        if (!isMounted) return
+
+        setPreviewStory({
+          title: previewResponse.title,
+          content: previewResponse.content,
+          username: previewResponse.userName,
+          fullname: previewResponse.fullName,
+        })
+
+        setState({ screen: 'login' })
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -231,27 +275,34 @@ const StoryPage = () => {
     }
 
   }
-    
+  
+  
+  if (isLoading) {
+    return (
+      <div className={styles.story}>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.story}>
       {state.screen === 'login' && (
         <div className={styles.story__login}>
-          <h1 className={styles.story__login__title}><span className="highlight">{userInfo?.fullName}</span> desea compartir contigo una historia personal</h1>
+          <h1 className={styles.story__login__title}><span className="highlight">{previewStory?.fullname}</span> desea compartir contigo una historia personal</h1>
 
-          {story && (
+          {previewStory && (
             <div className={styles.story__login__content}>
 
               <div className={styles.story__login__content__header}>
                 <svg className={styles.story__login__content__header__svg} width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9.74999 1.75571V16.9415M9.74999 1.75571L10.7401 1.38414C12.9932 0.538619 15.5067 0.538619 17.7599 1.38414C18.3579 1.60855 18.75 2.15192 18.75 2.75616V15.2217C18.75 16.0515 17.8568 16.6188 17.0356 16.3107C15.2474 15.6396 13.2526 15.6396 11.4644 16.3107L9.76234 16.9494C9.75642 16.9516 9.74999 16.9475 9.74999 16.9415M9.74999 1.75571L8.75987 1.38414C6.50674 0.538619 3.99326 0.538619 1.74012 1.38414C1.14212 1.60855 0.75 2.15192 0.75 2.75616V15.2217C0.75 16.0515 1.64322 16.6188 2.46436 16.3107C4.25258 15.6396 6.24742 15.6396 8.03563 16.3107L9.73765 16.9494C9.74356 16.9516 9.74999 16.9475 9.74999 16.9415" stroke="var(--color-white)" strokeWidth="1.5"/>
                 </svg>
-                <p>{story.title}</p>
+                <p>{previewStory?.title}</p>
               </div>
 
-              {story.content && (
+              {previewStory?.content && (
                 <div className={styles.story__login__content__content}>
-                  <p>{story.content.split(' ').slice(0, 20).join(' ')}...</p>
+                  <p>{previewStory?.content.split(' ').slice(0, 20).join(' ')}...</p>
                 </div>
               )}
                 
@@ -286,15 +337,51 @@ const StoryPage = () => {
             </div>
           </div>
 
-          {story?.attributions && story.attributions.length > 0 && (
-            <div className={styles.story__isowner__attributions}>
-              <h3>Personas que han leído tu historia:</h3>
-              {story.attributions.map((attribution) => (
-                <div className={styles.story__isowner__attributions__attribution} key={attribution.fullName}>
-                  <Image src={attribution.pictureUrl} alt={attribution.fullName} width={32} height={32} className={styles.story__isowner__attributions__attribution__image} />
-                  <p>{attribution.fullName}</p>
+          {story?.contributions && story.contributions.length > 0 ? (
+            <div className={styles.story__isowner__contributions}>
+              <h3>Personas que han leído tu historia ({story.contributions.length}):</h3>
+              {story.contributions.map((contribution) => (
+                <div key={contribution.attribution.fullName} className={styles.story__isowner__contributions__contribution}>
+                  <div className={styles.story__isowner__contributions__contribution__header}>
+                    {contribution.attribution.pictureUrl && (
+                      <Image 
+                        src={contribution.attribution.pictureUrl} 
+                        alt={contribution.attribution.fullName || 'Usuario'} 
+                        className={styles.story__isowner__contributions__contribution__header__avatar}
+                        width={32}
+                        height={32}
+                      />
+                    )}
+                    <div className={styles.story__isowner__contributions__contribution__header__info}>
+                      <span className={styles.story__isowner__contributions__contribution__header__info__name}>
+                        {contribution.attribution.fullName || 'Usuario anónimo'}
+                      </span>
+
+                    </div>
+                  </div>
+                  
+                  {contribution.comments.length > 0 && (
+                    <div className={styles.story__isowner__contributions__contribution__comments}>
+                      {contribution.comments.map((comment) => (
+                        <div key={comment.id} className={styles.story__isowner__contributions__contribution__comments__comment}>
+                          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.929 3H17.7697C23.8448 3 28.7697 7.92487 28.7697 14L28.7697 14.2563L28.5817 22.9402C28.5451 24.6345 28.7957 26.3227 29.3232 27.9332L29.4224 28.2364C29.6702 28.993 28.9776 29.7216 28.2094 29.5125L26.6055 29.0758C25.2374 28.7033 23.8233 28.5267 22.4056 28.5513L16.7 28.65H11.8C6.38761 28.65 2 24.2624 2 18.85V12.929C2 7.44538 6.44538 3 11.929 3Z" stroke="var(--color-gray)" strokeWidth="1.4"/>
+                            <circle cx="1" cy="1" r="1" transform="matrix(-1 0 0 1 21 15)" fill="var(--color-gray)"/>
+                            <circle cx="1" cy="1" r="1" transform="matrix(-1 0 0 1 17 15)" fill="var(--color-gray)"/>
+                            <circle cx="1" cy="1" r="1" transform="matrix(-1 0 0 1 13 15)" fill="var(--color-gray)"/>
+                          </svg>
+
+                          <p className={styles.story__isowner__contributions__contribution__comments__comment__content}>{comment.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
+            </div>
+          ) : (
+            <div className={styles.story__isowner__contributions}>
+              <p className={styles.story__isowner__contributions__noone}>Todavía no hay personas que hayan leído tu historia</p>
             </div>
           )}
 
@@ -307,7 +394,7 @@ const StoryPage = () => {
       {state.screen === 'not-owner' && (
         <div className={styles.story__notowner}>
           <div className={styles.story__notowner__header}>
-            <h1 className={styles.story__notowner__header__title}><span className="highlight">{story?.username}</span> generó esta historia charlando 2 minutos con Wanna</h1>
+            <h1 className={styles.story__notowner__header__title}><span className="highlight">{story?.fullname}</span> generó esta historia charlando 2 minutos con Wanna</h1>
             <h3 className={styles.story__notowner__header__subtitle}>También le dió una reflexió... pero eso ya es privado :) </h3>
           </div>
 
@@ -349,7 +436,12 @@ const StoryPage = () => {
               className={styles.story__notowner__comment__textarea} 
               placeholder='Escribe tu comentario...'
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= MAX_COMMENT_LENGTH) {
+                  setComment(e.target.value)
+                }
+              }}
+              maxLength={MAX_COMMENT_LENGTH}
             />
             
             <button className={styles.story__notowner__comment__svg} onClick={() => handleSendComment(token!, userInfo!)}>
@@ -360,7 +452,10 @@ const StoryPage = () => {
                 <line x1="0.75" y1="-0.75" x2="6.32107" y2="-0.75" transform="matrix(0.707107 0.707107 0.707107 -0.707107 14 7.33334)" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
               </svg>
             </button>
+          </div>
 
+          <div className={styles.story__notowner__comment__counter}>
+            {comment.length}/{MAX_COMMENT_LENGTH}
           </div>
 
           <button className={styles.story__notowner__button} onClick={() => handleGoToChat(`/chat`)}>

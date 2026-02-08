@@ -69,27 +69,61 @@
       }
     }
 
-    &__attributions {
+    &__contributions {
       display: flex;
       flex-direction: column;
       gap: var(--space-4);
-      &__attribution {
+
+      &__contribution {
         display: flex;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
         gap: var(--space-4);
 
         border-bottom: 1px solid var(--color-separator);
         padding-bottom: var(--space-4);
         margin-bottom: var(--space-4);
 
-        &__image {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          object-fit: cover;
+        &__header {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: var(--space-4);
+
+          &__avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+        }
+
+        &__comments {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-4);
+
+          &__comment {
+            display: flex;
+            flex-direction: row;
+            gap: var(--space-4);
+            margin-left: var(--space-4);
+
+            &__content {
+              width: calc(100% - 20px);
+              font-size: var(--font-size-sm);
+              color: var(--color-gray);
+            }
+          }
         }
       }
+
+      &__noone {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray);
+        margin-top: var(--space-4);
+        font-style: italic;
+      }
+
     }
   }
 
@@ -99,9 +133,7 @@
       &__title {
         margin-bottom: var(--space-4);
       }
-  
-      &__subtitle {
-      }
+
       margin-bottom: var(--space-6);
     }
 
@@ -135,10 +167,12 @@
       min-height: calc(100% + 28px);
       display: flex;
       flex-direction: column;
+
       &__textarea {
         border: none;
         min-height: 50px;
       }
+      
       &__svg {
         align-self: flex-end;
         margin-bottom: var(--space-2);
@@ -147,6 +181,14 @@
         width: 29px;
         height: 29px;
         border: none;
+      }
+
+      &__counter {
+        margin-top: var(--space-2);
+        margin-right: var(--space-2);
+        font-size: var(--font-size-sm);
+        color: var(--color-gray);
+        text-align: right;
       }
     }
 

@@ -9,6 +9,7 @@ interface ExperienceData {
   reflection: string;
   story_valuable: string;
   rawInterviewText: string;
+  visibility: string;
 }
 
 interface PromptData {

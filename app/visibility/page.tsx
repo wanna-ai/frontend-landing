@@ -46,6 +46,7 @@ const VisibilityPage = () => {
           reflection: response.reflection,
           story_valuable: response.story_valuable,
           rawInterviewText: response.rawInterviewText,
+          visibility: response.visibility,
         })
 
       } catch (err) {

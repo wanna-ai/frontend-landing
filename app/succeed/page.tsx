@@ -13,6 +13,7 @@ interface ExperienceData {
   reflection: string
   story_valuable: string
   rawInterviewText: string
+  visibility: string
 }
 
 const SucceedPage = () => {
@@ -24,10 +25,12 @@ const SucceedPage = () => {
   const { experienceData, setExperienceData, userInfo, setUserInfo } = useContext(AppContext)
 
   const [token, setToken] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        setIsLoading(true)
         /*
          * 1️⃣ Get token from cookie
          */
@@ -64,11 +67,14 @@ const SucceedPage = () => {
           reflection: response.reflection,
           story_valuable: response.story_valuable,
           rawInterviewText: response.rawInterviewText,
+          visibility: response.visibility,
         })
 
       } catch (err) {
         console.error('Error fetching post:', err)
         router.push('/')
+      } finally {
+        setIsLoading(false)
       }
     }
   
@@ -91,6 +97,13 @@ const SucceedPage = () => {
     window.open(whatsappUrl, '_blank')
   }
 
+  if (isLoading) {
+    return (
+      <div className={styles.succeed}>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.succeed}>
       <div className={styles.succeed__content}>
@@ -111,10 +124,12 @@ const SucceedPage = () => {
 
         <div className={styles.succeed__content__story}>
           <div className={styles.succeed__content__story__header}>
-            <h1 className={styles.succeed__content__story__header__title}>Déjate conocer más por las personas que te aprecian &#10084;&#65039;</h1>
+            <h1 className={styles.succeed__content__story__header__title}>
+              {experienceData?.visibility === 'PRIVATE' ? 'Déjate conocer más por las personas que te aprecian ' : 'Comparte tu historia '} &#10084;&#65039;
+            </h1>
           </div>
           
-          <div className={styles.succeed__content__story__story} onClick={() => handleShareWhatsApp(experienceData ?? { title: '', experience: '', pildoras: [], reflection: '', story_valuable: '', rawInterviewText: '' })}>
+          <div className={styles.succeed__content__story__story} onClick={() => handleShareWhatsApp(experienceData ?? { title: '', experience: '', pildoras: [], reflection: '', story_valuable: '', rawInterviewText: '', visibility: 'PRIVATE' })}>
             <div className={styles.succeed__content__story__story__content}>
               <div className={styles.succeed__content__story__story__header}>
                 <svg className={styles.succeed__content__story__story__header__svg} width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">

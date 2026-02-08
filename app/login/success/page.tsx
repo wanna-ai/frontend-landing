@@ -75,12 +75,12 @@ const LoginSuccessPage = () => {
          * 5️⃣ Redirect
         */
        if (lastpage === 'register') {
-          if (postId) {
-            console.log("here")
-            const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
-            console.log('response', response)
-          }
-          router.push(`/preview?postId=${postId}`)
+        if (postId) {
+          console.log("here")
+          const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
+          console.log('response', response)
+        }
+        router.push(`/preview?postId=${postId}`)
         } else {
           router.push(`/story/${postId}`)
         }
