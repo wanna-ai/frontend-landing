@@ -54,13 +54,13 @@ jobs:
       - name: Create environment file
         run: |
           if [[ "${{ matrix.environment }}" == "production" ]]; then
-            API_URL="https://api.wannna.ai"
+            NEXT_PUBLIC_API_BASE_URL="https://api.wannna.ai"
           else
-            API_URL="https://api.${{ matrix.environment }}.wannna.ai"
+            NEXT_PUBLIC_API_BASE_URL="https://api.${{ matrix.environment }}.wannna.ai"
           fi
           
-          echo "NEXT_PUBLIC_API_BASE_URL=$API_URL" > .env
-          echo "Created .env with API URL: $API_URL"
+          echo "NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL" > .env
+          echo "Created .env with API URL: $NEXT_PUBLIC_API_BASE_URL"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
