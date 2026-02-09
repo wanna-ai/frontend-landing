@@ -20,7 +20,7 @@ const LoginSuccessPage = () => {
         console.log("===============================")
         console.log("process.env.NEXT_PUBLIC_ENV", process.env.NEXT_PUBLIC_ENV)
         // Check if we need to redirect to localhost
-        if (process.env.NEXT_PUBLIC_ENV === 'localhost') {
+        //if (process.env.NEXT_PUBLIC_ENV === 'localhost') {
           const currentUrl = window.location.href
           const url = new URL(currentUrl)
           const pathname = url.pathname
@@ -34,7 +34,7 @@ const LoginSuccessPage = () => {
             window.location.href = `http://localhost:3000${pathname}${search}`
             return
           }
-        }
+        //}
         
         //get token from search params
         const token = searchParams.get('token')
@@ -88,7 +88,6 @@ const LoginSuccessPage = () => {
         */
        if (lastpage === 'register') {
         if (postId) {
-          console.log("here")
           const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
           console.log('response', response)
         }

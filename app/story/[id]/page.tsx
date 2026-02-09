@@ -7,6 +7,7 @@ import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { AppContext } from '@/context/AppContext'
 import Image from 'next/image'
 import Snippet from '@/components/Snippet/Snippet'
+import { useAuth } from '@/app/hook/useAuth'
 
 const MAX_COMMENT_LENGTH = 160
 
@@ -136,6 +137,7 @@ const StoryPage = () => {
   const params = useParams()
   const id = params.id // '2903932'
   const router = useRouter()
+  const { checkAuthStatus } = useAuth();
 
   const { token, userInfo } = useContext(AppContext)
 
@@ -169,25 +171,33 @@ const StoryPage = () => {
         /*
          * 1️⃣ Get token from cookie
          */
-        const tokenResponse = await fetch('/api/auth/get-cookie', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        if (!tokenResponse.ok) {
-          throw new Error('Failed to fetch token')
+
+        const authStatus = await checkAuthStatus();
+        console.log("authStatus", authStatus)
+
+        // only if user is guest or there is no user
+        if (authStatus?.isGuest) {
+          const previewResponse = await apiService.get(`/api/v1/landing/posts/${id}/preview`)
+          console.log('previewResponse', previewResponse)
+
+          setPreviewStory({
+            title: previewResponse.title,
+            previewContent: previewResponse.previewContent,
+            username: previewResponse.userName,
+            fullname: previewResponse.fullName,
+          })
+
+          setState({ screen: 'login' })
+          return
         }
-        const tokenData = await tokenResponse.json()
-        const token = tokenData.token
 
         /*
          * 2️⃣ Fetch story data
          */
         const response = await apiService.get(`/api/v1/landing/posts/${id}`, { 
-          token: token
+          token: authStatus?.token || ""
         })
-
+        
         if (!isMounted) return
 
         setStory({
