@@ -34,38 +34,6 @@ const RegisterPage = () => {
   const [showLoginMail, setShowLoginMail] = useState(false)
   const [showLoginPassword, setShowLoginPassword] = useState(false)
 
-  /* useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const authStatus = await checkAuthStatus();
-        console.log("authStatus", authStatus)
-
-        const postResponse = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: authStatus?.token || "" })
-        if (postResponse.error) {
-          throw new Error('Failed to fetch post')
-        }
-        console.log('postResponse', postResponse)
-        setExperienceData({
-          title: postResponse.title,
-          experience: postResponse.experience,
-          pildoras: postResponse.pildoras,
-          reflection: postResponse.reflection,
-          story_valuable: postResponse.story_valuable,
-          rawInterviewText: postResponse.rawInterviewText,
-          visibility: postResponse.visibility,
-        })
-  
-        
-      } catch (err) {
-        console.error('Error fetching token:', err)
-        router.push('/')
-      } finally {
-      }
-    }
-  
-    fetchPost()
-  }, [postId]) */
-
   const getTruncatedText = (text: string, maxWords: number = 20) => {
     const words = text.trim().split(/\s+/);
     if (words.length <= maxWords) return text;
@@ -113,17 +81,20 @@ const RegisterPage = () => {
 
   return (
     <div className={styles.register}>
-      <h1 className={styles.register__title}>Esto es lo que Wanna ha empezado a escribir contigo...</h1>
-
+      <div className={styles.register__overlay}></div>
       <div className={styles.register__content}>
-        <Swiper pagination={true} modules={[Pagination]} spaceBetween={50} slidesPerView={1}>
-          <SwiperSlide>
-            <Snippet icon="reflection" header="Reflexión" content={getTruncatedText(experienceData?.reflection ?? '')} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Snippet icon="story" header="Tu historia" content={experienceData?.title ?? ''} />
-          </SwiperSlide>
-        </Swiper>
+        <h1 className={styles.register__content__title}>Esto es lo que Wanna ha empezado a escribir contigo...</h1>
+
+        <div className={styles.register__content__content}>
+          <Swiper pagination={true} modules={[Pagination]} spaceBetween={50} slidesPerView={1}>
+            <SwiperSlide>
+              <Snippet icon="reflection" header="Reflexión" content={getTruncatedText(experienceData?.reflection ?? '')} />
+            </SwiperSlide>
+            <SwiperSlide>
+              <Snippet icon="story" header="Tu historia" content={experienceData?.title ?? ''} />
+            </SwiperSlide>
+          </Swiper>
+        </div>
       </div>
 
       <div className={styles.register__register}>
@@ -152,9 +123,9 @@ const RegisterPage = () => {
               )}
             </div>
           ) : (
-            <>
+            <div className={styles.register__register__buttons__login}>
               <LoginProviders lastpage="register" />
-            </>
+            </div>
           )}
         </div>
       </div>

@@ -29,7 +29,7 @@ const ResultPage = () => {
   const router = useRouter();
   const { checkAuthStatus } = useAuth();
 
-  const { setPostId } = useContext(AppContext);
+  const { setPostId, postId } = useContext(AppContext);
 
   const hasSubmitted = useRef(false); // ✅ useRef en lugar de variable local
   const [conversation, setConversation] = useState('');
@@ -51,6 +51,7 @@ const ResultPage = () => {
     }, { token: authStatus?.token || "" });
 
     const responseData = response.data || response;
+    console.log('responseData', responseData);
     setPostId(responseData.id);
   }
 
@@ -115,30 +116,39 @@ const ResultPage = () => {
   }
 
   return (
-    <div className={styles.preview}>
-      <div className={styles.preview__container}>
+    <div className={styles.result}>
+      <div className={styles.result__container}>
         <h1>Creando tu experiencia</h1>
         
         {isLoading && !object?.title && (
-          <div className={styles.preview__loading}>
+          <div className={styles.result__loading}>
             <div className={styles.spinner} />
             <p>Analizando tu conversación...</p>
           </div>
         )}
 
         {object && (
-          <div className={styles.preview__content}>
+          <div className={styles.result__content}>
             {/* ✅ Título */}
             {object.title && (
-              <div className={styles.preview__section}>
+              <div className={styles.result__section}>
                 <h2>📝 Título</h2>
                 <h3>{object.title}</h3>
               </div>
             )}
 
+            {/* ✅ Experiencia */}
+            {object.experience && (
+              <div className={styles.result__section}>
+                <h2>📖 Tu historia</h2>
+                <p>{object.experience}</p>
+                {isLoading && <span className={styles.typing}>▊</span>}
+              </div>
+            )}
+
             {/* ✅ Píldoras */}
             {object.pildoras && object.pildoras.length > 0 && (
-              <div className={styles.preview__section}>
+              <div className={styles.result__section}>
                 <h2>💊 Píldoras ({object.pildoras.length})</h2>
                 <ul>
                   {object.pildoras.map((pill, i) => (
@@ -148,34 +158,19 @@ const ResultPage = () => {
               </div>
             )}
 
-            {/* ✅ Experiencia */}
-            {object.experience && (
-              <div className={styles.preview__section}>
-                <h2>📖 Tu historia</h2>
-                <p>{object.experience}</p>
-                {isLoading && <span className={styles.typing}>▊</span>}
-              </div>
-            )}
-
             {/* ✅ Reflexión */}
             {object.reflection && (
-              <div className={styles.preview__section}>
+              <div className={styles.result__section}>
                 <h2>💭 Reflexión</h2>
                 <p>{object.reflection}</p>
               </div>
             )}
 
-            {/* ✅ Por qué es valiosa */}
-            {object.story_valuable && (
-              <div className={styles.preview__section}>
-                <h2>✨ Valor de tu historia</h2>
-                <p>{object.story_valuable}</p>
-              </div>
-            )}
-
             {!isLoading && (
-              <div className={styles.preview__complete}>
-                <p>✓ Experiencia completada!</p>
+              <div className={styles.result__complete}>
+                <button className={styles.result__complete__button} onClick={() => router.push(`/visibility?postId=${postId}`)}>
+                  <p>Decide quién ve tu historia</p>
+                </button>
               </div>
             )}
           </div>

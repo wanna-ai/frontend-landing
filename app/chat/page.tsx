@@ -40,106 +40,6 @@ export default function ChatPage() {
     }
   };
 
-  /* const saveAndNavigate = async (data: {
-    title: string;
-    experience: string;
-    pildoras: string[];
-    reflection: string;
-    story_valuable: string;
-    rawInterviewText: string;
-  }) => {
-    if (hasNavigated.current) return;
-    hasNavigated.current = true;
-
-    try {
-      const authStatus = await checkAuthStatus();
-
-      const response = await apiService.post('/api/v1/landing/posts/interview', {
-        title: data.title,
-        content: data.experience,
-        pills: data.pildoras.join(' - '),
-        reflection: data.reflection,
-        story_valuable: data.story_valuable,
-        rawInterviewText: data.rawInterviewText
-      }, { token: authStatus?.token || "" });
-
-      const responseData = response.data || response;
-      setPostId(responseData.id);
-
-      // ✅ Ejecutar en paralelo
-      await Promise.all([
-        fetch('/api/auth/set-cookie', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: 'authToken', value: responseData.token }),
-        }),
-        // ✅ localStorage es síncrono, no necesita await
-        Promise.resolve().then(() => {
-          localStorage.setItem('postId', responseData.id);
-          localStorage.setItem('title', responseData.title);
-          localStorage.setItem('content', responseData.content);
-          localStorage.setItem('communityId', responseData.communityId || communityId || '');
-          localStorage.setItem('pills', responseData.pills);
-          localStorage.setItem('reflection', responseData.reflection);
-          localStorage.setItem('story_valuable', responseData.story_valuable);
-          localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
-        })
-      ]);
-
-      router.push(authStatus?.isGuest ? '/register?postId=' + responseData.id : '/preview?postId=' + responseData.id);
-
-    } catch (error) {
-      console.error('Error al enviar la conversación al backend:', error);
-      hasNavigated.current = false;
-      setIsGenerating(false);
-      setIsInputVisible(true);
-      alert('Error al guardar la experiencia. Por favor, intenta de nuevo.');
-    }
-  };
-
-  const processExperience = async () => {
-    setIsGenerating(true);
-    setIsInputVisible(false);
-
-    try {
-      const response = await fetch('/api/chat/review', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          conversation: conversationRef.current,
-          editorPrompt: promptData?.editorPrompt
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to process experience');
-      }
-
-      const result = await response.json();
-      console.log("REVIEW RESULT", result)
-
-      const experienceDataToSave = {
-        title: result.title,
-        experience: result.experience,
-        pildoras: result.pildoras,
-        reflection: result.reflection,
-        story_valuable: result.story_valuable,
-        rawInterviewText: conversationRef.current,
-        visibility: 'PRIVATE'
-      };
-
-      setExperienceData(experienceDataToSave);
-      await saveAndNavigate(experienceDataToSave);
-
-    } catch (error) {
-      console.error('Error processing experience:', error);
-      setIsGenerating(false);
-      setIsInputVisible(true);
-      alert('Error al procesar la experiencia. Por favor, intenta de nuevo.');
-    }
-  }; */
-
-
   const saveAndNavigate = async () => {
     await Promise.all([
       localStorage.setItem('conversation', conversationRef.current),
@@ -148,6 +48,7 @@ export default function ChatPage() {
 
     const authStatus = await checkAuthStatus();
     console.log('authStatus', authStatus)
+
     router.push(authStatus?.isGuest ? '/register': '/result');
   };
 

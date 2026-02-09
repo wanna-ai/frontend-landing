@@ -14,7 +14,7 @@ responde EXACTAMENTE este texto: "[WANNA_REVIEW_READY]"
 
 No agregues nada más después de ese mensaje. Ese será el indicador para procesar la conversación.
 
-    Si el usuario escribe "BETLEM", significa que quiere creas una experiencia de prueba inmediatamente, 
+    Si el usuario escribe "BETLEM", significa que quiere creas una experiencia humana aleatoria de prueba inmediatamente, 
 así que responde directamente "[WANNA_REVIEW_READY]"
     
     `;
@@ -28,21 +28,6 @@ así que responde directamente "[WANNA_REVIEW_READY]"
           },
           ...(await convertToModelMessages(messages)),
       ],
-      /* tools: {
-        reviewExperience: {
-          description: `${editorPrompt} No necesitas llenar los campos, solo ejecuta la tool como señal.`,
-        
-          inputSchema: z.object({
-            title: z.string(),
-            experience: z.string(),
-            pildoras: z.array(z.string()),
-            reflection: z.string(),
-            story_valuable: z.string(),
-          }),
-
-          execute: async (params) => params,
-        },
-      }, */
     });
 
   return result.toUIMessageStreamResponse();
