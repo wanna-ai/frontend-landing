@@ -1,7 +1,6 @@
 'use client'
 import { createContext, useState, useEffect } from "react";
 import { apiService } from '@/services/api';
-import { getCookieAuthToken } from '@/app/lib/auth';
 
 interface ExperienceData {
   title: string;
@@ -63,7 +62,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoadingPrompts, setIsLoadingPrompts] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
+  // Función para fetchear los prompts
   const fetchPromptData = async (communityId?: string) => {
+    // Si ya tenemos los datos, no hacer fetch de nuevo
     if (promptData?.interviewerPromp && promptData?.editorPrompt) {
       return;
     }
@@ -87,21 +88,70 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // Initialize auth on mount
-  const initializeAuth = async () => {
-    const { token: authToken, userInfo: authUserInfo } = await getCookieAuthToken();
-    setToken(authToken);
-    setUserInfo(authUserInfo);
-  };
+  // Function to get user info
+  const getUserInfo = async (token: string) => {
+    const userInfoResponse = await apiService.get('/api/v1/users/me', { token: token })
+    console.log('userInfoResponse', userInfoResponse)
+
+    if (userInfoResponse) {
+      setUserInfo(userInfoResponse)
+    }
+  }
+
+  // Function to get cookie authToken
+  const getCookieAuthToken = async () => {
+    // First, check the "register" cookie via API
+    const registerResponse = await fetch('/api/auth/get-cookie-register', {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const registerData = await registerResponse.json();
+    console.log('register cookie:', registerData.register);
+
+
+      // If register is "anonymous", remove authToken cookie and exit
+    if (registerData.register === 'anonymous' || !registerData.register) {
+      // Call API to remove authToken cookie
+      await fetch('/api/auth/remove-cookie-token', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      setToken(null);
+      return;
+    }
+
+    // If register is "user" (or doesn't exist), proceed with getting the token
+    if (registerData.register === 'user' || !registerData.register) {
+      const tokenResponse = await fetch('/api/auth/get-cookie', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const tokenData = await tokenResponse.json();
+      console.log('tokenData', tokenData);
+
+      if (tokenData.token) {
+        setToken(tokenData.token);
+        getUserInfo(tokenData.token);
+      } else {
+        setToken(null);
+      }
+    }
+  }
 
   useEffect(() => {
     if (!promptData) {
       fetchPromptData();
     }
-  }, [promptData]);
+  }, [ promptData ]);
 
   useEffect(() => {
-    initializeAuth();
+    getCookieAuthToken();
   }, []);
   
   return (
