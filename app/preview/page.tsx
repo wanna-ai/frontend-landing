@@ -39,13 +39,11 @@ export default function PreviewPage() {
         }
         const tokenData = await tokenResponse.json()
         const token = tokenData.token
-        console.log('token', token)
 
         /**
          * 2️⃣ Get post
          */
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
-        console.log('response', response)
 
         setData({
           title: response.title,

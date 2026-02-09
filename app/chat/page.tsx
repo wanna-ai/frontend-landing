@@ -1,35 +1,31 @@
 'use client'
 import styles from "./Chat.module.scss";
-import React, { useState, useEffect, useRef, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { AppContext } from "@/context/AppContext";
 import { useSearchParams } from 'next/navigation'
 import { useChat } from "@ai-sdk/react";
-import Image from "next/image";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import Loader from "@/components/Loader/Loader";
-import { ToolResultPart } from "ai";
 import { useRouter } from 'next/navigation';
 import { apiService } from '@/services/api'
 import LoaderGenerate from "@/components/LoaderGenerate/LoaderGenerate";
 import { useAuth } from '@/app/hook/useAuth'
 
-
 export default function ChatPage() {
   const searchParams = useSearchParams()
   const communityId = searchParams.get('c') ?? undefined
 
-  const { promptData } = useContext(AppContext);
+  const { promptData, setExperienceData, setPostId } = useContext(AppContext);
   const router = useRouter();
-  const { setExperienceData, setPostId, token, userInfo } = useContext(AppContext);
   const { checkAuthStatus } = useAuth();
 
   // refs
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const editableRef = useRef<HTMLDivElement>(null);
   const conversationRef = useRef<string>("");
-  const hasNavigated = useRef<boolean>(false); // ✅ Prevent double navigation
+  const hasNavigated = useRef<boolean>(false);
   const hasInitialized = useRef<boolean>(false);
 
   // states
@@ -38,12 +34,12 @@ export default function ChatPage() {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
     }
   };
 
-  // ✅ Improved: Pass data directly, handle response properly
   const saveAndNavigate = async (data: {
     title: string;
     experience: string;
@@ -52,19 +48,11 @@ export default function ChatPage() {
     story_valuable: string;
     rawInterviewText: string;
   }) => {
-    // Prevent double navigation
-    if (hasNavigated.current) {
-      console.log('Navigation already in progress');
-      alert('Navigation already in progress');
-      return;
-    }
-    
+    if (hasNavigated.current) return;
     hasNavigated.current = true;
 
     try {
-
       const authStatus = await checkAuthStatus();
-      console.log("authStatus", authStatus)
 
       const response = await apiService.post('/api/v1/landing/posts/interview', {
         title: data.title,
@@ -75,125 +63,108 @@ export default function ChatPage() {
         rawInterviewText: data.rawInterviewText
       }, { token: authStatus?.token || "" });
 
-      
-      // ✅ Fix: Handle response structure properly
       const responseData = response.data || response;
       setPostId(responseData.id);
 
-      console.log("responseData", responseData)
+      // ✅ Ejecutar en paralelo
+      await Promise.all([
+        fetch('/api/auth/set-cookie', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'authToken', value: responseData.token }),
+        }),
+        // ✅ localStorage es síncrono, no necesita await
+        Promise.resolve().then(() => {
+          localStorage.setItem('postId', responseData.id);
+          localStorage.setItem('title', responseData.title);
+          localStorage.setItem('content', responseData.content);
+          localStorage.setItem('communityId', responseData.communityId || communityId || '');
+          localStorage.setItem('pills', responseData.pills);
+          localStorage.setItem('reflection', responseData.reflection);
+          localStorage.setItem('story_valuable', responseData.story_valuable);
+          localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
+        })
+      ]);
 
-      // set cookie authToken
-      const cookieRes = await fetch('/api/auth/set-cookie', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: 'authToken', value: responseData.token }),
-      })
-
-      // Set localStorage data
-      localStorage.setItem('postId', responseData.id);
-      localStorage.setItem('title', responseData.title);
-      localStorage.setItem('content', responseData.content);
-      localStorage.setItem('communityId', responseData.communityId || communityId || '');
-      localStorage.setItem('pills', responseData.pills);
-      localStorage.setItem('reflection', responseData.reflection);
-      localStorage.setItem('story_valuable', responseData.story_valuable);
-      localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
-
-      // Navigate
       router.push(authStatus?.isGuest ? '/register?postId=' + responseData.id : '/preview?postId=' + responseData.id);
 
     } catch (error) {
       console.error('Error al enviar la conversación al backend:', error);
-      hasNavigated.current = false; // Reset on error
+      hasNavigated.current = false;
+      setIsGenerating(false);
+      setIsInputVisible(true);
       alert('Error al guardar la experiencia. Por favor, intenta de nuevo.');
     }
   };
 
-  // useChat hook
-  const { messages, setMessages, sendMessage, status, stop } = useChat({
-    onFinish: ({ message }) => {
-      setIsGenerating(false);
+  const processExperience = async () => {
+    setIsGenerating(true);
+    setIsInputVisible(false);
 
-      // ✅ Process in parallel, not sequentially
-      const textParts: string[] = [];
-      let toolResult = null;
-  
-      message.parts.forEach((part) => {
-        if (part.type === "text") {
-          textParts.push(part.text);
-        } else if (part.type === "tool-reviewExperience") {
-          toolResult = (part as unknown as ToolResultPart).output;
-        }
+    try {
+      const response = await fetch('/api/chat/review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversation: conversationRef.current,
+          editorPrompt: promptData?.editorPrompt
+        })
       });
-  
-      // ✅ Build conversation string only once
-      if (textParts.length > 0) {
-        conversationRef.current += `${message.role}: ${textParts.join('')}\n\n`;
-      }
-  
-      // ✅ Handle tool result immediately without blocking
-      if (toolResult) {
-        const result = toolResult as { 
-          title: string; 
-          experience: string; 
-          pildoras: string[]; 
-          reflection: string; 
-          story_valuable: string 
-        };
-        
-        const experienceDataToSave = {
-          title: result.title,
-          experience: result.experience,
-          pildoras: result.pildoras,
-          reflection: result.reflection,
-          story_valuable: result.story_valuable,
-          rawInterviewText: conversationRef.current,
-          visibility: 'PRIVATE'
-        };
-  
-        // ✅ Update UI immediately (non-blocking)
-        setExperienceData(experienceDataToSave);
-        
-        // ✅ Hide input immediately
-        setIsInputVisible(false);
-        
-        // ✅ Save in background (don't await)
-        saveAndNavigate(experienceDataToSave);
-      }
-    },
 
-    onToolCall: async ({ toolCall }) => {
-      console.log('toolCall', toolCall);
-      if (toolCall.toolName === 'reviewExperience') {
-        setIsGenerating(true);
-        setIsInputVisible(false);
+      if (!response.ok) {
+        throw new Error('Failed to process experience');
+      }
+
+      const result = await response.json();
+      console.log("REVIEW RESULT", result)
+
+      const experienceDataToSave = {
+        title: result.title,
+        experience: result.experience,
+        pildoras: result.pildoras,
+        reflection: result.reflection,
+        story_valuable: result.story_valuable,
+        rawInterviewText: conversationRef.current,
+        visibility: 'PRIVATE'
+      };
+
+      setExperienceData(experienceDataToSave);
+      await saveAndNavigate(experienceDataToSave);
+
+    } catch (error) {
+      console.error('Error processing experience:', error);
+      setIsGenerating(false);
+      setIsInputVisible(true);
+      alert('Error al procesar la experiencia. Por favor, intenta de nuevo.');
+    }
+  };
+
+  const { messages, setMessages, sendMessage, status, stop } = useChat({
+    onFinish: async ({ message }) => {
+      const textParts = message.parts
+        .filter(part => part.type === "text")
+        .map(part => part.text);
+  
+      const fullText = textParts.join('');
+      
+      if (fullText) {
+        conversationRef.current += `${message.role}: ${fullText}\n\n`;
+      }
+  
+      if (fullText.includes("[WANNA_REVIEW_READY]")) {
+        await processExperience();
       }
     },
   });
 
-  // useEffect to set isGenerating to true when tool-reviewExperience is called
+  // ✅ Unificado: scroll cuando cambian los mensajes
   useEffect(() => {
-    if (messages.length > 0) {
-      const toolParts = messages.filter(message => message.parts.some(part => part.type === "tool-reviewExperience"));
-      if (toolParts.length > 0) {
-        setIsGenerating(true);
-        setIsInputVisible(false);
-
-        requestAnimationFrame(() => {
-          scrollToBottom();
-        });
-        
-        return;
-      }
-      requestAnimationFrame(() => {
-        scrollToBottom();
-      });
+    if (messages.length > 0 && !isGenerating) {
+      requestAnimationFrame(scrollToBottom);
     }
-  }, [messages]);
+  }, [messages.length, isGenerating]);
 
-  // scroll to top when clicking on input
+  // ✅ Prevenir scroll al hacer focus
   useEffect(() => {
     const preventScrollOnFocus = (e: Event) => {
       e.preventDefault();
@@ -203,33 +174,17 @@ export default function ChatPage() {
     const editable = editableRef.current;
     if (editable) {
       editable.addEventListener('focus', preventScrollOnFocus);
+      return () => editable.removeEventListener('focus', preventScrollOnFocus);
     }
-  
-    return () => {
-      if (editable) {
-        editable.removeEventListener('focus', preventScrollOnFocus);
-      }
-    };
   }, []);
 
-  // send message when component mounts
+  // ✅ Inicialización del chat
   useEffect(() => {
-    // ✅ Prevenir doble ejecución
-    if (hasInitialized.current) {
-      console.log('Already initialized, skipping');
-      return;
-    }
-
-    // ✅ Prevenir doble ejecución
-    if (!promptData) {
-      console.log('No prompt data, skipping');
-      return;
-    }
+    if (hasInitialized.current || !promptData) return;
     
-    console.log('Initializing chat for the first time');
     hasInitialized.current = true;
     
-    // Clear localStorage and state on mount
+    // Limpiar en una sola línea
     ['title', 'content', 'communityId', 'pills', 'reflection', 'story_valuable', 'rawInterviewText']
       .forEach(key => localStorage.removeItem(key));
 
@@ -237,7 +192,6 @@ export default function ChatPage() {
     setMessages([]);
     hasNavigated.current = false;
 
-    // ✅ Enviar mensaje inicial
     sendMessage(
       {
         role: "user",
@@ -247,38 +201,20 @@ export default function ChatPage() {
         body: {
           data: {
             interviewerPrompt: promptData?.interviewerPromp,
-            editorPrompt: promptData?.editorPrompt
           }
         }
       }
     );
-
-  }, [promptData]); // ✅ Dependencias correctas
-
-  // ✅ Solo mantén el scroll en un useEffect separado y más ligero
-  useEffect(() => {
-    if (messages.length === 0) return;
-    
-    const container = messagesContainerRef.current;
-    if (container) {
-      // ✅ Solo hacer scroll si no estamos generando
-      if (!isGenerating) {
-        container.scrollTop = container.scrollHeight;
-      }
-    }
-  }, [messages.length, isGenerating]); // ✅ Dependencia solo del length, no del array completo
-
+  }, [promptData, setExperienceData, setMessages, sendMessage]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!editableRef.current) return;
+    if (!editableRef.current || status === "streaming") return;
 
     const content = editableRef.current.innerText.trim();
     if (content === "") return;
 
-    conversationRef.current += "user: " + content + "\n\n";
-
-    if (status === "streaming") return;
+    conversationRef.current += `user: ${content}\n\n`;
 
     sendMessage(
       {
@@ -289,27 +225,25 @@ export default function ChatPage() {
         body: {
           data: {
             interviewerPrompt: promptData?.interviewerPromp,
-            editorPrompt: promptData?.editorPrompt
           }
         }
       }
     );
 
     editableRef.current.innerText = "";
+    setIsEditableEmpty(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (!editableRef.current) return;
+      if (!editableRef.current || status === "streaming") return;
   
       const content = editableRef.current.innerText.trim();
       if (content === "") return;
 
-      conversationRef.current += "user: " + content + "\n\n";
+      conversationRef.current += `user: ${content}\n\n`;
   
-      if (status === "streaming") return;
-
       sendMessage(
         {
           role: "user",
@@ -319,7 +253,6 @@ export default function ChatPage() {
           body: {
             data: {
               interviewerPrompt: promptData?.interviewerPromp,
-              editorPrompt: promptData?.editorPrompt
             }
           }
         }
@@ -341,46 +274,48 @@ export default function ChatPage() {
       <div className={styles.chat__messages} ref={messagesContainerRef}>
         
         {messages.map((message) => {
-          // ✅ Filtrar solo las partes de texto una vez
           const textParts = message.parts.filter(part => part.type === "text");
-          // ✅ Si no hay texto, no renderizar nada
           if (textParts.length === 0) return null;
 
           return (
             <div className={styles.chat__messages__message} key={message.id}>
-              {textParts.map((part, index) => (
-                <div
-                  key={`${message.id}-${index}`}
-                  className={`${styles.chat__messages__message__content} ${
-                    message.role === "user"
-                      ? styles.chat__messages__message__content__user
-                      : styles.chat__messages__message__content__avatar
-                  }`}
-                >
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeRaw]}
-                    components={{
-                      p: ({ children }) => <p className={styles.markdown_paragraph}>{children}</p>,
-                      strong: ({ children }) => <strong className={styles.markdown_bold}>{children}</strong>,
-                      em: ({ children }) => <em className={styles.markdown_italic}>{children}</em>,
-                      code: ({ children }) => <code className={styles.markdown_code}>{children}</code>,
-                      pre: ({ children }) => <pre className={styles.markdown_pre}>{children}</pre>,
-                      ul: ({ children }) => <ul className={styles.markdown_ul}>{children}</ul>,
-                      ol: ({ children }) => <ol className={styles.markdown_ol}>{children}</ol>,
-                      li: ({ children }) => <li className={styles.markdown_li}>{children}</li>,
-                      h1: ({ children }) => <h1 className={styles.markdown_h1}>{children}</h1>,
-                      h2: ({ children }) => <h2 className={styles.markdown_h2}>{children}</h2>,
-                      h3: ({ children }) => <h3 className={styles.markdown_h3}>{children}</h3>
-                    }}
+              {textParts.map((part, index) => {
+                // ✅ Ocultar el trigger
+                if (part.text.includes("[WANNA_REVIEW_READY]")) return null;
+
+                return (
+                  <div
+                    key={`${message.id}-${index}`}
+                    className={`${styles.chat__messages__message__content} ${
+                      message.role === "user"
+                        ? styles.chat__messages__message__content__user
+                        : styles.chat__messages__message__content__avatar
+                    }`}
                   >
-                    {part.text}
-                  </ReactMarkdown>
-                </div>
-              ))}
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeRaw]}
+                      components={{
+                        p: ({ children }) => <p className={styles.markdown_paragraph}>{children}</p>,
+                        strong: ({ children }) => <strong className={styles.markdown_bold}>{children}</strong>,
+                        em: ({ children }) => <em className={styles.markdown_italic}>{children}</em>,
+                        code: ({ children }) => <code className={styles.markdown_code}>{children}</code>,
+                        pre: ({ children }) => <pre className={styles.markdown_pre}>{children}</pre>,
+                        ul: ({ children }) => <ul className={styles.markdown_ul}>{children}</ul>,
+                        ol: ({ children }) => <ol className={styles.markdown_ol}>{children}</ol>,
+                        li: ({ children }) => <li className={styles.markdown_li}>{children}</li>,
+                        h1: ({ children }) => <h1 className={styles.markdown_h1}>{children}</h1>,
+                        h2: ({ children }) => <h2 className={styles.markdown_h2}>{children}</h2>,
+                        h3: ({ children }) => <h3 className={styles.markdown_h3}>{children}</h3>
+                      }}
+                    >
+                      {part.text}
+                    </ReactMarkdown>
+                  </div>
+                );
+              })}
             </div>
           );
-
         })}
         
         {isGenerating && (
@@ -389,7 +324,7 @@ export default function ChatPage() {
           </div>
         )}
         
-        {status === "submitted" && (
+        {status === "submitted" && !isGenerating && (
           <div className={styles.chat__messages__message__loading}>
             <Loader />
           </div>
@@ -412,10 +347,9 @@ export default function ChatPage() {
             {status === "submitted" || status === "streaming" ? (
               <button type="button" className={styles.chat__input__form__button} onClick={stop}>
                 <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="16.6265" cy="16.6265" r="16.6265" fill="var(--color-black)"/>
-                <rect x="11.6265" y="11.6265" width="10" height="10" rx="1" fill="white"/>
+                  <circle cx="16.6265" cy="16.6265" r="16.6265" fill="var(--color-black)"/>
+                  <rect x="11.6265" y="11.6265" width="10" height="10" rx="1" fill="white"/>
                 </svg>
-
               </button>
             ) : (
               <button

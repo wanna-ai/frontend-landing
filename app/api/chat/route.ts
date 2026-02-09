@@ -7,7 +7,16 @@ export async function POST(req: Request) {
   try {
     const { messages, data } = await req.json();
     const { interviewerPrompt, editorPrompt } = data;
-    const prompt = `${interviewerPrompt}\n\n${editorPrompt}\n\n Si escribo "BETLEM" crea una experiencia de prueba y ejecuta la tool reviewExperience
+    const prompt = `${interviewerPrompt}\n\n
+    
+    IMPORTANTE: Cuando determines que tienes suficiente información para crear una experiencia completa, 
+responde EXACTAMENTE este texto: "[WANNA_REVIEW_READY]"
+
+No agregues nada más después de ese mensaje. Ese será el indicador para procesar la conversación.
+
+    Si el usuario escribe "BETLEM", significa que quiere creas una experiencia de prueba inmediatamente, 
+así que responde directamente "[WANNA_REVIEW_READY]"
+    
     `;
   
     const result = streamText({
@@ -19,9 +28,9 @@ export async function POST(req: Request) {
           },
           ...(await convertToModelMessages(messages)),
       ],
-      tools: {
+      /* tools: {
         reviewExperience: {
-          description: `${editorPrompt}`,
+          description: `${editorPrompt} No necesitas llenar los campos, solo ejecuta la tool como señal.`,
         
           inputSchema: z.object({
             title: z.string(),
@@ -33,7 +42,7 @@ export async function POST(req: Request) {
 
           execute: async (params) => params,
         },
-      },
+      }, */
     });
 
   return result.toUIMessageStreamResponse();
