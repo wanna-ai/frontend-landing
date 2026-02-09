@@ -17,12 +17,17 @@ const LoginSuccessPage = () => {
   useEffect(() => {
     const processLogin = async () => {
       try {
+        console.log("===============================")
+        console.log("process.env.NEXT_PUBLIC_ENV", process.env.NEXT_PUBLIC_ENV)
         // Check if we need to redirect to localhost
         if (process.env.NEXT_PUBLIC_ENV === 'localhost') {
           const currentUrl = window.location.href
           const url = new URL(currentUrl)
           const pathname = url.pathname
           const search = url.search
+
+          console.log("pathname", pathname)
+          console.log("search", search)
           
           // If we're not already on localhost, redirect
           if (!window.location.hostname.includes('localhost')) {
@@ -69,16 +74,6 @@ const LoginSuccessPage = () => {
         console.log("authStatus", authStatus)
 
         /**
-         * 2️⃣ Get user info (still from localStorage or context)
-         */
-
-        /* const userInfo = await apiService.get('/api/v1/users/me', { token: authStatus?.token || "" })
-        console.log('userInfo', userInfo)
-        if (userInfo) {
-          setUserInfo(userInfo)
-        } */
-
-        /**
          * 3️⃣ Get postId (still from localStorage or context)
          */
         const storedPostId = localStorage.getItem('postId')
@@ -91,7 +86,7 @@ const LoginSuccessPage = () => {
         /**
          * 5️⃣ Redirect
         */
-       /* if (lastpage === 'register') {
+       if (lastpage === 'register') {
         if (postId) {
           console.log("here")
           const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
@@ -100,7 +95,7 @@ const LoginSuccessPage = () => {
         router.push(`/preview?postId=${postId}`)
         } else {
           router.push(`/story/${postId}`)
-        } */
+        }
 
       } catch (error) {
         console.error('Error durante el login:', error)

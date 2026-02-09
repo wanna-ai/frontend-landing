@@ -36,7 +36,6 @@ const LoginProviders = ({ lastpage }: LoginProvidersProps) => {
       
       await Promise.all([
         setCookie('lastpage', lastpage),
-        setCookie('mode', 'testing')
       ])
 
       const endpoint = '/oauth2/authorization/google'
