@@ -34,7 +34,7 @@ const RegisterPage = () => {
   const [showLoginMail, setShowLoginMail] = useState(false)
   const [showLoginPassword, setShowLoginPassword] = useState(false)
 
-  useEffect(() => {
+  /* useEffect(() => {
     const fetchPost = async () => {
       try {
         const authStatus = await checkAuthStatus();
@@ -64,7 +64,7 @@ const RegisterPage = () => {
     }
   
     fetchPost()
-  }, [postId])
+  }, [postId]) */
 
   const getTruncatedText = (text: string, maxWords: number = 20) => {
     const words = text.trim().split(/\s+/);

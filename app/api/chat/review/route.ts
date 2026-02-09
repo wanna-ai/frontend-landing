@@ -1,4 +1,4 @@
-import { generateObject } from "ai";
+import { streamObject } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 
@@ -21,8 +21,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await generateObject({
-      model: anthropic("claude-haiku-4-5-20251001"),
+    const result = await streamObject({
+      model: anthropic("claude-sonnet-4-20250514"),
       schema: experienceSchema,
       prompt: `${editorPrompt}
 
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       temperature: 0.3,
     });
 
-    return Response.json(result.object);
+    return result.toTextStreamResponse();
 
   } catch (error) {
     console.error("Error generating review", error);

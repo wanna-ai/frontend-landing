@@ -40,7 +40,7 @@ export default function ChatPage() {
     }
   };
 
-  const saveAndNavigate = async (data: {
+  /* const saveAndNavigate = async (data: {
     title: string;
     experience: string;
     pildoras: string[];
@@ -137,6 +137,18 @@ export default function ChatPage() {
       setIsInputVisible(true);
       alert('Error al procesar la experiencia. Por favor, intenta de nuevo.');
     }
+  }; */
+
+
+  const saveAndNavigate = async () => {
+    await Promise.all([
+      localStorage.setItem('conversation', conversationRef.current),
+      localStorage.setItem('editorPrompt', promptData?.editorPrompt || '')
+    ]);
+
+    const authStatus = await checkAuthStatus();
+    console.log('authStatus', authStatus)
+    router.push(authStatus?.isGuest ? '/register': '/result');
   };
 
   const { messages, setMessages, sendMessage, status, stop } = useChat({
@@ -152,7 +164,11 @@ export default function ChatPage() {
       }
   
       if (fullText.includes("[WANNA_REVIEW_READY]")) {
-        await processExperience();
+        console.log("WANNA_REVIEW_READY")
+        // await processExperience();
+        
+        // router.push('/result');
+        await saveAndNavigate();
       }
     },
   });
