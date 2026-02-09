@@ -1,6 +1,7 @@
 'use client'
 import { createContext, useState, useEffect } from "react";
 import { apiService } from '@/services/api';
+import { useAuth } from '@/app/hook/useAuth';
 
 interface ExperienceData {
   title: string;
@@ -61,6 +62,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [postId, setPostId] = useState<string | null>(null);
   const [isLoadingPrompts, setIsLoadingPrompts] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  const { checkAuthStatus } = useAuth();
 
   // Función para fetchear los prompts
   const fetchPromptData = async (communityId?: string) => {
@@ -135,9 +138,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [ promptData ]);
 
+
   useEffect(() => {
-    getCookieAuthToken();
-  }, []);
+    checkAuthStatus();
+  }, [checkAuthStatus]);
   
   return (
     <AppContext.Provider value={{ 

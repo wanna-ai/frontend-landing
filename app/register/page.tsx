@@ -10,6 +10,7 @@ import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { useState, useEffect } from 'react'
 import { API_BASE_URL } from '@/services/config/api'
 import Snippet from '@/components/Snippet/Snippet'
+import { useAuth } from '@/app/hook/useAuth'
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -23,10 +24,10 @@ import { Pagination } from 'swiper/modules';
 const RegisterPage = () => {
 
   const searchParams = useSearchParams()
-  const communityId = searchParams.get('c') ?? undefined
   const postId = searchParams.get('postId') ?? undefined
 
   const router = useRouter();
+  const { checkAuthStatus } = useAuth();
 
   const { experienceData, setExperienceData, token } = useContext(AppContext);
 
@@ -36,21 +37,10 @@ const RegisterPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        const authStatus = await checkAuthStatus();
+        console.log("authStatus", authStatus)
 
-        const tokenResponse = await fetch('/api/auth/get-cookie', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        if (!tokenResponse.ok) {
-          throw new Error('Failed to fetch token')
-        }
-        const tokenData = await tokenResponse.json()
-        const token = tokenData.token
-        console.log('token', token)
-        
-        const postResponse = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
+        const postResponse = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: authStatus?.token || "" })
         if (postResponse.error) {
           throw new Error('Failed to fetch post')
         }

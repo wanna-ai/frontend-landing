@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import LottieAnimation from '@/components/LottieAnimation/LottieAnimation'
 import animationData from '@/public/animation.json'
+import { useAuth } from '@/app/hook/useAuth'
 
 // components
 import OurStories from '@/components/OurStories/OurStories'
@@ -22,6 +23,11 @@ export default function Home() {
   const communityId = searchParams.get('c') ?? undefined
 
   const router = useRouter()
+  const { checkAuthStatus } = useAuth();
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, [ checkAuthStatus ]);
 
   const handleGoToChat = async (_url: string) => {
     router.push(_url)

@@ -13,6 +13,7 @@ import { ToolResultPart } from "ai";
 import { useRouter } from 'next/navigation';
 import { apiService } from '@/services/api'
 import LoaderGenerate from "@/components/LoaderGenerate/LoaderGenerate";
+import { useAuth } from '@/app/hook/useAuth'
 
 
 export default function ChatPage() {
@@ -22,6 +23,7 @@ export default function ChatPage() {
   const { promptData } = useContext(AppContext);
   const router = useRouter();
   const { setExperienceData, setPostId, token, userInfo } = useContext(AppContext);
+  const { checkAuthStatus } = useAuth();
 
   // refs
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -61,19 +63,8 @@ export default function ChatPage() {
 
     try {
 
-      const tokenResponse = await fetch('/api/auth/get-cookie', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (!tokenResponse.ok) {
-        throw new Error('Failed to fetch token')
-      }
-      const tokenData = await tokenResponse.json()
-      const token = tokenData.token
-
-      console.log(token)
+      const authStatus = await checkAuthStatus();
+      console.log("authStatus", authStatus)
 
       const response = await apiService.post('/api/v1/landing/posts/interview', {
         title: data.title,
@@ -82,7 +73,7 @@ export default function ChatPage() {
         reflection: data.reflection,
         story_valuable: data.story_valuable,
         rawInterviewText: data.rawInterviewText
-      }, { token: token });
+      }, { token: authStatus?.token || "" });
 
       
       // ✅ Fix: Handle response structure properly
@@ -99,6 +90,8 @@ export default function ChatPage() {
         },
         body: JSON.stringify({ name: 'authToken', value: responseData.token }),
       })
+
+      // Set localStorage data
       localStorage.setItem('postId', responseData.id);
       localStorage.setItem('title', responseData.title);
       localStorage.setItem('content', responseData.content);
@@ -109,7 +102,7 @@ export default function ChatPage() {
       localStorage.setItem('rawInterviewText', responseData.rawInterviewText);
 
       // Navigate
-      router.push(token ? '/preview?postId=' + responseData.id : '/register?postId=' + responseData.id);
+      router.push(authStatus?.isGuest ? '/register?postId=' + responseData.id : '/preview?postId=' + responseData.id);
 
     } catch (error) {
       console.error('Error al enviar la conversación al backend:', error);
@@ -118,6 +111,7 @@ export default function ChatPage() {
     }
   };
 
+  // useChat hook
   const { messages, setMessages, sendMessage, status, stop } = useChat({
     onFinish: ({ message }) => {
       setIsGenerating(false);
@@ -179,6 +173,7 @@ export default function ChatPage() {
     },
   });
 
+  // useEffect to set isGenerating to true when tool-reviewExperience is called
   useEffect(() => {
     if (messages.length > 0) {
       const toolParts = messages.filter(message => message.parts.some(part => part.type === "tool-reviewExperience"));

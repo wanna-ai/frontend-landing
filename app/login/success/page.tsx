@@ -5,16 +5,32 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { AppContext } from '@/context/AppContext'
 import { API_BASE_URL } from '@/services/config/api'
 import { apiService } from '@/services/api'
+import { useAuth } from '@/app/hook/useAuth'
 
 
 const LoginSuccessPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { checkAuthStatus } = useAuth();
   const { postId: contextPostId, setUserInfo } = useContext(AppContext)
 
   useEffect(() => {
     const processLogin = async () => {
       try {
+        // Check if we need to redirect to localhost
+        if (process.env.NEXT_PUBLIC_ENV === 'localhost') {
+          const currentUrl = window.location.href
+          const url = new URL(currentUrl)
+          const pathname = url.pathname
+          const search = url.search
+          
+          // If we're not already on localhost, redirect
+          if (!window.location.hostname.includes('localhost')) {
+            window.location.href = `http://localhost:3000${pathname}${search}`
+            return
+          }
+        }
+        
         //get token from search params
         const token = searchParams.get('token')
 
@@ -34,13 +50,6 @@ const LoginSuccessPage = () => {
             },
             body: JSON.stringify({ name: 'authToken', value: token }),
           }),
-          await fetch('/api/auth/set-cookie', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: 'register', value: 'user' }),
-          })
         ])
 
         /*
@@ -56,15 +65,18 @@ const LoginSuccessPage = () => {
         const lastpage = lastpageData.lastpage
         console.log('lastpage', lastpage)
 
+        const authStatus = await checkAuthStatus();
+        console.log("authStatus", authStatus)
+
         /**
          * 2️⃣ Get user info (still from localStorage or context)
          */
 
-        const userInfo = await apiService.get('/api/v1/users/me', { token: token })
+        /* const userInfo = await apiService.get('/api/v1/users/me', { token: authStatus?.token || "" })
         console.log('userInfo', userInfo)
         if (userInfo) {
           setUserInfo(userInfo)
-        }
+        } */
 
         /**
          * 3️⃣ Get postId (still from localStorage or context)
@@ -79,7 +91,7 @@ const LoginSuccessPage = () => {
         /**
          * 5️⃣ Redirect
         */
-       if (lastpage === 'register') {
+       /* if (lastpage === 'register') {
         if (postId) {
           console.log("here")
           const response = await apiService.postText('/api/v1/landing/interview/assign', { postId: postId }, { token: token })
@@ -88,7 +100,7 @@ const LoginSuccessPage = () => {
         router.push(`/preview?postId=${postId}`)
         } else {
           router.push(`/story/${postId}`)
-        }
+        } */
 
       } catch (error) {
         console.error('Error durante el login:', error)
