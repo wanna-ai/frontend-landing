@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '@/context/AppContext'
 import Link from 'next/link'
 import { apiService } from '@/services/api'
+import { useAuth } from '@/app/hook/useAuth'
 
 interface ExperienceData {
   title: string
@@ -18,6 +19,7 @@ interface ExperienceData {
 
 const SucceedPage = () => {
   const router = useRouter()
+  const { checkAuthStatus } = useAuth();
 
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId') ?? undefined
@@ -34,30 +36,15 @@ const SucceedPage = () => {
         /*
          * 1️⃣ Get token from cookie
          */
-        const tokenResponse = await fetch('/api/auth/get-cookie', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        if (!tokenResponse.ok) {
-          throw new Error('Failed to fetch token')
-        }
-        const tokenData = await tokenResponse.json()
-        const token = tokenData.token
-        setToken(token)
+        const authStatus = await checkAuthStatus();
+        console.log("authStatus", authStatus)
 
-        /*
-         * 2️⃣ Get user info
-         */
-        const userInfo = await apiService.get('/api/v1/users/me', { token: token })
-        console.log('userInfo', userInfo)
-        setUserInfo(userInfo)
+        setToken(authStatus?.token || "")
 
         /*
          * 3️⃣ Get post
          */
-        const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
+        const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: authStatus?.token || "" })
         console.log('response', response)
 
         setExperienceData({

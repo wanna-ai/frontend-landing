@@ -173,12 +173,10 @@ const StoryPage = () => {
          */
 
         const authStatus = await checkAuthStatus();
-        console.log("authStatus", authStatus)
 
         // only if user is guest or there is no user
         if (authStatus?.isGuest) {
           const previewResponse = await apiService.get(`/api/v1/landing/posts/${id}/preview`)
-          console.log('previewResponse', previewResponse)
 
           setPreviewStory({
             title: previewResponse.title,
@@ -187,7 +185,6 @@ const StoryPage = () => {
             fullname: previewResponse.fullName,
           })
 
-          setState({ screen: 'login' })
           return
         }
 
@@ -212,7 +209,7 @@ const StoryPage = () => {
         /*
          * 3️⃣ Determine screen based on token and ownership
          */
-        if (!token) {
+        if (!authStatus?.token) {
           setState({ screen: 'login' })
         } else if (response.isOwner) {
           setState({ screen: 'is-owner' })
@@ -223,7 +220,6 @@ const StoryPage = () => {
       } catch (error) {
 
         const previewResponse = await apiService.get(`/api/v1/landing/posts/${id}/preview`)
-        console.log('previewResponse', previewResponse)
 
         if (!isMounted) return
 

@@ -19,7 +19,6 @@ export const useAuth = () => {
       }
 
       const authStatusData: AuthStatus = await response.json();
-      console.log('authStatusData', authStatusData);
 
       // Actualizar contexto si está autenticado
       if (authStatusData.isAuthenticated && authStatusData.user) {

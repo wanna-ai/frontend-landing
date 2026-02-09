@@ -5,11 +5,13 @@ import styles from './Visibility.module.scss'
 import { AppContext } from '@/context/AppContext'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { apiService } from '@/services/api'
+import { useAuth } from '@/app/hook/useAuth'
 
 type PrivacyOption = 'public' | 'private'
 
 const VisibilityPage = () => {
   const router = useRouter()
+  const { checkAuthStatus } = useAuth();
 
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId') ?? undefined
@@ -22,21 +24,12 @@ const VisibilityPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const tokenResponse = await fetch('/api/auth/get-cookie', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        if (!tokenResponse.ok) {
-          throw new Error('Failed to fetch token')
-        }
-        const tokenData = await tokenResponse.json()
-        const token = tokenData.token
-        console.log('token', token)
-        setToken(token)
+        const authStatus = await checkAuthStatus();
+        console.log("authStatus", authStatus)
 
-        const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: token })
+        setToken(authStatus?.token || "")
+
+        const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: authStatus?.token || "" })
         console.log('response', response)
 
         setExperienceData({

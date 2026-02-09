@@ -17,24 +17,18 @@ const LoginSuccessPage = () => {
   useEffect(() => {
     const processLogin = async () => {
       try {
-        console.log("===============================")
-        console.log("process.env.NEXT_PUBLIC_ENV", process.env.NEXT_PUBLIC_ENV)
-        // Check if we need to redirect to localhost
-        //if (process.env.NEXT_PUBLIC_ENV === 'localhost') {
-          const currentUrl = window.location.href
-          const url = new URL(currentUrl)
-          const pathname = url.pathname
-          const search = url.search
 
-          console.log("pathname", pathname)
-          console.log("search", search)
-          
-          // If we're not already on localhost, redirect
-          if (!window.location.hostname.includes('localhost')) {
-            window.location.href = `http://localhost:3000${pathname}${search}`
-            return
-          }
-        //}
+        // Check if we need to redirect to localhost
+        /* const currentUrl = window.location.href
+        const url = new URL(currentUrl)
+        const pathname = url.pathname
+        const search = url.search
+
+        // If we're not already on localhost, redirect
+        if (!window.location.hostname.includes('localhost')) {
+          window.location.href = `http://localhost:3000${pathname}${search}`
+          return
+        } */
         
         //get token from search params
         const token = searchParams.get('token')
