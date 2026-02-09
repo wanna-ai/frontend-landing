@@ -73,6 +73,8 @@ export default function ChatPage() {
       const tokenData = await tokenResponse.json()
       const token = tokenData.token
 
+      console.log(token)
+
       const response = await apiService.post('/api/v1/landing/posts/interview', {
         title: data.title,
         content: data.experience,
@@ -90,18 +92,25 @@ export default function ChatPage() {
       console.log("responseData", responseData)
 
       // set cookie authToken
-      const cookieRes = await fetch('/api/auth/set-cookie', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: 'authToken', value: responseData.token }),
-      })
+      await Promise.all([
+        await fetch('/api/auth/set-cookie', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: 'authToken', value: responseData.token }),
+        })
+        , await fetch('/api/auth/set-cookie', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: 'register', value: 'anonymous' }),
+        })
+      ])
 
-      if (!cookieRes.ok) {
-        throw new Error('Failed to set auth cookie')
-      }
-      
+
+
       localStorage.setItem('postId', responseData.id);
       localStorage.setItem('title', responseData.title);
       localStorage.setItem('content', responseData.content);

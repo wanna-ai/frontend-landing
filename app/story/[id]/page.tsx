@@ -6,6 +6,7 @@ import { apiService } from '@/services/api'
 import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { AppContext } from '@/context/AppContext'
 import Image from 'next/image'
+import Snippet from '@/components/Snippet/Snippet'
 
 const MAX_COMMENT_LENGTH = 160
 
@@ -38,7 +39,7 @@ interface Story {
 
 interface PreviewStory {
   title: string
-  content: string
+  previewContent: string
   username: string
   fullname: string
 }
@@ -178,15 +179,13 @@ const StoryPage = () => {
         }
         const tokenData = await tokenResponse.json()
         const token = tokenData.token
-        console.log('token', token)
 
         /*
          * 2️⃣ Fetch story data
          */
         const response = await apiService.get(`/api/v1/landing/posts/${id}`, { 
-          token: token 
+          token: token
         })
-        console.log('response', response)
 
         if (!isMounted) return
 
@@ -219,7 +218,7 @@ const StoryPage = () => {
 
         setPreviewStory({
           title: previewResponse.title,
-          content: previewResponse.content,
+          previewContent: previewResponse.previewContent,
           username: previewResponse.userName,
           fullname: previewResponse.fullName,
         })
@@ -292,27 +291,13 @@ const StoryPage = () => {
 
           {previewStory && (
             <div className={styles.story__login__content}>
-
-              <div className={styles.story__login__content__header}>
-                <svg className={styles.story__login__content__header__svg} width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.74999 1.75571V16.9415M9.74999 1.75571L10.7401 1.38414C12.9932 0.538619 15.5067 0.538619 17.7599 1.38414C18.3579 1.60855 18.75 2.15192 18.75 2.75616V15.2217C18.75 16.0515 17.8568 16.6188 17.0356 16.3107C15.2474 15.6396 13.2526 15.6396 11.4644 16.3107L9.76234 16.9494C9.75642 16.9516 9.74999 16.9475 9.74999 16.9415M9.74999 1.75571L8.75987 1.38414C6.50674 0.538619 3.99326 0.538619 1.74012 1.38414C1.14212 1.60855 0.75 2.15192 0.75 2.75616V15.2217C0.75 16.0515 1.64322 16.6188 2.46436 16.3107C4.25258 15.6396 6.24742 15.6396 8.03563 16.3107L9.73765 16.9494C9.74356 16.9516 9.74999 16.9475 9.74999 16.9415" stroke="var(--color-white)" strokeWidth="1.5"/>
-                </svg>
-                <p>{previewStory?.title}</p>
-              </div>
-
-              {previewStory?.content && (
-                <div className={styles.story__login__content__content}>
-                  <p>{previewStory?.content.split(' ').slice(0, 20).join(' ')}...</p>
-                </div>
-              )}
-                
-
+                <Snippet icon="story" header="Tu historia" content={previewStory?.title || ''} />
             </div>
           )}
 
-          <p>Para poder leer la historia completa, registrate</p>
 
           <div className={styles.story__login__login}>
+            <h3>Para poder leer la historia completa, registrate</h3>
             <LoginProviders lastpage="story" />
           </div>
           

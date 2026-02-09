@@ -1,6 +1,7 @@
 'use client'
 import { createContext, useState, useEffect } from "react";
 import { apiService } from '@/services/api';
+import { getCookieAuthToken } from '@/app/lib/auth';
 
 interface ExperienceData {
   title: string;
@@ -62,9 +63,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoadingPrompts, setIsLoadingPrompts] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
-  // Función para fetchear los prompts
   const fetchPromptData = async (communityId?: string) => {
-    // Si ya tenemos los datos, no hacer fetch de nuevo
     if (promptData?.interviewerPromp && promptData?.editorPrompt) {
       return;
     }
@@ -88,44 +87,21 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // Function to get user info
-  const getUserInfo = async (token: string) => {
-    const userInfoResponse = await apiService.get('/api/v1/users/me', { token: token })
-    console.log('userInfoResponse', userInfoResponse)
-
-    if (userInfoResponse) {
-      setUserInfo(userInfoResponse)
-    }
-  }
-
-  // Function to get cookie authToken
-  const getCookieAuthToken = async () => {
-    const tokenResponse = await fetch('/api/auth/get-cookie', {
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    const tokenData = await tokenResponse.json()
-    console.log('tokenData', tokenData)
-
-    if (tokenData.token) {
-      setToken(tokenData.token)
-      getUserInfo(tokenData.token);
-    }
-
-    const token = tokenData.token
-    setToken(token)
-  }
+  // Initialize auth on mount
+  const initializeAuth = async () => {
+    const { token: authToken, userInfo: authUserInfo } = await getCookieAuthToken();
+    setToken(authToken);
+    setUserInfo(authUserInfo);
+  };
 
   useEffect(() => {
     if (!promptData) {
       fetchPromptData();
     }
-  }, [ promptData ]);
+  }, [promptData]);
 
   useEffect(() => {
-    getCookieAuthToken();
+    initializeAuth();
   }, []);
   
   return (

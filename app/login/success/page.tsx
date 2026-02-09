@@ -24,19 +24,24 @@ const LoginSuccessPage = () => {
         }
 
         /**
-         * 1️⃣ Store token securely in HttpOnly cookie
+         * 1️⃣ Store token securely in HttpOnly cookie and set register to user
          */
-        const cookieRes = await fetch('/api/auth/set-cookie', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name: 'authToken', value: token }),
-        })
-
-        if (!cookieRes.ok) {
-          throw new Error('Failed to set auth cookie')
-        }
+        await Promise.all([
+          await fetch('/api/auth/set-cookie', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: 'authToken', value: token }),
+          }),
+          await fetch('/api/auth/set-cookie', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: 'register', value: 'user' }),
+          })
+        ])
 
         /*
          * Get cookie lastpage
