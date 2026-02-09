@@ -58,6 +58,7 @@ interface State {
 const Modal = ({ story, onClose }: { story: Story, onClose: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  
   // Lock body scroll when modal is open
   useEffect(() => {
     if (story) {

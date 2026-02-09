@@ -61,8 +61,6 @@ export const apiService = {
       'Content-Type': 'application/json',
       ...options?.headers
     }
-
-    console.log(options)
     
     if (options?.token) {
       headers['Authorization'] = `Bearer ${options.token}`
