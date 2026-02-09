@@ -92,25 +92,13 @@ export default function ChatPage() {
       console.log("responseData", responseData)
 
       // set cookie authToken
-      await Promise.all([
-        await fetch('/api/auth/set-cookie', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name: 'authToken', value: responseData.token }),
-        })
-        , await fetch('/api/auth/set-cookie', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name: 'register', value: 'anonymous' }),
-        })
-      ])
-
-
-
+      const cookieRes = await fetch('/api/auth/set-cookie', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: 'authToken', value: responseData.token }),
+      })
       localStorage.setItem('postId', responseData.id);
       localStorage.setItem('title', responseData.title);
       localStorage.setItem('content', responseData.content);

@@ -94,54 +94,39 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     console.log('userInfoResponse', userInfoResponse)
 
     if (userInfoResponse) {
+
+      if (userInfoResponse.username.startsWith('guest-')) {
+        await fetch('/api/auth/remove-cookie-token', {
+          method: 'POST',
+          credentials: 'include',
+        })
+        setToken(null)
+        setUserInfo(null)
+        return
+      }
+
       setUserInfo(userInfoResponse)
     }
   }
 
   // Function to get cookie authToken
   const getCookieAuthToken = async () => {
-    // First, check the "register" cookie via API
-    const registerResponse = await fetch('/api/auth/get-cookie-register', {
+    const tokenResponse = await fetch('/api/auth/get-cookie', {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    })
+    const tokenData = await tokenResponse.json()
+    console.log('tokenData', tokenData)
 
-    const registerData = await registerResponse.json();
-    console.log('register cookie:', registerData.register);
-
-
-      // If register is "anonymous", remove authToken cookie and exit
-    if (registerData.register === 'anonymous' || !registerData.register) {
-      // Call API to remove authToken cookie
-      await fetch('/api/auth/remove-cookie-token', {
-        method: 'POST',
-        credentials: 'include',
-      });
-      setToken(null);
-      return;
+    if (tokenData.token) {
+      setToken(tokenData.token)
+      getUserInfo(tokenData.token);
     }
 
-    // If register is "user" (or doesn't exist), proceed with getting the token
-    if (registerData.register === 'user' || !registerData.register) {
-      const tokenResponse = await fetch('/api/auth/get-cookie', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      const tokenData = await tokenResponse.json();
-      console.log('tokenData', tokenData);
-
-      if (tokenData.token) {
-        setToken(tokenData.token);
-        getUserInfo(tokenData.token);
-      } else {
-        setToken(null);
-      }
-    }
+    const token = tokenData.token
+    setToken(token)
   }
 
   useEffect(() => {
