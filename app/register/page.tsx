@@ -83,22 +83,29 @@ const RegisterPage = () => {
     <div className={styles.register}>
       <div className={styles.register__overlay}></div>
       <div className={styles.register__content}>
-        <h1 className={styles.register__content__title}>Esto es lo que Wanna ha empezado a escribir contigo...</h1>
+        <div className={styles.register__content__header}>
+          <p>Esta es tu historia:</p>
+        </div>
+        <h1 className={styles.register__content__title}>Cuando dejas de meditar justo cuando más lo necesitas</h1>
 
         <div className={styles.register__content__content}>
-          <Swiper pagination={true} modules={[Pagination]} spaceBetween={50} slidesPerView={1}>
-            <SwiperSlide>
-              <Snippet icon="reflection" header="Reflexión" content={getTruncatedText(experienceData?.reflection ?? '')} />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Snippet icon="story" header="Tu historia" content={experienceData?.title ?? ''} />
-            </SwiperSlide>
-          </Swiper>
+          <p>
+            Había un momento en mi vida en que me sentía centrado, conectado conmigo mismo. Meditaba regularmente y tenía tiempo para mí. Todo cambió cuando tuve que tirar de la compañía y el estrés se instaló en mi día a día.  Es curioso cómo funciona la mente: cuando más cosas tienes en la cabeza, más te cuesta meditar, dejar la mente vacía. Ves urgencia en todo y puedes llegar a pensar que meditar es un engorro. 
+            <br/>
+            <br/>
+            Perdí el foco en mí mismo justo en el momento en que más lo necesitaba.  Me di cuenta de algo paradójico: a veces en la vida toca empujar, y es precisamente entonces cuando abandonas lo que más te ayudaría. 
+            <br/>
+            <br/>
+            Es como si la urgencia te convenciera de que parar es lujo que no te puedes permitir.  Lo que he aprendido es que no hay que fustigarse por no conseguir meditar cuando creemos que deberíamos hacerlo. Vamos mejorando poco a poco, y algún día lo conseguiremos si así lo queremos. 
+            <br/>
+            <br/>
+            Aunque no logres meditar con la misma intensidad o profundidad, el simple hecho de luchar por ello, de hacer una pausa, siempre va a ir bien en momentos de intensidad. Es ahí donde encuentras la claridad.<br/>
+          </p>
         </div>
       </div>
 
       <div className={styles.register__register}>
-        <h3>Regístrate y lee tu historia completa</h3>
+        <h3 className={styles.register__register__title}>Regístrate y lee<br/>tu historia completa:</h3>
         <div className={styles.register__register__buttons}>
           {showLoginMail ? (
             <div>

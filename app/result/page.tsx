@@ -8,6 +8,7 @@ import styles from './Result.module.scss';
 import { apiService } from '@/services/api';
 import { useAuth } from '@/app/hook/useAuth';
 import { AppContext } from '@/context/AppContext';
+import Loader from '@/components/Loader/Loader';
 
 interface ExperienceData {
   title: string;
@@ -118,7 +119,9 @@ const ResultPage = () => {
   return (
     <div className={styles.result}>
       <div className={styles.result__container}>
-        <h1>Creando tu experiencia</h1>
+        <div className={styles.result__header}>
+          <p>Esta es tu historia:</p>
+        </div>
         
         {isLoading && !object?.title && (
           <div className={styles.result__loading}>
@@ -132,24 +135,21 @@ const ResultPage = () => {
             {/* ✅ Título */}
             {object.title && (
               <div className={styles.result__section}>
-                <h2>📝 Título</h2>
-                <h3>{object.title}</h3>
+                <h1>{object.title}</h1>
               </div>
             )}
 
             {/* ✅ Experiencia */}
             {object.experience && (
               <div className={styles.result__section}>
-                <h2>📖 Tu historia</h2>
                 <p>{object.experience}</p>
-                {isLoading && <span className={styles.typing}>▊</span>}
               </div>
             )}
 
             {/* ✅ Píldoras */}
             {object.pildoras && object.pildoras.length > 0 && (
               <div className={styles.result__section}>
-                <h2>💊 Píldoras ({object.pildoras.length})</h2>
+                <h3>Píldoras breves ({object.pildoras.length}):</h3>
                 <ul>
                   {object.pildoras.map((pill, i) => (
                     <li key={i}>{pill}</li>
@@ -160,17 +160,32 @@ const ResultPage = () => {
 
             {/* ✅ Reflexión */}
             {object.reflection && (
-              <div className={styles.result__section}>
-                <h2>💭 Reflexión</h2>
-                <p>{object.reflection}</p>
+              <div className={styles.result__reflection}>
+                <div className={styles.result__reflection__title}>
+                  <svg className={styles.result__reflection__title__svg} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.14286 14C4.41735 12.8082 4 11.4118 4 9.91886C4 5.54539 7.58172 2 12 2C16.4183 2 20 5.54539 20 9.91886C20 11.4118 19.5827 12.8082 18.8571 14" stroke="var(--color-yellow)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M7.38287 17.0982C7.291 16.8216 7.24507 16.6833 7.25042 16.5713C7.26174 16.3343 7.41114 16.1262 7.63157 16.0405C7.73579 16 7.88105 16 8.17157 16H15.8284C16.119 16 16.2642 16 16.3684 16.0405C16.5889 16.1262 16.7383 16.3343 16.7496 16.5713C16.7549 16.6833 16.709 16.8216 16.6171 17.0982C16.4473 17.6094 16.3624 17.8651 16.2315 18.072C15.9572 18.5056 15.5272 18.8167 15.0306 18.9408C14.7935 19 14.525 19 13.9881 19H10.0119C9.47495 19 9.2065 19 8.96944 18.9408C8.47283 18.8167 8.04281 18.5056 7.7685 18.072C7.63755 17.8651 7.55266 17.6094 7.38287 17.0982Z" stroke="var(--color-yellow)" strokeWidth="1.5"/>
+                    <path d="M15 19L14.8707 19.6466C14.7293 20.3537 14.6586 20.7072 14.5001 20.9866C14.2552 21.4185 13.8582 21.7439 13.3866 21.8994C13.0816 22 12.7211 22 12 22C11.2789 22 10.9184 22 10.6134 21.8994C10.1418 21.7439 9.74484 21.4185 9.49987 20.9866C9.34144 20.7072 9.27073 20.3537 9.12932 19.6466L9 19" stroke="var(--color-yellow)" strokeWidth="1.5"/>
+                    <path d="M12 16V11" stroke="var(--color-yellow)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span>Reflexión sólo para ti</span>
+                </div>
+                <p className={styles.result__reflection__content}>{object.reflection}</p>
               </div>
             )}
 
-            {!isLoading && (
+            {!isLoading ? (
               <div className={styles.result__complete}>
                 <button className={styles.result__complete__button} onClick={() => router.push(`/visibility?postId=${postId}`)}>
                   <p>Decide quién ve tu historia</p>
+                  <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.3536 4.03553C15.5488 3.84027 15.5488 3.52369 15.3536 3.32843L12.1716 0.146446C11.9763 -0.048816 11.6597 -0.048816 11.4645 0.146446C11.2692 0.341708 11.2692 0.658291 11.4645 0.853553L14.2929 3.68198L11.4645 6.51041C11.2692 6.70567 11.2692 7.02225 11.4645 7.21751C11.6597 7.41278 11.9763 7.41278 12.1716 7.21751L15.3536 4.03553ZM0 3.68198L0 4.18198L15 4.18198V3.68198V3.18198L0 3.18198L0 3.68198Z" fill="var(--color-white)"/>
+                  </svg>
                 </button>
+              </div>
+            ) : (
+              <div className={styles.result__loading}>
+                <Loader />
               </div>
             )}
           </div>
