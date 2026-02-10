@@ -10,12 +10,12 @@ export async function POST(req: Request) {
     const prompt = `${interviewerPrompt}\n\n
     
     IMPORTANTE: Cuando determines que tienes suficiente información para crear una experiencia completa, 
-responde EXACTAMENTE este texto: "[WANNA_REVIEW_READY]"
+responde EXACTAMENTE este texto: "...Wanna está generando tu historia..."
 
 No agregues nada más después de ese mensaje. Ese será el indicador para procesar la conversación.
 
     Si el usuario escribe "BETLEM", significa que quiere creas una experiencia humana aleatoria de prueba inmediatamente, 
-así que responde directamente "[WANNA_REVIEW_READY]"
+así que responde directamente "...Wanna está generando tu historia..."
     
     `;
   
@@ -36,3 +36,5 @@ así que responde directamente "[WANNA_REVIEW_READY]"
     return Response.json({ error: "Failed to stream text." }, { status: 500 });
   }
 }
+
+//[WANNA_REVIEW_READY]

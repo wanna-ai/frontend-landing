@@ -83,7 +83,7 @@ const RegisterPage = () => {
 
   return (
     <div className={styles.register}>
-      <div className={styles.register__overlay}></div>
+      {/* <div className={styles.register__overlay}></div>
       <div className={styles.register__content}>
         <div className={styles.register__content__header}>
           <p>Esta es tu historia:</p>
@@ -104,7 +104,7 @@ const RegisterPage = () => {
             Aunque no logres meditar con la misma intensidad o profundidad, el simple hecho de luchar por ello, de hacer una pausa, siempre va a ir bien en momentos de intensidad. Es ahí donde encuentras la claridad.<br/>
           </p>
         </div>
-      </div>
+      </div> */}
 
       <div className={styles.register__register}>
         <h3 className={styles.register__register__title}>Regístrate y lee<br/>tu historia completa:</h3>

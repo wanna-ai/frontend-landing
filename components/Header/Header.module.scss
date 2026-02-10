@@ -3,6 +3,7 @@
   top: 0;
   left: 0;
   background-color: var(--color-white);
+  color: var(--color-black);
   width: 100%;
   z-index: 10000;
   padding: var(--space-4);
@@ -38,7 +39,12 @@
     &__name {
       font-size: var(--font-size-md);
       font-weight: var(--font-weight-medium);
-      color: var(--color-black);
+      
     }
+  }
+
+  &__result {
+    background-color: var(--background);
+    color: var(--color-white);
   }
 }

@@ -40,12 +40,21 @@ const members = [
   {
     name: "Miguel",
     profession: "former lead designer at wallapop",
-    story: `Acabo de ser padre y todo se siente como una nube: amor, cansancio y desconcierto mezclados. Estar tanto en casa pesa, pero me ha enseñado a frenar y estar presente.
-    Los días ya no se miden igual. El tiempo se estira y se encoge a la vez: horas larguísimas que pasan volando, noches que parecen eternas y mañanas que llegan sin haber dormido del todo. El cuerpo va por inercia, pero el corazón está despierto de una forma nueva, como si hubiera aprendido otro ritmo.
-    Hay momentos de felicidad pura, casi absurda. Una mano diminuta agarrando un dedo, una respiración tranquila sobre el pecho, una mirada que todavía no entiende el mundo pero ya confía. Y luego está el cansancio, profundo, acumulado, ese que no se quita durmiendo una siesta porque la cabeza sigue encendida incluso cuando el cuerpo cae.
-    También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
-    Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
-    No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
+    story: `Con 36 años, decidí lanzarme al vacío y montar mi propia empresa de muebles en Shanghái. Había convencido a una marca americana para distribuirlos en China y el plan era perfecto. Pero la euforia se convirtió en una puñalada cuando leí el contrato final: solo podía vender a empresas locales chinas. Las multinacionales, que eran mi mercado seguro, quedaban fuera
+    En aquel momento eso era una locura. Las empresas chinas no valoraban la calidad, solo querían lo más barato. 
+    Llegué a casa sintiéndome derrotado, y se lo conté a mi mujer. Ella, con esa calma suya que siempre me ancla, me miró y me dijo: “Tranquilo, Miguel. Ya has ganado”.  Y yo me lo creí. Con esa fe ciega y solo dos empleados, Jennifer y Kerry, arrancamos HWS.
+    Los primeros cuatro meses fueron infernales. Ventas: cero. Mis ahorros se acababan. No podía dormir pensando en cómo pagar el colegio de mis hijos. Me puse a hacer networking como un loco, casi no pisaba la oficina. No quería que pensaran que su jefe era un fracasado. Pero la verdad era que nadie quería nuestros muebles.
+    Un día, en un evento, escuché hablar de un megaproyecto: Alibaba, la empresa china mas exitosa del momento, iba a construir un campus gigantesco. Al principio, me reí de la idea de poder ganarlo. A ese proyecto se presentaban todas las grandes marcas. 
+    Al despertar, recordé que Jack Ma (CEO y fundador de Alibaba) estaba en una asociación de empresarios conmigo. Busqué su móvil en el portal y le llamé. Una, dos, tres veces... A la semana me detuve porque aquello ya rozaba lo delictivo: Jack tenía 30 llamadas perdidas mías
+    Sin nada que perder, le escribí un email: 'Jack, soy Miguel'. Le hablé de emprendedor a emprendedor, recordándole que él también empezó desde abajo. Fui sincero: confesé que no tenía ni un solo cliente. Le prometí que Alibaba sería mi prioridad absoluta. Fue mi última carta y la jugué desde el corazón.
+    Días después mi teléfono empezó a sonar. Casi me da una taquicardia. Era él. Respondí: Hi Jack…pero salió una voz femenina. Soy Smile (los chinos escogen nombres en inglés muy peculiares para facilitarnos la vida). Jack sabe quién eres y quiere ayudarte, me dijo. Quiere que te reúnas con sus arquitectos y hableis del proyecto. Se lo agradecí de corazón. 
+    Antes de terminar me dijo: Ah una cosa más: Jack te pide que no le llames más. Me eché a reír solo. 
+    Fuimos a Hangzhou, conectamos con los arquitectos y presentamos nuestra propuesta. 
+    Poco después, Smile me volvió a llamar y me lo soltó: “Vais a ganar”. Ahí sí que se me puso el corazón a mil…
+    Cuando llegó el correo oficial, Kerry, Jennifer y yo casi rompemos el techo de la oficina de los saltos que dimos. Habíamos ganado un contrato para 80.000 personas y un acuerdo renovable cada tres años. No me lo podía creer. 
+    Lo que parecía una condena (vender solo a empresas chinas) resultó ser una bendición: todas las empresas de tecnología chinas nos empezaron a ver como los proveedores de confianza del sector. Pronto ganamos proyectos de otros gigantes como Tencent, Baidu, Huawei o Didi.
+    Esa noche, eufórico, pensé en llamar a Jack otra vez, quería darle las gracias, quería invitarle a todo... pero miré el teléfono me acordé de Smile y pensé: 'Miguel, quieto... que este tío es capaz de anular el contrato con tal de que no le suene más el móvil'.
+    `,
     image: "/members/miguel.jpg"
   },
   {

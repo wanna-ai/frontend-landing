@@ -47,8 +47,6 @@ export default function ChatPage() {
     ]);
 
     const authStatus = await checkAuthStatus();
-    console.log('authStatus', authStatus)
-
     router.push(authStatus?.isGuest ? '/register': '/result');
   };
 
@@ -64,12 +62,11 @@ export default function ChatPage() {
         conversationRef.current += `${message.role}: ${fullText}\n\n`;
       }
   
-      if (fullText.includes("[WANNA_REVIEW_READY]")) {
+      if (fullText.includes("...Wanna está generando tu historia...")) {
         console.log("WANNA_REVIEW_READY")
-        // await processExperience();
-        
-        // router.push('/result');
-        await saveAndNavigate();
+        setTimeout(async () => {
+          await saveAndNavigate();
+        }, 2000);
       }
     },
   });
@@ -98,8 +95,6 @@ export default function ChatPage() {
   // ✅ Inicialización del chat
   useEffect(() => {
     if (hasInitialized.current || !promptData) return;
-
-    console.log('promptData', promptData)
     
     hasInitialized.current = true;
     

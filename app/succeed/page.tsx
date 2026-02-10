@@ -37,7 +37,6 @@ const SucceedPage = () => {
          * 1️⃣ Get token from cookie
          */
         const authStatus = await checkAuthStatus();
-        console.log("authStatus", authStatus)
 
         setToken(authStatus?.token || "")
 
@@ -45,7 +44,6 @@ const SucceedPage = () => {
          * 3️⃣ Get post
          */
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: authStatus?.token || "" })
-        console.log('response', response)
 
         setExperienceData({
           title: response.title,
@@ -73,7 +71,6 @@ const SucceedPage = () => {
   }, [postId])
 
   const handleShareWhatsApp = (experienceData: ExperienceData) => {
-    console.log('experienceData', experienceData)
     const postId = localStorage.getItem('postId')
     const message = encodeURIComponent(
       `¡Mira lo que acabo de escribir con Wanna!

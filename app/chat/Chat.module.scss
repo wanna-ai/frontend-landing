@@ -9,7 +9,7 @@
   padding: var(--header-height) var(--space-5);
 
   * {
-    font-family: var(--font-open-sans);
+    /* font-family: var(--font-open-sans); */
   }
 
   @include bp.respond-to(md) {
@@ -36,18 +36,22 @@
     &__message {
       display: flex;
       flex-direction: column;
-      font-family: var(--font-family-base);
+      /* font-family: var(--font-family-base); */
       /* padding-top: var(--space-4); */
       gap: var(--space-6);
       width: 100%;
       margin: 0 auto;
+
+      &:first-child {
+        display: none;
+      }
       
       @include bp.respond-to(md) {
         margin-right: 0px;
       }
 
       &__content {
-        max-width: 70%;
+        max-width: 85%;
         width: fit-content;
         line-height: var(--line-height-normal);
         position: relative;

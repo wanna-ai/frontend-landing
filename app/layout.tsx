@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.scss";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
 import { Suspense } from "react";
 import { AppProvider } from "@/context/AppContext";
+import MainLayout from "@/components/MainLayout/MainLayout";
 
 const diatypeSemiMonoFont = localFont({
   src: [
@@ -72,13 +71,9 @@ export default function RootLayout({
       <body className={`${diatypeSemiMonoFont.variable} ${diatypeExpandedFont.variable} ${diatypeTrialHeavyFont.variable} ${openSansFont.variable}`}>
         <AppProvider>
           <Suspense fallback={null}>
-              <Header />
-              <main className="main">
-                <div className="main__content">
-                  {children}
-                </div>
-              </main>
-              <Footer />
+          <MainLayout>
+              {children}
+            </MainLayout>
           </Suspense>
         </AppProvider>
       </body>

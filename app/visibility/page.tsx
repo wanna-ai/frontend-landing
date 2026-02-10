@@ -29,12 +29,10 @@ const VisibilityPage = () => {
     const fetchPost = async () => {
       try {
         const authStatus = await checkAuthStatus();
-        console.log("authStatus", authStatus)
 
         setToken(authStatus?.token || "")
 
         const response = await apiService.get(`/api/v1/landing/posts/${postId}`, { token: authStatus?.token || "" })
-        console.log('response', response)
 
         setExperienceData({
           title: response.title,

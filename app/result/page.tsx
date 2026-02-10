@@ -9,6 +9,8 @@ import { apiService } from '@/services/api';
 import { useAuth } from '@/app/hook/useAuth';
 import { AppContext } from '@/context/AppContext';
 import Loader from '@/components/Loader/Loader';
+import Image from 'next/image';
+
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -34,7 +36,7 @@ const ResultPage = () => {
   const router = useRouter();
   const { checkAuthStatus } = useAuth();
 
-  const { setPostId, postId } = useContext(AppContext);
+  const { setPostId, postId, userInfo } = useContext(AppContext);
 
   const hasSubmitted = useRef(false); // ✅ useRef en lugar de variable local
   const [conversation, setConversation] = useState('');
@@ -44,7 +46,6 @@ const ResultPage = () => {
     console.log('experienceData', experienceData);
 
     const authStatus = await checkAuthStatus();
-    console.log('authStatus', authStatus);
 
     const response = await apiService.post('/api/v1/landing/posts/interview', {
       title: experienceData.title,
@@ -130,44 +131,64 @@ const ResultPage = () => {
   return (
     <div className={styles.result}>
       <div className={styles.result__container}>
-        <div className={styles.result__header}>
-          <p>Esta es tu historia:</p>
-        </div>
+
         
-        {isLoading && !object?.title && (
-          <div className={styles.result__analizando}>
-            <p>Analizando tu conversación...</p>
-          </div>
-        )}
 
-        {object && (
           <div className={styles.result__content}>
-            {/* ✅ Título */}
-            {object.title && (
-              <div className={styles.result__title}>
-                <h1>{object.title}</h1>
-              </div>
-            )}
+            
+            <div className={styles.result__story}>
+              {object && (
+                <>
+                  {isLoading && !object?.title && (
+                    <div className={styles.result__story__loading}>
+                      <p>Analizando tu conversación...</p>
+                    </div>
+                  )}
 
-            {/* ✅ Experiencia */}
-            {object.experience && (
-              <div className={styles.result__experience}>
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    p: ({ children }) => <p className={styles.result__experience__content}>{children}</p>,
-                    strong: ({ children }) => <strong className={styles.result__experience__content__strong}>{children}</strong>,
-                    em: ({ children }) => <em className={styles.result__experience__content__em}>{children}</em>,
-                    code: ({ children }) => <code className={styles.result__experience__content__code}>{children}</code>,
-                    pre: ({ children }) => <pre className={styles.result__experience__content__pre}>{children}</pre>,
-                    ul: ({ children }) => <ul className={styles.result__experience__content__ul}>{children}</ul>,
-                  }}
-                >
-                  {object.experience}
-                </ReactMarkdown>
-              </div>
-            )}
+                  <div className={styles.result__story__header}>
+                    <p>Esta es tu historia:</p>
+                  </div>
+
+                  {/*  User */}
+                  {userInfo?.fullName && (
+                    <div className={styles.result__story__user}>
+                      <Image className={styles.result__story__user__avatar} src={userInfo.pictureUrl} alt={userInfo.fullName} width={24} height={24} />
+                      <p className={styles.result__story__user__name}>
+                        {userInfo.fullName}
+                        <span>· {new Date().toLocaleDateString( 'es-ES', { month: 'short', day: 'numeric' }) }</span>  
+                      </p>
+                    </div>
+                  )}
+
+                  {/* ✅ Título */}
+                  {object.title && (
+                    <div className={styles.result__story__title}>
+                      <h1>{object.title}</h1>
+                    </div>
+                  )}
+
+                  {/* ✅ Experiencia */}
+                  {object.experience && (
+                    <div className={styles.result__story__experience}>
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[rehypeRaw]}
+                        components={{
+                          p: ({ children }) => <p className={styles.result__experience__content}>{children}</p>,
+                          strong: ({ children }) => <strong className={styles.result__experience__content__strong}>{children}</strong>,
+                          em: ({ children }) => <em className={styles.result__experience__content__em}>{children}</em>,
+                          code: ({ children }) => <code className={styles.result__experience__content__code}>{children}</code>,
+                          pre: ({ children }) => <pre className={styles.result__experience__content__pre}>{children}</pre>,
+                          ul: ({ children }) => <ul className={styles.result__experience__content__ul}>{children}</ul>,
+                        }}
+                      >
+                        {object.experience}
+                      </ReactMarkdown>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
 
             {/* ✅ Píldoras */}
             {/* {object.pildoras && object.pildoras.length > 0 && (
@@ -180,9 +201,10 @@ const ResultPage = () => {
                 </ul>
               </div>
             )} */}
+            
 
             {/* ✅ Reflexión */}
-            {object.reflection && (
+            {object?.reflection && (
               <div className={styles.result__reflection}>
                 <div className={styles.result__reflection__title}>
                   <svg className={styles.result__reflection__title__svg} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -206,20 +228,6 @@ const ResultPage = () => {
               </div>
             )}
 
-            {/* {!isLoading ? (
-              <div className={styles.result__complete}>
-                <button className={styles.result__complete__button} onClick={() => router.push(`/visibility?postId=${postId}`)}>
-                  <p>Decide quién ve tu historia</p>
-                  <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.3536 4.03553C15.5488 3.84027 15.5488 3.52369 15.3536 3.32843L12.1716 0.146446C11.9763 -0.048816 11.6597 -0.048816 11.4645 0.146446C11.2692 0.341708 11.2692 0.658291 11.4645 0.853553L14.2929 3.68198L11.4645 6.51041C11.2692 6.70567 11.2692 7.02225 11.4645 7.21751C11.6597 7.41278 11.9763 7.41278 12.1716 7.21751L15.3536 4.03553ZM0 3.68198L0 4.18198L15 4.18198V3.68198V3.18198L0 3.18198L0 3.68198Z" fill="var(--color-white)"/>
-                  </svg>
-                </button>
-              </div>
-            ) : (
-              <div className={styles.result__loading}>
-                <Loader />
-              </div>
-            )} */}
             <div className={styles.result__complete}>
               <button
                 className={styles.result__complete__button}
@@ -239,7 +247,7 @@ const ResultPage = () => {
             </div>
             )}
           </div>
-        )}
+        
       </div>
     </div>
   );
