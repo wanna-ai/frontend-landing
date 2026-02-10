@@ -5,6 +5,9 @@
   width: 100%;
   min-height: 100dvh;
 
+  max-width: var(--max-width-container-small);
+  margin: 0 auto;
+
   padding: var(--header-height) var(--space-5);
 
   &__content {

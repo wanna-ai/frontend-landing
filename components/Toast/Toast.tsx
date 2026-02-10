@@ -1,17 +1,21 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Toast.module.scss";
 import Image from "next/image";
 const Toast = ({ children, success, visible, onClose }: { children: React.ReactNode, success: boolean, visible: boolean, onClose: () => void }) => {
 
 
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+
   useEffect(() => {
     if (visible) {
-      setTimeout(() => {
-        onClose();
-      }, 3000);
+      setHasBeenVisible(true);
+      const timer = setTimeout(onClose, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [ onClose, visible ]);
+  }, [visible, onClose]);
+
+  if (!hasBeenVisible) return null; // render nothing until first shown
 
   return (
     <div className={`${styles.toast} ${success ? styles.success : styles.error} ${visible ? styles.visible : styles.hidden}`}>

@@ -2,7 +2,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "@/context/AppContext";
 
 import Header from "@/components/Header/Header";
@@ -12,7 +12,16 @@ import Toast from "@/components/Toast/Toast";
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isResult = pathname?.includes("/result");
-  const { toast, setToast } = useContext(AppContext);
+
+  const { toast, setToast, setColorInverse, colorInverse } = useContext(AppContext);
+
+  useEffect(() => {
+    if (pathname?.includes("/result")) {
+      setColorInverse(true);
+    } else {
+      setColorInverse(false);
+    }
+  }, [pathname]);
 
   return (
     <>
@@ -22,7 +31,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <p>{toast.message}</p>
       </Toast>
 
-      <main className={`main${isResult ? " main--result" : ""}`}>
+      <main className={`main ${colorInverse ? " main--color-inverse" : ""}`}>
         <div className="main__content">
           {children}
         </div>

@@ -4,7 +4,8 @@
   flex-direction: column;
   width: 100%;
   gap: var(--space-6);
-
+  max-width: var(--max-width-container-small);
+  margin: 0 auto;
   padding: var(--header-height) var(--space-5);
   padding-bottom: var(--space-16);
   min-height: 100dvh;

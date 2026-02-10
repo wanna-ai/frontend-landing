@@ -28,18 +28,13 @@ const members = [
   },
   {
     name: "Marta",
-    profession: "former lead designer at wallapop",
-    story: `Acabo de ser padre y todo se siente como una nube: amor, cansancio y desconcierto mezclados. Estar tanto en casa pesa, pero me ha enseñado a frenar y estar presente.
-    Los días ya no se miden igual. El tiempo se estira y se encoge a la vez: horas larguísimas que pasan volando, noches que parecen eternas y mañanas que llegan sin haber dormido del todo. El cuerpo va por inercia, pero el corazón está despierto de una forma nueva, como si hubiera aprendido otro ritmo.
-    Hay momentos de felicidad pura, casi absurda. Una mano diminuta agarrando un dedo, una respiración tranquila sobre el pecho, una mirada que todavía no entiende el mundo pero ya confía. Y luego está el cansancio, profundo, acumulado, ese que no se quita durmiendo una siesta porque la cabeza sigue encendida incluso cuando el cuerpo cae.
-    También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
-    Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
-    No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
+    profession: "corporate & legal manager",
+    story: `Yo era de esas madres que su mejor momento era recoger a mi hija cada día en el colegio. Era mi ritual, mi conexión diaria con su mundo. Hasta que me separé. De repente pasé de vivir con ella el 100% del tiempo a tener solo la mitad. Las primeras veces que no fui a buscarla a las 16:30, me refugié en el trabajo. No quería darme cuenta de que era la hora de salida del colegio. Pero el dolor estaba ahí, esperándome. Lo que más me duele es perderme las pequeñas cosas del día a día: los líos con sus amigos, los deberes, esa nueva ilusión pasajera que tiene cada tarde. Y lo que más me parte el corazón es darme cuenta de que ella evita contarme su "otra mitad" para que no me ponga triste. Se ha vuelto más mayor, protegiéndome a mí. Las llamadas los días que no está conmigo no son fáciles. Pero he aprendido algo: cuando estamos juntas, estoy súper presente. Cero móvil, tareas resueltas, enfocada solo en ella. Porque aunque sea la mitad del tiempo, puede ser un tiempo más intenso y real.`,
     image: "/members/marta.webp"
   },
   {
     name: "Miguel",
-    profession: "former lead designer at wallapop",
+    profession: "Emprendedor e inversor consciente",
     story: `Con 36 años, decidí lanzarme al vacío y montar mi propia empresa de muebles en Shanghái. Había convencido a una marca americana para distribuirlos en China y el plan era perfecto. Pero la euforia se convirtió en una puñalada cuando leí el contrato final: solo podía vender a empresas locales chinas. Las multinacionales, que eran mi mercado seguro, quedaban fuera
     En aquel momento eso era una locura. Las empresas chinas no valoraban la calidad, solo querían lo más barato. 
     Llegué a casa sintiéndome derrotado, y se lo conté a mi mujer. Ella, con esa calma suya que siempre me ancla, me miró y me dijo: “Tranquilo, Miguel. Ya has ganado”.  Y yo me lo creí. Con esa fe ciega y solo dos empleados, Jennifer y Kerry, arrancamos HWS.
@@ -60,23 +55,20 @@ const members = [
   {
     name: "Jordi",
     profession: "creative developer",
-    story: `Acabo de ser padre y todo se siente como una nube: amor, cansancio y desconcierto mezclados. Estar tanto en casa pesa, pero me ha enseñado a frenar y estar presente.
-    Los días ya no se miden igual. El tiempo se estira y se encoge a la vez: horas larguísimas que pasan volando, noches que parecen eternas y mañanas que llegan sin haber dormido del todo. El cuerpo va por inercia, pero el corazón está despierto de una forma nueva, como si hubiera aprendido otro ritmo.
-    Hay momentos de felicidad pura, casi absurda. Una mano diminuta agarrando un dedo, una respiración tranquila sobre el pecho, una mirada que todavía no entiende el mundo pero ya confía. Y luego está el cansancio, profundo, acumulado, ese que no se quita durmiendo una siesta porque la cabeza sigue encendida incluso cuando el cuerpo cae.
-    También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
-    Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
-    No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
+    story: `Tenía quince años cuando apareció. La psoriasis llegó sin avisar, sin explicación, y mi primera reacción fue la pregunta que tantos nos hacemos: "¿Por qué yo?". Era difícil mirarme al espejo, difícil aceptar algo que no había elegido y que no entendía. La adolescencia ya es complicada de por sí, y esto se sentía como una carga extra que no merecía.
+    El tiempo pasó y, poco a poco, algo empezó a cambiar. Encontré un video en YouTube que se titulaba "CON P DE PSORIASIS", donde varias personas hablaban de su experiencia. Por primera vez me di cuenta de que no estaba solo. Había otros que habían pasado por lo mismo, que entendían esa mezcla de frustración y búsqueda de respuestas.
+    Fue un proceso gradual, pero llegué a una conclusión que cambió todo: hay que quererla. Si está ahí, si forma parte de mi piel, si no me duele, ¿por qué no quererla? Empecé a verla diferente, a llamarla mis "tatuajes naturales". Porque eso es lo que son: marcas únicas, patrones que solo yo tengo, diseños que cuentan mi historia.
+    Ahora entiendo algo fundamental: está para siempre, así que es mejor no darle muchas vueltas. No tiene sentido luchar contra algo que es parte de ti. La aceptación no llegó de la noche a la mañana, pero cuando llegó, trajo una paz que no sabía que necesitaba.
+    `,
     image: "/members/jordi.jpg"
   },
   {
     name: "Pau",
-    profession: "former lead designer at wallapop",
-    story: `Acabo de ser padre y todo se siente como una nube: amor, cansancio y desconcierto mezclados. Estar tanto en casa pesa, pero me ha enseñado a frenar y estar presente.
-    Los días ya no se miden igual. El tiempo se estira y se encoge a la vez: horas larguísimas que pasan volando, noches que parecen eternas y mañanas que llegan sin haber dormido del todo. El cuerpo va por inercia, pero el corazón está despierto de una forma nueva, como si hubiera aprendido otro ritmo.
-    Hay momentos de felicidad pura, casi absurda. Una mano diminuta agarrando un dedo, una respiración tranquila sobre el pecho, una mirada que todavía no entiende el mundo pero ya confía. Y luego está el cansancio, profundo, acumulado, ese que no se quita durmiendo una siesta porque la cabeza sigue encendida incluso cuando el cuerpo cae.
-    También está el desconcierto. La sensación de no saber muy bien qué hacer, de dudar constantemente, de preguntarse si lo estás haciendo bien mientras haces lo mejor que puedes. Nadie te prepara para ese vértigo: la responsabilidad repentina, el miedo silencioso, el amor enorme que no sabías que cabía dentro.
-    Estar tanto en casa pesa porque te enfrenta a ti mismo. A tus límites, a tu impaciencia, a tus rutinas rotas. Pero también te obliga a frenar sin excusas. A mirar de verdad. A estar ahí, incluso cuando no pasa nada. Y empiezo a entender que eso es lo que quedará: la presencia, no la perfección.
-    No sé todavía qué tipo de padre seré. Lo que sí sé es que estoy aprendiendo a estar. A no huir del cansancio ni del caos. A quedarme. Y en medio de esta nube espesa y confusa, empiezo a notar algo claro: aquí, ahora, aunque duela y pese, es donde tengo que estar.`,
+    profession: "translator",
+    story: `Estábamos recorriendo el circuito que rodea el Annapurna con tres buenos amigos. Hace ya unos cuantos años de esto. Fue una travesía dura, de menos a más. Empezamos en cotas bajas y cada día subíamos más y más, con más frío.
+    Hasta que llegó la etapa épica de cruzar el Thorung La, el paso de montaña más elevado, casi a 6000 metros. Llevábamos días sin poder movernos de un refugio por mal tiempo y acumulación de nieve. Vimos peligrar la aventura por falta de días, pensando que igual no podíamos llegar a tiempo a la capital para coger el vuelo de vuelta. Hasta que el tiempo amainó y nos dispusimos a cruzar el paso. Fue un día durísimo, de los peores de mi vida: falta de aire por la altura, hundidos hasta la cintura en la nieve, los pies congelados... pero finalmente conseguimos llegar. La bajada fue también destructiva y eterna. Finalmente llegamos al pueblo sagrado de Muktinath, hechos trizas.
+    Estábamos en el comedor del albergue y pedimos una cerveza. Solo una. En nuestro estado, fue suficiente para entonarnos de lo lindo. El local estaba regentado por una mujer y su sobrino que, al vernos contentillos, decidió sacar un viejo transistor. Música nepalí, completamente folklórica. Ad, que no hablaba ni una palabra de inglés, quiso comunicarse con él exclamando alegre como nunca: 'Very very musicale.' Nos empezamos a reír a carcajada limpia. En la vida me había reído tanto. Nuestro compañero alemán que llevaba días sin abrir la boca se desternilló con nosotros. Fue un momento mágico de comunión y colofón de nuestra aventura épica que siempre recordaré. La felicidad absoluta no existe si haber sufrido anteriormente. No hubiera reído así en ninguna otra circunstancia. La alegría de ese momento era exactamente proporcional a todo lo que habíamos pasado para llegar hasta allí. Y eso solo lo entiende quien lo ha vivido."
+    `,
     image: "/members/pau.jpg"
   },
   /* {

@@ -40,6 +40,8 @@ interface ContextData {
   setUserInfo: (userInfo: UserInfo | null) => void;
   toast: Toast;
   setToast: (toast: Toast ) => void;
+  colorInverse: boolean;
+  setColorInverse: (colorInverse: boolean) => void;
 }
 
 interface Toast {
@@ -67,6 +69,8 @@ export const AppContext = createContext<ContextData>({
     type: "success",
   },
   setToast: () => {},
+  colorInverse: false,
+  setColorInverse: () => {},
 });
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -81,7 +85,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     message: 'Experiencia publicada correctamente',
     type: "success",
   });
-
+  const [colorInverse, setColorInverse] = useState<boolean>(false);
   const { checkAuthStatus } = useAuth();
 
   // Función para fetchear los prompts
@@ -178,6 +182,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       setUserInfo,
       toast,
       setToast,
+      colorInverse,
+      setColorInverse,
     }}>
       {children}
     </AppContext.Provider>
