@@ -8,7 +8,7 @@ const faqs = [
   },
   {
     question: '¿Qué se supone que tengo que explicar?',
-    answer: 'No necesitas explicar nada especial, solo real.<br/>Puede ser algo cotidiano, sentimental, de trabajo, identidad, salud, propósito… Lo que quieras, tú decides.<br/>Detrás de cualquier vivencia, por lo pequeña que sea, siempre hay algo que antes no habiamos visto.'
+    answer: 'No necesitas explicar nada especial, solo real.<br/>Puede ser algo cotidiano, sentimental, de trabajo, identidad, salud, propósito… Lo que quieras, tú decides.<br/>Detrás de cualquier vivencia, por pequeña que sea, siempre hay algo que antes no habíamos visto.'
   },
   {
     question: '¿Dónde irá a parar mi conversación?',

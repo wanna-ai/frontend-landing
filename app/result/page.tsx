@@ -67,6 +67,19 @@ const ResultPage = () => {
     },
   });
 
+  useEffect(() => {
+    
+    const checkAuth = async () => {
+      const authStatus = await checkAuthStatus();
+      console.log('authStatus', authStatus);
+      if (authStatus?.isGuest) {
+        router.push('/');
+      }
+    }
+    checkAuth();
+
+  }, []);
+
   // ✅ Cargar datos del localStorage solo una vez
   useEffect(() => {
     const conversationLS = localStorage.getItem('conversation');
@@ -97,12 +110,6 @@ const ResultPage = () => {
     }
   }, [conversation, editorPrompt, submit]);
 
-  useEffect(() => {
-    if (object) {
-      console.log('object', object);
-    }
-  }, [object]);
-
   // ✅ Mostrar errores si los hay
   if (error) {
     return (
@@ -124,8 +131,7 @@ const ResultPage = () => {
         </div>
         
         {isLoading && !object?.title && (
-          <div className={styles.result__loading}>
-            <div className={styles.spinner} />
+          <div className={styles.result__analizando}>
             <p>Analizando tu conversación...</p>
           </div>
         )}
@@ -174,7 +180,7 @@ const ResultPage = () => {
               </div>
             )}
 
-            {!isLoading ? (
+            {/* {!isLoading ? (
               <div className={styles.result__complete}>
                 <button className={styles.result__complete__button} onClick={() => router.push(`/visibility?postId=${postId}`)}>
                   <p>Decide quién ve tu historia</p>
@@ -187,6 +193,24 @@ const ResultPage = () => {
               <div className={styles.result__loading}>
                 <Loader />
               </div>
+            )} */}
+            <div className={styles.result__complete}>
+              <button
+                className={styles.result__complete__button}
+                onClick={() => router.push(`/visibility?postId=${postId}`)}
+                disabled={isLoading}
+              >
+                <p>Decide quién ve tu historia</p>
+                <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.3536 4.03553C15.5488 3.84027 15.5488 3.52369 15.3536 3.32843L12.1716 0.146446C11.9763 -0.048816 11.6597 -0.048816 11.4645 0.146446C11.2692 0.341708 11.2692 0.658291 11.4645 0.853553L14.2929 3.68198L11.4645 6.51041C11.2692 6.70567 11.2692 7.02225 11.4645 7.21751C11.6597 7.41278 11.9763 7.41278 12.1716 7.21751L15.3536 4.03553ZM0 3.68198L0 4.18198L15 4.18198V3.68198V3.18198L0 3.18198L0 3.68198Z" fill="var(--color-white)"/>
+                </svg>
+              </button>
+            </div>
+
+            {isLoading && (
+              <div className={styles.result__loading}>
+              <Loader />
+            </div>
             )}
           </div>
         )}

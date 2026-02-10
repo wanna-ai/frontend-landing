@@ -84,6 +84,15 @@ const SucceedPage = () => {
     window.open(whatsappUrl, '_blank')
   }
 
+  const handleShareWhatsappFriend = () => {
+    const message = encodeURIComponent(
+      `¡Descubre Wanna!
+      \nhttps://frontend.playground.wannna.ai/`
+    )
+    const whatsappUrl = `https://wa.me/?text=${message}`
+    window.open(whatsappUrl, '_blank')
+  }
+
   if (isLoading) {
     return (
       <div className={styles.succeed}>
@@ -142,13 +151,13 @@ const SucceedPage = () => {
 
           </div>
 
-          <p className={styles.succeed__content__story__subtitle}>En este <Link className={styles.succeed__content__story__header__link} href={ postId ? `/story/${postId}` : '/'} target='_blank'>enlace privado</Link> podrás ver tu historia, quién la ha leido y los comentarios</p>
+          <p className={styles.succeed__content__story__subtitle}>En este <Link className={styles.succeed__content__story__header__link} href={ postId ? `/story/${postId}` : '/'} target='_blank'>enlace privado</Link> podrás ver tu historia, quién la ha leído y los comentarios</p>
           
         </div>
 
         <div className={styles.succeed__content__separator} />
         
-        <div className={styles.succeed__content__recommend}>
+        <div className={styles.succeed__content__recommend} onClick={() => handleShareWhatsappFriend()}>
           <button className={styles.succeed__content__recommend__button}>
             <p className={styles.succeed__content__recommend__button__text}>¡Recomiéndale a un amigo una charla con Wanna!</p>
 

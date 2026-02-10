@@ -387,7 +387,7 @@ const StoryPage = () => {
         <div className={styles.story__notowner}>
           <div className={styles.story__notowner__header}>
             <h1 className={styles.story__notowner__header__title}><span className="highlight">{story?.fullname}</span> generó esta historia charlando 2 minutos con Wanna</h1>
-            <h3 className={styles.story__notowner__header__subtitle}>También le dió una reflexió... pero eso ya es privado :) </h3>
+            <h3 className={styles.story__notowner__header__subtitle}>También le dió una reflexión... pero eso ya es privado :) </h3>
           </div>
 
           <div className={styles.story__notowner__story}>
@@ -438,7 +438,7 @@ const StoryPage = () => {
             
             <button className={styles.story__notowner__comment__svg} onClick={() => handleSendComment(token!, userInfo!)}>
               <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="28" width="27" height="27" rx="13.5" transform="rotate(180 28 28)" stroke="var(--color-main)" fill="var(--color-main)" strokeWidth="2"/>
+                <rect x="28" y="28" width="27" height="27" rx="13.5" transform="rotate(180 28 28)" stroke="var(--color-black)" fill="var(--color-black)" strokeWidth="2"/>
                 <path d="M14 22L14 9.5" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
                 <line x1="14" y1="8.394" x2="10.0607" y2="12.3333" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>
                 <line x1="0.75" y1="-0.75" x2="6.32107" y2="-0.75" transform="matrix(0.707107 0.707107 0.707107 -0.707107 14 7.33334)" stroke="var(--color-white)" strokeWidth="1.5" strokeLinecap="round"/>

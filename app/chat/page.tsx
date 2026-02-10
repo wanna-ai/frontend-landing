@@ -76,10 +76,10 @@ export default function ChatPage() {
 
   // ✅ Unificado: scroll cuando cambian los mensajes
   useEffect(() => {
-    if (messages.length > 0 && !isGenerating) {
+    if (messages && !isGenerating) {
       requestAnimationFrame(scrollToBottom);
     }
-  }, [messages.length, isGenerating]);
+  }, [messages, isGenerating]);
 
   // ✅ Prevenir scroll al hacer focus
   useEffect(() => {

@@ -9,17 +9,7 @@ import { useRouter } from 'next/navigation'
 import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { useState, useEffect } from 'react'
 import { API_BASE_URL } from '@/services/config/api'
-import Snippet from '@/components/Snippet/Snippet'
 import { useAuth } from '@/app/hook/useAuth'
-
-// Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
-// Import Swiper styles
-import "swiper/css";
-import 'swiper/css/pagination';
-// import required modules
-import { Pagination } from 'swiper/modules';
-
 
 const RegisterPage = () => {
 
@@ -29,16 +19,28 @@ const RegisterPage = () => {
   const router = useRouter();
   const { checkAuthStatus } = useAuth();
 
-  const { experienceData, setExperienceData, token } = useContext(AppContext);
+  const { token } = useContext(AppContext);
 
   const [showLoginMail, setShowLoginMail] = useState(false)
   const [showLoginPassword, setShowLoginPassword] = useState(false)
 
-  const getTruncatedText = (text: string, maxWords: number = 20) => {
-    const words = text.trim().split(/\s+/);
-    if (words.length <= maxWords) return text;
-    return words.slice(0, maxWords).join(' ') + "...";
-  };
+  useEffect(() => {
+
+    const checkAuth = async () => {
+        const authStatus = await checkAuthStatus();
+        if (!authStatus?.isGuest) {
+
+          if (localStorage.getItem('conversation') && localStorage.getItem('editorPrompt')) {
+            router.push('/result')
+          } else {
+            router.push('/')
+          }
+        }
+    }
+    
+    checkAuth()
+  }, [])
+
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

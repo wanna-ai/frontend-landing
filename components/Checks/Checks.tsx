@@ -33,7 +33,7 @@ const WorldIcon = () => (
 
 const checks = [
   {
-    text: "Guárdalas sólo para ti",
+    text: "Guárdalas solo para ti",
     color: "#FF00BB",
     icon: LockIcon
   },
@@ -43,7 +43,7 @@ const checks = [
     icon: KeyIcon
   },
   {
-    text: "Hazla pública para que ayude a otros ",
+    text: "Hazlas públicas para que ayuden a otros ",
     color: "#FF8000",
     icon: WorldIcon
   }
