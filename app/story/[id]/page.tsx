@@ -11,6 +11,7 @@ import { useAuth } from '@/app/hook/useAuth'
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import CardStory from '@/components/CardStory/CardStory'
 
 const MAX_COMMENT_LENGTH = 160
 
@@ -161,7 +162,6 @@ const StoryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [comment, setComment] = useState('')
 
-
   /*
    * Handle go to chat
    */
@@ -205,7 +205,9 @@ const StoryPage = () => {
         const response = await apiService.get(`/api/v1/landing/posts/${id}`, { 
           token: authStatus?.token || ""
         })
-        
+
+        console.log("response", response)
+
         if (!isMounted) return
 
         setStory({
@@ -293,7 +295,6 @@ const StoryPage = () => {
 
   }
   
-  
   if (isLoading) {
     return (
       <div className={styles.story}>
@@ -324,63 +325,49 @@ const StoryPage = () => {
 
       {state.screen === 'is-owner' && (
         <div className={styles.story__isowner}>
-          <h1 className={styles.story__isowner__title}>Eres el dueño de esta historia</h1>
 
-          <div className={styles.story__isowner__snippet} onClick={() => setIsModalOpen(true)}>
-            <p className={styles.story__isowner__snippet__title}>{story?.title}</p>
-            <div className={styles.story__isowner__snippet__buttons}>
-              <div className={styles.story__isowner__snippet__buttons__button}>
-
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 5C8 5 5 8 2.5 12C5 16 8 19 12 19C16 19 19 16 21.5 12C19 8 16 5 12 5Z" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                  <circle cx="12" cy="12" r="3" stroke="var(--color-black)" strokeWidth="1.4"/>
-                </svg>
-
-              </div>
-            </div>
+          <div className={styles.story__isowner__card} onClick={() => setIsModalOpen(true)}>
+            <CardStory user={userInfo ?? { pictureUrl: '', fullName: '' }} title={story?.title ?? ''} />
           </div>
 
           {story?.contributions && story.contributions.length > 0 ? (
             <div className={styles.story__isowner__contributions}>
-              <h3>Personas que han leído tu historia ({story.contributions.length}):</h3>
-              {story.contributions.map((contribution) => (
-                <div key={contribution.attribution.fullName} className={styles.story__isowner__contributions__contribution}>
-                  <div className={styles.story__isowner__contributions__contribution__header}>
-                    {contribution.attribution.pictureUrl && (
-                      <Image 
-                        src={contribution.attribution.pictureUrl} 
-                        alt={contribution.attribution.fullName || 'Usuario'} 
-                        className={styles.story__isowner__contributions__contribution__header__avatar}
-                        width={32}
-                        height={32}
-                      />
-                    )}
-                    <div className={styles.story__isowner__contributions__contribution__header__info}>
-                      <span className={styles.story__isowner__contributions__contribution__header__info__name}>
-                        {contribution.attribution.fullName || 'Usuario anónimo'}
-                      </span>
+              
+              <p className={styles.story__isowner__contributions__title}>
+                <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1.39922 0.699951C1.39922 0.313352 1.08582 -4.88162e-05 0.699219 -4.88162e-05C0.312619 -4.88162e-05 -0.000781238 0.313352 -0.000781238 0.699951H0.699219H1.39922ZM13.1497 15.0233C13.4231 14.7499 13.4231 14.3067 13.1497 14.0333L8.69497 9.57857C8.4216 9.3052 7.97838 9.3052 7.70502 9.57857C7.43165 9.85194 7.43165 10.2952 7.70502 10.5685L11.6648 14.5283L7.70502 18.4881C7.43165 18.7615 7.43165 19.2047 7.70502 19.4781C7.97838 19.7514 8.4216 19.7514 8.69497 19.4781L13.1497 15.0233ZM0.699219 0.699951H-0.000781238V11.5283H0.699219H1.39922V0.699951H0.699219ZM3.69922 14.5283V15.2283H12.6548V14.5283V13.8283H3.69922V14.5283ZM0.699219 11.5283H-0.000781238C-0.000781238 13.5718 1.65577 15.2283 3.69922 15.2283V14.5283V13.8283C2.42896 13.8283 1.39922 12.7986 1.39922 11.5283H0.699219Z" fill="#90A1B9"/>
+                </svg>
+                Personas que han leído tu historia:
+              </p>
 
-                    </div>
-                  </div>
-                  
-                  {contribution.comments.length > 0 && (
-                    <div className={styles.story__isowner__contributions__contribution__comments}>
-                      {contribution.comments.map((comment) => (
-                        <div key={comment.id} className={styles.story__isowner__contributions__contribution__comments__comment}>
-                          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11.929 3H17.7697C23.8448 3 28.7697 7.92487 28.7697 14L28.7697 14.2563L28.5817 22.9402C28.5451 24.6345 28.7957 26.3227 29.3232 27.9332L29.4224 28.2364C29.6702 28.993 28.9776 29.7216 28.2094 29.5125L26.6055 29.0758C25.2374 28.7033 23.8233 28.5267 22.4056 28.5513L16.7 28.65H11.8C6.38761 28.65 2 24.2624 2 18.85V12.929C2 7.44538 6.44538 3 11.929 3Z" stroke="var(--color-gray)" strokeWidth="1.4"/>
-                            <circle cx="1" cy="1" r="1" transform="matrix(-1 0 0 1 21 15)" fill="var(--color-gray)"/>
-                            <circle cx="1" cy="1" r="1" transform="matrix(-1 0 0 1 17 15)" fill="var(--color-gray)"/>
-                            <circle cx="1" cy="1" r="1" transform="matrix(-1 0 0 1 13 15)" fill="var(--color-gray)"/>
-                          </svg>
-
-                          <p className={styles.story__isowner__contributions__contribution__comments__comment__content}>{comment.content}</p>
+              <div className={styles.story__isowner__contributions__list}>
+                {story.contributions.flatMap((contribution) =>
+                  contribution.comments.map((comment) => (
+                    <div key={comment.id} className={styles.story__isowner__contributions__contribution}>
+                      <div className={styles.story__isowner__contributions__contribution__header}>
+                        {contribution.attribution.pictureUrl && (
+                          <Image
+                            src={contribution.attribution.pictureUrl}
+                            alt={contribution.attribution.fullName || 'Usuario'}
+                            className={styles.story__isowner__contributions__contribution__header__avatar}
+                            width={32}
+                            height={32}
+                          />
+                        )}
+                        <div className={styles.story__isowner__contributions__contribution__header__info}>
+                          <span className={styles.story__isowner__contributions__contribution__header__info__name}>
+                            {contribution.attribution.fullName || 'Usuario anónimo'}
+                          </span>
                         </div>
-                      ))}
+                      </div>
+
+                      <p className={styles.story__isowner__contributions__contribution__comments__comment__content}>
+                        {comment.content}
+                      </p>
                     </div>
-                  )}
-                </div>
-              ))}
+                  ))
+                )}
+              </div>
             </div>
           ) : (
             <div className={styles.story__isowner__contributions}>

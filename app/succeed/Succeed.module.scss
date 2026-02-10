@@ -75,9 +75,7 @@
         margin-bottom: var(--space-4);
         &__title {
           text-align: left;
-          font-weight: var(--font-weight-bold);
-          font-size: var(--font-size-2xl);
-          margin-bottom: var(--space-1);
+          color: var(--color-gray);
         }
 
         &__link {
@@ -87,45 +85,6 @@
 
       &__story {
         position: relative;
-        background-color: var(--color-black);
-        border: 0px;
-        border-radius: var(--border-radius-small);
-        
-        color: var(--color-white);
-        width: 85%;
-        margin: 0 auto;
-        
-        margin-bottom: var(--space-4);
-        box-shadow: rgba(149, 157, 165, 0.7) 0px 8px 24px;
-
-        overflow: hidden;
-
-        &__header {
-          display: flex;
-          gap: var(--space-4);
-          flex-direction: row;
-          opacity: 0.6;
-          margin-bottom: var(--space-2);
-        }
-
-        &__content {
-          display: flex;
-          flex-direction: column;
-          gap: var(--space-2);
-          padding: var(--space-4) var(--space-5);
-
-          margin-bottom: 55px;
-        }
-
-        &__title {
-          /* font-style: italic; */
-          font-size: var(--font-size-xl);
-        }
-
-        &__by {
-          margin-bottom: var(--space-4);
-          color: var(--color-gray);
-        }
       }
       
       &__subtitle {
@@ -190,6 +149,47 @@
 
       }
 
+    }
+
+    &__share {
+      display: flex;
+      flex-direction: row;
+      gap: var(--space-4);
+      align-items: flex-start;
+      justify-content: center;
+
+      &__item {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        align-items: center;
+        justify-content: space-between;
+        width: calc(100% / 3);
+
+        &__text {
+          text-align: center;
+        }
+
+        &__whatsapp {
+          width: 60px;
+          height: 60px;
+          background-color: var(--color-green);
+          border-radius: var(--border-radius);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        &__instagram {
+          width: 60px;
+          height: 60px;
+          background-color: var(--color-black);
+          border-radius: var(--border-radius);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
     }
     
     &__recommend {

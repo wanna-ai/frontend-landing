@@ -38,7 +38,15 @@ interface ContextData {
   fetchPromptData: (communityId?: string) => Promise<void>;
   userInfo: UserInfo | null;
   setUserInfo: (userInfo: UserInfo | null) => void;
+  toast: Toast;
+  setToast: (toast: Toast ) => void;
 }
+
+interface Toast {
+  show: boolean;
+  message: string;
+  type: "success" | "error" | "info";
+};
 
 export const AppContext = createContext<ContextData>({
   experienceData: null,
@@ -53,6 +61,12 @@ export const AppContext = createContext<ContextData>({
   fetchPromptData: async () => {},
   userInfo: null,
   setUserInfo: () => {},
+  toast: {
+    show: false,
+    message: 'Experiencia publicada correctamente',
+    type: "success",
+  },
+  setToast: () => {},
 });
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -62,6 +76,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [postId, setPostId] = useState<string | null>(null);
   const [isLoadingPrompts, setIsLoadingPrompts] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [toast, setToast] = useState<Toast>({
+    show: false,
+    message: 'Experiencia publicada correctamente',
+    type: "success",
+  });
 
   const { checkAuthStatus } = useAuth();
 
@@ -157,6 +176,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       fetchPromptData,
       userInfo,
       setUserInfo,
+      toast,
+      setToast,
     }}>
       {children}
     </AppContext.Provider>

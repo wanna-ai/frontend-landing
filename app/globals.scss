@@ -2,7 +2,7 @@
 
 :root {
   --background: #000000;
-  --color-white: #FFF;
+  --color-white: #F8F8F8;
   --color-black: #181818;
   --color-main: #FF00BB;
   --color-gray: #747A8C;
@@ -12,6 +12,7 @@
   --color-separator: #D7D7D7;
   --color-green:#25d366;
   --color-yellow: #FFC842;
+  --color-card: #FFFFFF;
 
   // fonts
   --font-diatype-semi-mono: var(--font-diatype-semi-mono);
@@ -110,7 +111,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-diatype-trial-heavy);
+  font-family: var(--font-diatype-trial-bold);
 }
 
 h1 {

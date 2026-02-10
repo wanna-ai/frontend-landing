@@ -23,6 +23,15 @@ const diatypeExpandedFont = localFont({
   display: "swap",
 });
 
+const diatypeTrialBoldFont = localFont({
+  src: [
+    { path: "./fonts/Diatype-Trial/ABCDiatype-Bold-Trial.woff" },
+    { path: "./fonts/Diatype-Trial/ABCDiatype-Bold-Trial.woff2" },
+  ],
+  variable: "--font-diatype-trial-bold",
+  display: "swap",
+});
+
 const diatypeTrialHeavyFont = localFont({
   src: [
     { path: "./fonts/Diatype-Trial/ABCDiatype-Heavy-Trial.woff" },
@@ -68,10 +77,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${diatypeSemiMonoFont.variable} ${diatypeExpandedFont.variable} ${diatypeTrialHeavyFont.variable} ${openSansFont.variable}`}>
+      <body className={`${diatypeSemiMonoFont.variable} ${diatypeExpandedFont.variable} ${diatypeTrialHeavyFont.variable} ${openSansFont.variable} ${diatypeTrialBoldFont.variable}`}>
         <AppProvider>
           <Suspense fallback={null}>
-          <MainLayout>
+            <MainLayout>
               {children}
             </MainLayout>
           </Suspense>

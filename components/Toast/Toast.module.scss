@@ -1,0 +1,67 @@
+.toast {
+  position: fixed;
+  top: var(--space-4);
+  right: var(--space-4);
+  color: var(--color-white);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-5);
+  transition: all 0.3s ease-in-out;
+  z-index: 10000;
+  
+  &.visible {
+    animation: fadeIn 0.3s ease-in-out forwards;
+  }
+
+  &.hidden {
+    animation: fadeOut 0.3s ease-in-out forwards;
+  }
+
+  &.success {
+    background-color: var(--color-green);
+  }
+
+  &.error {
+    background-color: var(--color-error);
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    height: fit-content;
+    width: fit-content;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
