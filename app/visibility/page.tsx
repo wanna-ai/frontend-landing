@@ -7,6 +7,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { apiService } from '@/services/api'
 import { useAuth } from '@/app/hook/useAuth'
 
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+
 type PrivacyOption = 'public' | 'private'
 
 const VisibilityPage = () => {
@@ -129,7 +133,17 @@ const VisibilityPage = () => {
               </svg>
               <p className={styles.visibility__value__header__title}>¿Por qué compartirla?</p>
             </div>
-            <p>{experienceData.story_valuable}</p>
+            <div className={styles.visibility__value__content}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  p: ({ children }) => <p className={styles.visibility__value__content__text}>{children}</p>,
+                }}
+              >
+                {experienceData.story_valuable}
+              </ReactMarkdown>
+            </div>
           </div>
         )}
 

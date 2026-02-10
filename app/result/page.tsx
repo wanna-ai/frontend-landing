@@ -10,10 +10,14 @@ import { useAuth } from '@/app/hook/useAuth';
 import { AppContext } from '@/context/AppContext';
 import Loader from '@/components/Loader/Loader';
 
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+
 interface ExperienceData {
   title: string;
   experience: string;
-  pildoras: string[];
+  //pildoras: string[];
   reflection: string;
   story_valuable: string;
 }
@@ -21,7 +25,7 @@ interface ExperienceData {
 const experienceSchema = z.object({
   title: z.string(),
   experience: z.string(),
-  pildoras: z.array(z.string()),
+  //pildoras: z.array(z.string()),
   reflection: z.string(),
   story_valuable: z.string(),
 });
@@ -45,7 +49,7 @@ const ResultPage = () => {
     const response = await apiService.post('/api/v1/landing/posts/interview', {
       title: experienceData.title,
       content: experienceData.experience,
-      pills: experienceData.pildoras.join(' - '),
+      pills: "",
       reflection: experienceData.reflection,
       story_valuable: experienceData.story_valuable,
       rawInterviewText: localStorage.getItem('conversation')
@@ -140,20 +144,33 @@ const ResultPage = () => {
           <div className={styles.result__content}>
             {/* ✅ Título */}
             {object.title && (
-              <div className={styles.result__section}>
+              <div className={styles.result__title}>
                 <h1>{object.title}</h1>
               </div>
             )}
 
             {/* ✅ Experiencia */}
             {object.experience && (
-              <div className={styles.result__section}>
-                <p>{object.experience}</p>
+              <div className={styles.result__experience}>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    p: ({ children }) => <p className={styles.result__experience__content}>{children}</p>,
+                    strong: ({ children }) => <strong className={styles.result__experience__content__strong}>{children}</strong>,
+                    em: ({ children }) => <em className={styles.result__experience__content__em}>{children}</em>,
+                    code: ({ children }) => <code className={styles.result__experience__content__code}>{children}</code>,
+                    pre: ({ children }) => <pre className={styles.result__experience__content__pre}>{children}</pre>,
+                    ul: ({ children }) => <ul className={styles.result__experience__content__ul}>{children}</ul>,
+                  }}
+                >
+                  {object.experience}
+                </ReactMarkdown>
               </div>
             )}
 
             {/* ✅ Píldoras */}
-            {object.pildoras && object.pildoras.length > 0 && (
+            {/* {object.pildoras && object.pildoras.length > 0 && (
               <div className={styles.result__section}>
                 <h3>Píldoras breves ({object.pildoras.length}):</h3>
                 <ul>
@@ -162,7 +179,7 @@ const ResultPage = () => {
                   ))}
                 </ul>
               </div>
-            )}
+            )} */}
 
             {/* ✅ Reflexión */}
             {object.reflection && (
@@ -176,7 +193,16 @@ const ResultPage = () => {
                   </svg>
                   <span>Reflexión sólo para ti</span>
                 </div>
-                <p className={styles.result__reflection__content}>{object.reflection}</p>
+                {/* <p className={styles.result__reflection__content}>{object.reflection}</p> */}
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    p: ({ children }) => <p className={styles.result__reflection__content}>{children}</p>,
+                  }}
+                >
+                  {object.reflection}
+                </ReactMarkdown>
               </div>
             )}
 

@@ -8,6 +8,9 @@ import { AppContext } from '@/context/AppContext'
 import Image from 'next/image'
 import Snippet from '@/components/Snippet/Snippet'
 import { useAuth } from '@/app/hook/useAuth'
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 const MAX_COMMENT_LENGTH = 160
 
@@ -126,7 +129,15 @@ const Modal = ({ story, onClose }: { story: Story, onClose: () => void }) => {
         </div>
 
         <div className={styles.modal__story}>
-          <p className={styles.modal__story__text}>{story.content}</p>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              p: ({ children }) => <p className={styles.modal__story__text}>{children}</p>,
+            }}
+          >
+            {story.content}
+          </ReactMarkdown>
         </div>
       </div>
     </div>

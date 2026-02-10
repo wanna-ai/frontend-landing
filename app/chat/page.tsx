@@ -98,6 +98,8 @@ export default function ChatPage() {
   // ✅ Inicialización del chat
   useEffect(() => {
     if (hasInitialized.current || !promptData) return;
+
+    console.log('promptData', promptData)
     
     hasInitialized.current = true;
     

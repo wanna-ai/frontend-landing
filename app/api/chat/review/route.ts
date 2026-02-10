@@ -5,7 +5,7 @@ import { z } from "zod";
 export const experienceSchema = z.object({
   title: z.string(),
   experience: z.string(),
-  pildoras: z.array(z.string()),
+  // pildoras: z.array(z.string()),
   reflection: z.string(),
   story_valuable: z.string(),
 });
