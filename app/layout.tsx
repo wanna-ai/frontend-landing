@@ -50,8 +50,22 @@ const openSansFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Wanna",
-  description: "Una plataforma para compartir y descubrir historias reales.",
+  title: "Wanna - prelanzamiento",
+  description: "Conócete mejor con Wanna y comparte lo vivido.",
+  icons: {
+    icon: [
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/favicon/favicon_light.png",
+        href: "/favicon/favicon_light.png",
+      },
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/favicon/favicon_dark.png",
+        href: "/favicon/favicon_dark.png",
+      },
+    ],
+  },
   openGraph: {
     title: 'Wanna - Comparte experiencias auténticas',
     description: 'Una plataforma para compartir y descubrir historias reales.',

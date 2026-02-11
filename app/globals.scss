@@ -189,6 +189,8 @@ textarea {
   background-color: var(--color-white);
   border-bottom-left-radius: 38px;
 
+  transition: all 0.3s ease;
+
   &__content {
     max-width: var(--max-width-container);
     /* min-height: calc(100dvh - var(--header-height)); */

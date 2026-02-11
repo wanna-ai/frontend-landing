@@ -96,26 +96,148 @@ const SucceedPage = () => {
     })
   }
 
-  const handleShareInstagram = async () => {
-    const element = storyRef.current
-    if (!element) return
-
-    const canvas = await html2canvas(element, {
-      useCORS: true,
-      scale: 2, // mejor resolución
-    })
-
-    canvas.toBlob((blob) => {
-      if (!blob) return
-
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `your-wanna-story-${Date.now()}.png`
-      link.click()
-      URL.revokeObjectURL(url)
-    }, 'image/png')
+  async function loadImage(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+  
+    return new Promise<HTMLImageElement>((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.src = objectUrl;
+    });
   }
+
+  const handleShareInstagram = async () => {
+
+    //const blob = await generateStoryImage(experienceData?.title ?? '', userInfo?.fullName ?? '')
+    const blob = await generateStoryImage('Somos como somos: desde un segundo plano', userInfo?.fullName ?? '', '/wanna-logo.svg')
+    if (!blob) return
+
+    const file = new File([blob], "story.png", {
+      type: "image/png",
+    });
+  
+    const shareData = {
+      files: [file],
+    };
+  
+    if (navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      // Fallback: download
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "story.png";
+      a.click();
+    }
+      /* const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "story.png";
+      a.click(); */
+
+  }
+
+  async function generateStoryImage(
+    title: string,
+    profileName: string,
+    logoUrl: string // e.g. "/images/logo.png"
+  ) {
+    const width = 1080;
+    const height = 1080;
+    const padding = 80;
+  
+    // ---------- Load Fonts ----------
+    const semimono = new FontFace("Diatype-Semimono", "url(/fonts/ABCDiatypeSemi-Mono-Medium.woff)", { weight: "400" });
+    const bold = new FontFace("Diatype-Bold", "url(/fonts/ABCDiatype-Bold-Trial.woff)", { weight: "700" });
+    await Promise.all([semimono.load(), bold.load()]);
+    document.fonts.add(semimono);
+    document.fonts.add(bold);
+  
+    // ---------- Load Logo ----------
+    const logoImg = await new Promise<HTMLImageElement | null>((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = logoUrl;
+    });
+  
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+  
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+  
+    // ---------- Background ----------
+    ctx.fillStyle = "#F8F8F8";
+    ctx.fillRect(0, 0, width, height);
+  
+    // ---------- Logo (centered X, top) ----------
+    if (logoImg) {
+      const logoHeight = 60;
+      const logoWidth = (logoImg.width / logoImg.height) * logoHeight; // preserve aspect ratio
+      const logoX = (width - logoWidth) / 2;
+      const logoY = padding;
+      ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
+    }
+  
+    // ---------- Title (vertically centered, left-aligned) ----------
+    const fontSize = 88;
+    const lineHeight = fontSize * 1.2;
+    const maxWidth = width - padding * 2;
+  
+    ctx.fillStyle = "#181818";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.font = `700 ${fontSize}px Diatype-Bold`;
+  
+    const words = title.split(" ");
+    const lines: string[] = [];
+    let currentLine = "";
+  
+    for (let i = 0; i < words.length; i++) {
+      const testLine = currentLine + words[i] + " ";
+      if (ctx.measureText(testLine).width > maxWidth && i > 0) {
+        lines.push(currentLine.trim());
+        currentLine = words[i] + " ";
+      } else {
+        currentLine = testLine;
+      }
+    }
+    lines.push(currentLine.trim());
+  
+    const totalTextHeight = lines.length * lineHeight;
+    const startY = (height - totalTextHeight) / 2 + lineHeight / 2;
+  
+    lines.forEach((line, i) => {
+      ctx.fillText(line, padding, startY + i * lineHeight);
+    });
+  
+    // ---------- Profile Name (below title, right-aligned) ----------
+    const profileFontSize = 40;
+    const profileY = startY + totalTextHeight + 32; // 32px gap below last title line
+  
+    ctx.fillStyle = "#181818";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "top";
+    ctx.font = `400 ${profileFontSize}px Diatype-Semimono`;
+    ctx.fillText("by " + profileName, width - padding, profileY);
+  
+    // ---------- Convert to Blob ----------
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/png")
+    );
+  
+    return blob;
+  }
+  
 
   if (isLoading) {
     return (
@@ -149,8 +271,8 @@ const SucceedPage = () => {
           <div className={styles.succeed__content__share__item} onClick={() => handleCopyLink(postId ?? '')}>
             <svg width="59" height="59" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="29.5" cy="29.5" r="29.5" fill="#EBEBEB"/>
-              <path d="M32.1954 30.5228C30.8925 31.8257 28.7801 31.8257 27.4772 30.5228C26.1743 29.2199 26.1743 27.1075 27.4772 25.8045L30.4261 22.8556C31.6697 21.612 33.6508 21.5554 34.9615 22.6858M34.5546 18.7272C35.8575 17.4243 37.9699 17.4243 39.2728 18.7272C40.5757 20.0301 40.5757 22.1425 39.2728 23.4455L36.3239 26.3944C35.0803 27.638 33.0992 27.6946 31.7885 26.5642" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M27.1249 17.75C23.0157 17.75 20.9611 17.75 19.5782 18.8849C19.325 19.0927 19.0928 19.3249 18.885 19.5781C17.7501 20.961 17.7501 23.0156 17.75 27.1248L17.75 30.2499C17.75 34.964 17.7499 37.321 19.2144 38.7855C20.6789 40.25 23.0359 40.25 27.75 40.25H30.8749C34.9843 40.25 37.0389 40.25 38.4219 39.1151C38.675 38.9073 38.9072 38.6751 39.115 38.422C40.2499 37.039 40.2499 34.9844 40.2499 30.875" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M32.1954 30.5228C30.8925 31.8257 28.7801 31.8257 27.4772 30.5228C26.1743 29.2199 26.1743 27.1075 27.4772 25.8045L30.4261 22.8556C31.6697 21.612 33.6508 21.5554 34.9615 22.6858M34.5546 18.7272C35.8575 17.4243 37.9699 17.4243 39.2728 18.7272C40.5757 20.0301 40.5757 22.1425 39.2728 23.4455L36.3239 26.3944C35.0803 27.638 33.0992 27.6946 31.7885 26.5642" stroke="var(--color-black)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M27.1249 17.75C23.0157 17.75 20.9611 17.75 19.5782 18.8849C19.325 19.0927 19.0928 19.3249 18.885 19.5781C17.7501 20.961 17.7501 23.0156 17.75 27.1248L17.75 30.2499C17.75 34.964 17.7499 37.321 19.2144 38.7855C20.6789 40.25 23.0359 40.25 27.75 40.25H30.8749C34.9843 40.25 37.0389 40.25 38.4219 39.1151C38.675 38.9073 38.9072 38.6751 39.115 38.422C40.2499 37.039 40.2499 34.9844 40.2499 30.875" stroke="var(--color-black)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <p className={styles.succeed__content__share__item__text}>Copiar enlace</p>
           </div>
@@ -166,7 +288,7 @@ const SucceedPage = () => {
           </div>
           
           {/* share instagram */}
-          {/* <div className={styles.succeed__content__share__item} onClick={() => handleShareInstagram()}>
+          <div className={styles.succeed__content__share__item} onClick={() => handleShareInstagram()}>
             <div className={styles.succeed__content__share__item__instagram}>
               <svg fill="var(--color-white)" width="30" height="30" viewBox="0 0 32 32" id="Camada_1" version="1.1" xmlns="http://www.w3.org/2000/svg" >
                 <g>
@@ -177,7 +299,7 @@ const SucceedPage = () => {
               </svg>
             </div>
             <p className={styles.succeed__content__share__item__text}>Instagram</p>
-          </div> */}
+          </div>
 
         </div>
 

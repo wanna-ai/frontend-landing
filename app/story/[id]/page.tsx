@@ -265,14 +265,6 @@ const StoryPage = () => {
     }
   }, [id])
 
-  // Memoize truncated content to avoid recalculating on every render
-  const truncatedContent = story?.content 
-    ? story.content.split(' ').slice(0, isExpanded ? undefined : 50).join(' ')
-    : ''
-
-  const contentWordCount = story?.content?.split(' ').length || 0
-  const shouldShowMore = contentWordCount > 100
-
   /*
   * Handle send comment
   */
@@ -331,7 +323,7 @@ const StoryPage = () => {
           )}
           
           <div className={styles.story__login__login}>
-            <h3>Para poder leer la historia completa, registrate</h3>
+            <h3 className={styles.story__login__login__title}>Para poder leer la historia completa, registrate</h3>
             <LoginProviders lastpage="story" />
           </div>
           

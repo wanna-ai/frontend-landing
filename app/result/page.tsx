@@ -43,32 +43,44 @@ const ResultPage = () => {
   const [editorPrompt, setEditorPrompt] = useState('');
 
   const saveExperience = async (experienceData: ExperienceData) => {
-    console.log('experienceData', experienceData);
-
+    console.log('📤 Llamando API con:', experienceData);
     const authStatus = await checkAuthStatus();
-
-    const response = await apiService.post('/api/v1/landing/posts/interview', {
-      title: experienceData.title,
-      content: experienceData.experience,
-      pills: "",
-      reflection: experienceData.reflection,
-      story_valuable: experienceData.story_valuable,
-      rawInterviewText: localStorage.getItem('conversation')
-    }, { token: authStatus?.token || "" });
-
-    const responseData = response.data || response;
-    console.log('responseData', responseData);
-    setPostId(responseData.id);
+    console.log('🔑 authStatus:', authStatus);
+  
+    try {
+      const response = await apiService.post('/api/v1/landing/posts/interview', {
+        title: experienceData.title,
+        content: experienceData.experience,
+        pills: "",
+        reflection: experienceData.reflection,
+        story_valuable: experienceData.story_valuable,
+        rawInterviewText: localStorage.getItem('conversation')
+      }, { token: authStatus?.token || "" });
+  
+      const responseData = response.data || response;
+      console.log('✅ API response:', responseData);
+      setPostId(responseData.id);
+    } catch (err) {
+      console.error('❌ API call failed:', err);
+      throw err; // re-throw para que onFinish lo capture
+    }
   }
 
   const { object, submit, isLoading, error } = useObject({
     api: '/api/chat/review',
     schema: experienceSchema,
+    onError: (err) => {
+      console.error('❌ useObject error:', err);
+      router.push('/');
+    },
     onFinish: async ({ object: result }) => {
-      console.log('Experiencia generada:', result);
-      
-      // ✅ Aquí guardarías en backend
-      await saveExperience(result as ExperienceData);
+      console.log('✅ onFinish llamado con:', result);
+      try {
+        await saveExperience(result as ExperienceData);
+        console.log('✅ saveExperience completado, postId:', postId);
+      } catch (err) {
+        console.error('❌ Error en saveExperience:', err);
+      }
     },
   });
 
@@ -90,6 +102,11 @@ const ResultPage = () => {
     const conversationLS = localStorage.getItem('conversation');
     const editorPromptLS = localStorage.getItem('editorPrompt');
 
+    console.log('📦 localStorage:', { 
+      conversation: conversationLS?.slice(0, 50), // primeros 50 chars
+      editorPrompt: editorPromptLS?.slice(0, 50) 
+    });
+
     if (!conversationLS || !editorPromptLS) {
       console.error('No hay datos en localStorage');
       router.push('/'); // Redirigir si no hay datos
@@ -104,6 +121,8 @@ const ResultPage = () => {
 
   // ✅ Submit solo cuando tengamos los datos Y no hayamos hecho submit
   useEffect(() => {
+    console.log('🔄 Submit effect:', { conversation: !!conversation, editorPrompt: !!editorPrompt, hasSubmitted: hasSubmitted.current });
+    
     if (conversation && editorPrompt && !hasSubmitted.current) {
       console.log('Haciendo submit...');
       hasSubmitted.current = true;
@@ -137,18 +156,17 @@ const ResultPage = () => {
           <div className={styles.result__content}>
             
             <div className={styles.result__story}>
+
+              <div className={styles.result__story__header}>
+                <p>Esta es tu historia:</p>
+              </div>
+              {isLoading && !object?.title && (
+                <div className={styles.result__story__loading}>
+                  <p>Analizando tu conversación...</p>
+                </div>
+              )}
               {object && (
                 <>
-                  {isLoading && !object?.title && (
-                    <div className={styles.result__story__loading}>
-                      <p>Analizando tu conversación...</p>
-                    </div>
-                  )}
-
-                  <div className={styles.result__story__header}>
-                    <p>Esta es tu historia:</p>
-                  </div>
-
                   {/*  User */}
                   {userInfo?.fullName && (
                     <div className={styles.result__story__user}>
