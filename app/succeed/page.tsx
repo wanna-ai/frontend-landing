@@ -108,10 +108,9 @@ const SucceedPage = () => {
     });
   }
 
-  const handleShareInstagram = async () => {
+  const handleShareStory = async () => {
 
     const blob = await generateStoryImage(experienceData?.title ?? '', userInfo?.fullName ?? '', '/wanna-logo.svg')
-    // const blob = await generateStoryImage('Somos como somos: desde un segundo plano', userInfo?.fullName ?? '', '/wanna-logo.svg')
     if (!blob) return
 
     const file = new File([blob], "story.png", {
@@ -287,18 +286,17 @@ const SucceedPage = () => {
             <p className={styles.succeed__content__share__item__text}>Whatsapp</p>
           </div>
           
-          {/* share instagram */}
-          <div className={styles.succeed__content__share__item} onClick={() => handleShareInstagram()}>
+          {/* share story */}
+          <div className={styles.succeed__content__share__item} onClick={() => handleShareStory()}>
             <div className={styles.succeed__content__share__item__instagram}>
-              <svg fill="var(--color-white)" width="30" height="30" viewBox="0 0 32 32" id="Camada_1" version="1.1" xmlns="http://www.w3.org/2000/svg" >
-                <g>
-                  <path d="M22.3,8.4c-0.8,0-1.4,0.6-1.4,1.4c0,0.8,0.6,1.4,1.4,1.4c0.8,0,1.4-0.6,1.4-1.4C23.7,9,23.1,8.4,22.3,8.4z"/>
-                  <path d="M16,10.2c-3.3,0-5.9,2.7-5.9,5.9s2.7,5.9,5.9,5.9s5.9-2.7,5.9-5.9S19.3,10.2,16,10.2z M16,19.9c-2.1,0-3.8-1.7-3.8-3.8   c0-2.1,1.7-3.8,3.8-3.8c2.1,0,3.8,1.7,3.8,3.8C19.8,18.2,18.1,19.9,16,19.9z"/>
-                  <path d="M20.8,4h-9.5C7.2,4,4,7.2,4,11.2v9.5c0,4,3.2,7.2,7.2,7.2h9.5c4,0,7.2-3.2,7.2-7.2v-9.5C28,7.2,24.8,4,20.8,4z M25.7,20.8   c0,2.7-2.2,5-5,5h-9.5c-2.7,0-5-2.2-5-5v-9.5c0-2.7,2.2-5,5-5h9.5c2.7,0,5,2.2,5,5V20.8z"/>
-                </g>
-              </svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15.6667L12 5.66675" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
+              <line x1="12" y1="4.84853" x2="8.84853" y2="8" stroke="var(--color-black)" strokeWidth="1.2" strokeLinecap="round"/>
+              <line x1="0.6" y1="-0.6" x2="5.05685" y2="-0.6" transform="matrix(0.707107 0.707107 0.707107 -0.707107 12 4)" stroke="var(--color-black)" strokeWidth="1.2" strokeLinecap="round"/>
+              <path d="M3 12.5C3 14.0434 3 15.505 3 16.6773C3 18.1941 4.13089 19.4702 5.64065 19.6158C7.52589 19.7976 10.0608 20 12 20C13.9392 20 16.4741 19.7976 18.3593 19.6158C19.8691 19.4702 21 18.1941 21 16.6773C21 15.505 21 14.0434 21 12.5" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
+            </svg>
             </div>
-            <p className={styles.succeed__content__share__item__text}>Instagram</p>
+            <p className={styles.succeed__content__share__item__text}>Compartir historia</p>
           </div>
 
         </div>
