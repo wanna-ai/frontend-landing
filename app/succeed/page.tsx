@@ -110,8 +110,8 @@ const SucceedPage = () => {
 
   const handleShareInstagram = async () => {
 
-    //const blob = await generateStoryImage(experienceData?.title ?? '', userInfo?.fullName ?? '')
-    const blob = await generateStoryImage('Somos como somos: desde un segundo plano', userInfo?.fullName ?? '', '/wanna-logo.svg')
+    const blob = await generateStoryImage(experienceData?.title ?? '', userInfo?.fullName ?? '', '/wanna-logo.svg')
+    // const blob = await generateStoryImage('Somos como somos: desde un segundo plano', userInfo?.fullName ?? '', '/wanna-logo.svg')
     if (!blob) return
 
     const file = new File([blob], "story.png", {
