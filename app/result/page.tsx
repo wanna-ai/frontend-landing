@@ -226,7 +226,7 @@ const ResultPage = () => {
               <button
                 className={styles.result__complete__button}
                 onClick={() => router.push(`/visibility?postId=${postId}`)}
-                disabled={isLoading}
+                disabled={isLoading || !postId}
               >
                 <p>Decide quién ve tu historia</p>
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
