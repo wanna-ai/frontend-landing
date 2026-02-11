@@ -90,7 +90,7 @@ const ResultPage = () => {
       const authStatus = await checkAuthStatus();
       console.log('authStatus', authStatus);
       if (authStatus?.isGuest) {
-        router.push('/');
+        router.push('/register');
       }
     }
     checkAuth();

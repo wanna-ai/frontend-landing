@@ -47,7 +47,6 @@ export default function ChatPage() {
     ]);
 
     const authStatus = await checkAuthStatus();
-
     const goToRegister = !authStatus?.user || authStatus.user.username?.startsWith('guest-');
 
     // remove cookie token
