@@ -47,7 +47,8 @@ export default function ChatPage() {
     ]);
 
     const authStatus = await checkAuthStatus();
-    alert("isGuest: " + authStatus?.isGuest);
+    alert("fullname: " + authStatus?.user?.fullName);
+    alert("username: " + authStatus?.user?.username);
     router.push(authStatus?.isGuest ? '/register': '/result');
   };
 
