@@ -17,7 +17,7 @@ export default function ChatPage() {
   const searchParams = useSearchParams()
   const communityId = searchParams.get('c') ?? undefined
 
-  const { promptData, setExperienceData, setPostId } = useContext(AppContext);
+  const { promptData, setExperienceData, setPostId, setToken, setUserInfo } = useContext(AppContext);
   const router = useRouter();
   const { checkAuthStatus } = useAuth();
 
@@ -47,9 +47,18 @@ export default function ChatPage() {
     ]);
 
     const authStatus = await checkAuthStatus();
-    alert("fullname: " + authStatus?.user?.fullName);
-    alert("username: " + authStatus?.user?.username);
-    router.push(authStatus?.isGuest ? '/register': '/result');
+
+    const goToRegister = !authStatus?.user || authStatus.user.username?.startsWith('guest-');
+
+    // remove cookie token
+    await fetch('/api/auth/remove-cookie-token', {
+      method: 'POST',
+      credentials: 'include',
+    })
+    setToken(null);
+    setUserInfo(null);
+
+    router.push(goToRegister ? '/register': '/result');
   };
 
   const { messages, setMessages, sendMessage, status, stop } = useChat({
