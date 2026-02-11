@@ -287,14 +287,14 @@ const SucceedPage = () => {
           </div>
           
           {/* share story */}
-          <div className={styles.succeed__content__share__item} onClick={() => handleShareStory()}>
+          <div className={`${styles.succeed__content__share__item} ${styles.succeed__content__share__item__ig}`} onClick={() => handleShareStory()}>
             <div className={styles.succeed__content__share__item__instagram}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15.6667L12 5.66675" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
-              <line x1="12" y1="4.84853" x2="8.84853" y2="8" stroke="var(--color-black)" strokeWidth="1.2" strokeLinecap="round"/>
-              <line x1="0.6" y1="-0.6" x2="5.05685" y2="-0.6" transform="matrix(0.707107 0.707107 0.707107 -0.707107 12 4)" stroke="var(--color-black)" strokeWidth="1.2" strokeLinecap="round"/>
-              <path d="M3 12.5C3 14.0434 3 15.505 3 16.6773C3 18.1941 4.13089 19.4702 5.64065 19.6158C7.52589 19.7976 10.0608 20 12 20C13.9392 20 16.4741 19.7976 18.3593 19.6158C19.8691 19.4702 21 18.1941 21 16.6773C21 15.505 21 14.0434 21 12.5" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
-            </svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15.6667L12 5.66675" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
+                <line x1="12" y1="4.84853" x2="8.84853" y2="8" stroke="var(--color-black)" strokeWidth="1.2" strokeLinecap="round"/>
+                <line x1="0.6" y1="-0.6" x2="5.05685" y2="-0.6" transform="matrix(0.707107 0.707107 0.707107 -0.707107 12 4)" stroke="var(--color-black)" strokeWidth="1.2" strokeLinecap="round"/>
+                <path d="M3 12.5C3 14.0434 3 15.505 3 16.6773C3 18.1941 4.13089 19.4702 5.64065 19.6158C7.52589 19.7976 10.0608 20 12 20C13.9392 20 16.4741 19.7976 18.3593 19.6158C19.8691 19.4702 21 18.1941 21 16.6773C21 15.505 21 14.0434 21 12.5" stroke="var(--color-black)" strokeWidth="1.4" strokeLinecap="round"/>
+              </svg>
             </div>
             <p className={styles.succeed__content__share__item__text}>Compartir historia</p>
           </div>

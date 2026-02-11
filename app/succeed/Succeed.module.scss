@@ -169,6 +169,13 @@
         justify-content: space-between;
         width: calc(100% / 3);
 
+        &__ig {
+          display: none;
+          @include bp.md {
+            display: flex;
+          }
+        }
+
         &__text {
           text-align: center;
         }
@@ -186,9 +193,8 @@
         &__instagram {
           width: 60px;
           height: 60px;
-          background-color: var(--color-black);
+          background-color: #EBEBEB;
           border-radius: var(--border-radius);
-          display: flex;
           align-items: center;
           justify-content: center;
         }
