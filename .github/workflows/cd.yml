@@ -6,6 +6,7 @@ on:
       - main
     tags:
       - develop
+      - beta
       - 'v*.*.*'
 
 env:
@@ -24,8 +25,8 @@ jobs:
         run: |
           if [[ "${{ github.ref }}" == "refs/tags/develop" ]]; then
             ENVIRONMENTS='["playground"]'
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            ENVIRONMENTS='["playground"]'
+          elif [[ "${{ github.ref }}" == "refs/tags/beta" ]]; then
+            ENVIRONMENTS='["beta"]'
           elif [[ "${{ github.ref }}" =~ refs/tags/v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
             ENVIRONMENTS='["playground", "production"]'
           else
