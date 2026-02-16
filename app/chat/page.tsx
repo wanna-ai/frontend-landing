@@ -49,13 +49,15 @@ export default function ChatPage() {
     const authStatus = await checkAuthStatus();
     const goToRegister = !authStatus?.user || authStatus.user.username?.startsWith('guest-');
 
-    // remove cookie token
-    await fetch('/api/auth/remove-cookie-token', {
-      method: 'POST',
-      credentials: 'include',
-    })
-    setToken(null);
-    setUserInfo(null);
+    if (goToRegister) {
+      // Only clear token for guest users — authenticated users keep their session
+      await fetch('/api/auth/remove-cookie-token', {
+        method: 'POST',
+        credentials: 'include',
+      })
+      setToken(null);
+      setUserInfo(null);
+    }
 
     router.push(goToRegister ? '/register': '/result');
   };
