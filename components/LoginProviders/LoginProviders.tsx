@@ -2,7 +2,8 @@ import styles from './LoginProviders.module.scss'
 import LoginOAuth from '../LoginOAuth/LoginOAuth'
 import { API_BASE_URL } from '@/services/config/api'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { AppContext } from '@/context/AppContext'
 
 interface LoginProvidersProps {
   lastpage: string
@@ -10,6 +11,7 @@ interface LoginProvidersProps {
 
 const LoginProviders = ({ lastpage }: LoginProvidersProps) => {
   const router = useRouter()
+  const { sessionId } = useContext(AppContext)
   const [isLoading, setIsLoading] = useState(false)
 
   const setCookie = async (name: string, value: string) => {
@@ -39,7 +41,8 @@ const LoginProviders = ({ lastpage }: LoginProvidersProps) => {
       ])
 
       const endpoint = '/oauth2/authorization/google'
-      router.push(`${API_BASE_URL}${endpoint}`)
+      const sessionParam = sessionId ? `?sessionId=${sessionId}` : ''
+      router.push(`${API_BASE_URL}${endpoint}${sessionParam}`)
     } catch (error) {
       console.error('Error during Google OAuth:', error)
       setIsLoading(false)

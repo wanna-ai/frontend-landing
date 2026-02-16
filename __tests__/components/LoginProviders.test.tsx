@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
 import LoginProviders from '@/components/LoginProviders/LoginProviders'
+import { renderWithContext } from '../helpers/test-utils'
 
 const mockPush = vi.fn()
 vi.mock('next/navigation', () => ({
@@ -17,13 +18,13 @@ describe('LoginProviders', () => {
   })
 
   it('renders Google button', () => {
-    render(<LoginProviders lastpage="register" />)
+    renderWithContext(<LoginProviders lastpage="register" />)
 
     expect(screen.getByText('Continuar con Google')).toBeInTheDocument()
   })
 
   it('saves lastpage cookie before redirect', async () => {
-    render(<LoginProviders lastpage="register" />)
+    renderWithContext(<LoginProviders lastpage="register" />)
 
     // The LoginOAuth component has onClick on the wrapping div
     const googleText = screen.getByText('Continuar con Google')
@@ -47,7 +48,7 @@ describe('LoginProviders', () => {
   })
 
   it('redirects to backend OAuth endpoint', async () => {
-    render(<LoginProviders lastpage="register" />)
+    renderWithContext(<LoginProviders lastpage="register" />)
 
     const clickableDiv = screen.getByText('Continuar con Google').closest('[class*="login"]')!
     fireEvent.click(clickableDiv)
@@ -59,8 +60,35 @@ describe('LoginProviders', () => {
     })
   })
 
+  it('includes sessionId as query param when available', async () => {
+    const testSessionId = 'test-session-uuid-123'
+    renderWithContext(<LoginProviders lastpage="register" />, { sessionId: testSessionId })
+
+    const clickableDiv = screen.getByText('Continuar con Google').closest('[class*="login"]')!
+    fireEvent.click(clickableDiv)
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith(
+        expect.stringContaining(`/oauth2/authorization/google?sessionId=${testSessionId}`)
+      )
+    })
+  })
+
+  it('omits sessionId query param when sessionId is null', async () => {
+    renderWithContext(<LoginProviders lastpage="register" />, { sessionId: null })
+
+    const clickableDiv = screen.getByText('Continuar con Google').closest('[class*="login"]')!
+    fireEvent.click(clickableDiv)
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith(
+        expect.stringMatching(/\/oauth2\/authorization\/google$/)
+      )
+    })
+  })
+
   it('prevents double-click', async () => {
-    render(<LoginProviders lastpage="register" />)
+    renderWithContext(<LoginProviders lastpage="register" />)
 
     const clickableDiv = screen.getByText('Continuar con Google').closest('[class*="login"]')!
     fireEvent.click(clickableDiv)
