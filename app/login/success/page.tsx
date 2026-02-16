@@ -1,36 +1,18 @@
 'use client'
 
-import { useEffect, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { AppContext } from '@/context/AppContext'
-import { API_BASE_URL } from '@/services/config/api'
-import { apiService } from '@/services/api'
 import { useAuth } from '@/app/hook/useAuth'
-
 
 const LoginSuccessPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { checkAuthStatus } = useAuth();
-  const { postId: contextPostId, setUserInfo } = useContext(AppContext)
+  const [isProcessing, setIsProcessing] = useState(true);
 
   useEffect(() => {
     const processLogin = async () => {
       try {
-
-        // Check if we need to redirect to localhost
-        /* const currentUrl = window.location.href
-        const url = new URL(currentUrl)
-        const pathname = url.pathname
-        const search = url.search
-
-        // If we're not already on localhost, redirect
-        if (!window.location.hostname.includes('localhost')) {
-          window.location.href = `http://localhost:3000${pathname}${search}`
-          return
-        } */
-        
-        //get token from search params
         const token = searchParams.get('token')
 
         if (!token) {
@@ -38,66 +20,59 @@ const LoginSuccessPage = () => {
           return
         }
 
-        /**
-         * 1️⃣ Store token securely in HttpOnly cookie and set register to user
-         */
-        await Promise.all([
-          await fetch('/api/auth/set-cookie', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: 'authToken', value: token }),
-          }),
-        ])
+        // If running inside a popup (opened by chat page), send token back and close
+        // Use BroadcastChannel (reliable) + postMessage fallback (window.opener may be
+        // null after cross-origin redirect chain: frontend → backend → Google → backend → frontend)
+        if (window.opener || window.name === 'WannaLogin') {
+          const channel = new BroadcastChannel('wanna-auth');
+          channel.postMessage({ type: 'WANNA_AUTH_SUCCESS', token });
+          channel.close();
 
-        /*
-         * Get cookie lastpage
-         */
-        const lastpageResponse = await fetch('/api/auth/get-cookie-lastpage', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        const lastpageData = await lastpageResponse.json()
-        const lastpage = lastpageData.lastpage
-        console.log('lastpage', lastpage)
+          // Also try postMessage as fallback
+          if (window.opener) {
+            window.opener.postMessage({ type: 'WANNA_AUTH_SUCCESS', token }, window.location.origin);
+          }
 
-        const authStatus = await checkAuthStatus();
-        console.log("authStatus", authStatus)
-
-        /**
-         * 3️⃣ Get postId (still from localStorage or context)
-         */
-        const storedPostId = localStorage.getItem('postId')
-        const postId = storedPostId || contextPostId
-
-        console.log('PostId:', postId)
-        console.log('API_BASE_URL:', API_BASE_URL)
-        console.log('token', token)
-        
-        /**
-         * 5️⃣ Redirect
-        */
-        if (lastpage === 'register') {
-          router.push(`/result`)
-        } else {
-          router.push(`/story/${postId}`)
+          window.close();
+          return;
         }
 
+        // Normal redirect flow: store token in cookie and redirect
+        await fetch('/api/auth/set-cookie', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'authToken', value: token }),
+        })
+
+        const lastpageResponse = await fetch('/api/auth/get-cookie-lastpage', {
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        })
+        const lastpageData = await lastpageResponse.json()
+
+        await checkAuthStatus();
+
+        if (lastpageData.lastpage === 'register') {
+          router.push('/result')
+        } else {
+          const storedPostId = localStorage.getItem('postId')
+          router.push(storedPostId ? `/story/${storedPostId}` : '/')
+        }
       } catch (error) {
         console.error('Error durante el login:', error)
+        router.push('/')
+      } finally {
+        setIsProcessing(false)
       }
     }
 
     processLogin()
-  }, [searchParams, router, contextPostId])
+  }, [searchParams, router, checkAuthStatus])
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center">
-        <p>Procesando login...</p>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+      <div style={{ textAlign: 'center' }}>
+        <p>{isProcessing ? 'Procesando login...' : 'Redirigiendo...'}</p>
       </div>
     </div>
   )

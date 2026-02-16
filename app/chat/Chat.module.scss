@@ -133,6 +133,72 @@
     }
   }
 
+  &__revealCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-small);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    animation: fadeIn 0.3s ease;
+
+    &__details {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    &__title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+    }
+
+    &__pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    &__pill {
+      background-color: var(--color-gray-light);
+      border-radius: var(--border-radius-small);
+      padding: var(--space-1) var(--space-3);
+      font-size: var(--font-size-sm);
+    }
+
+    &__insight {
+      font-size: var(--font-size-md);
+      color: var(--color-gray-dark);
+      line-height: var(--line-height-normal);
+    }
+
+    &__googleBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-5);
+      background-color: var(--color-white);
+      color: var(--color-black);
+      border: 1px solid var(--color-gray);
+      border-radius: var(--border-radius-small);
+      font-size: var(--font-size-md);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: var(--color-gray-light);
+      }
+    }
+  }
+
+  &__statusLine {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-dark);
+    padding: var(--space-2) 0;
+  }
+
   &__input {
     position: absolute;
     bottom: var(--space-5);
@@ -395,6 +461,11 @@
     }
 
   }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeOut {

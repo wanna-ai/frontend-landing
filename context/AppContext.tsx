@@ -27,7 +27,7 @@ interface UserInfo {
 
 interface ContextData {
   experienceData: ExperienceData | null;
-  setExperienceData: (experienceData: ExperienceData | null) => void;  
+  setExperienceData: (experienceData: ExperienceData | null) => void;
   promptData: PromptData | null;
   setPromptData: (promptData: PromptData | null) => void;
   token: string | null;
@@ -42,6 +42,8 @@ interface ContextData {
   setToast: (toast: Toast ) => void;
   colorInverse: boolean;
   setColorInverse: (colorInverse: boolean) => void;
+  sessionId: string | null;
+  setSessionId: (sessionId: string | null) => void;
 }
 
 interface Toast {
@@ -71,6 +73,8 @@ export const AppContext = createContext<ContextData>({
   setToast: () => {},
   colorInverse: false,
   setColorInverse: () => {},
+  sessionId: null,
+  setSessionId: () => {},
 });
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -86,6 +90,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     type: "success",
   });
   const [colorInverse, setColorInverse] = useState<boolean>(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const { checkAuthStatus } = useAuth();
 
   // Función para fetchear los prompts
@@ -184,6 +189,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       setToast,
       colorInverse,
       setColorInverse,
+      sessionId,
+      setSessionId,
     }}>
       {children}
     </AppContext.Provider>
