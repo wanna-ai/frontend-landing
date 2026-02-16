@@ -1,0 +1,93 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FAQS > snapshot: initial state (all closed) 1`] = `
+<div>
+  <div
+    class="_faqs_9a290b"
+  >
+    <div
+      class="_faqs__items_9a290b"
+    >
+      <div
+        class="_faqs__items__item_9a290b "
+      >
+        <button
+          aria-expanded="false"
+          class="_faqs__items__item__question_9a290b"
+        >
+          <span
+            class="_faqs__items__item__icon_9a290b"
+          >
+            +
+          </span>
+          ¿Qué es Wanna?
+        </button>
+        <div
+          class="_faqs__items__item__answer__wrapper_9a290b"
+          style="max-height: 0px;"
+        >
+          <p
+            class="_faqs__items__item__answer_9a290b"
+          >
+            Wanna es un espacio para encontrarnos a través de lo que vivimos. Nuestras experiencias pueden ayudar a otras personas más de lo que creemos... y a nosotros mismos.
+          </p>
+        </div>
+      </div>
+      <div
+        class="_faqs__items__item_9a290b "
+      >
+        <button
+          aria-expanded="false"
+          class="_faqs__items__item__question_9a290b"
+        >
+          <span
+            class="_faqs__items__item__icon_9a290b"
+          >
+            +
+          </span>
+          ¿Qué se supone que tengo que explicar?
+        </button>
+        <div
+          class="_faqs__items__item__answer__wrapper_9a290b"
+          style="max-height: 0px;"
+        >
+          <p
+            class="_faqs__items__item__answer_9a290b"
+          >
+            No necesitas explicar nada especial, solo real.
+            <br />
+            Puede ser algo cotidiano, sentimental, de trabajo, identidad, salud, propósito… Lo que quieras, tú decides.
+            <br />
+            Detrás de cualquier vivencia, por pequeña que sea, siempre hay algo que antes no habíamos visto.
+          </p>
+        </div>
+      </div>
+      <div
+        class="_faqs__items__item_9a290b "
+      >
+        <button
+          aria-expanded="false"
+          class="_faqs__items__item__question_9a290b"
+        >
+          <span
+            class="_faqs__items__item__icon_9a290b"
+          >
+            +
+          </span>
+          ¿Dónde irá a parar mi conversación?
+        </button>
+        <div
+          class="_faqs__items__item__answer__wrapper_9a290b"
+          style="max-height: 0px;"
+        >
+          <p
+            class="_faqs__items__item__answer_9a290b"
+          >
+            En Wanna la privacidad es nuestra prioridad. Por defecto, tu conversación no se compartirá con nadie. Cuando termines de hablar con Wanna, verás el resultado y podrás decidir qué hacer: guardártelo solo para ti o compartirlo y publicarlo para ayudar a otras personas. También recibirás un correo electrónico con el que podrás acceder a tu publicación y editarla, hacerla pública o incluso eliminarla si así lo deseas. En un futuro, Wanna podrá citar tus historias públicas, atribuyendo con total transparencia la autoría de su contenido a tu nombre de usuario.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

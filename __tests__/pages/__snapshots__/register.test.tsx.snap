@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RegisterPage > snapshot: default view 1`] = `
+<div>
+  <div
+    class="_register_4ec8af"
+  >
+    <div
+      class="_register__register_4ec8af"
+    >
+      <h3
+        class="_register__register__title_4ec8af"
+      >
+        Regístrate y lee
+        <br />
+        tu historia completa:
+      </h3>
+      <div
+        class="_register__register__buttons_4ec8af"
+      >
+        <div
+          class="_register__register__buttons__login_4ec8af"
+        >
+          <div
+            data-testid="login-providers"
+          >
+            Login (
+            register
+            )
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,379 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OurStories > snapshot: grid layout 1`] = `
+<div>
+  <div
+    class="_our_stories_910c6d"
+  >
+    <div
+      class="_our_stories__header_910c6d"
+    >
+      <h2
+        class="_our_stories__header__title_910c6d"
+      >
+        Algunas 
+        <span
+          class="_our_stories__header__title__span_910c6d"
+        >
+          experiencias
+        </span>
+         de nuestro equipo generadas con Wanna
+      </h2>
+    </div>
+    <div
+      class="_our_stories__items_910c6d"
+    >
+      <div
+        class="_our_stories__items__item_910c6d"
+        style="top: 100px;"
+      >
+        <div
+          class="_our_stories__items__item__header_910c6d"
+        >
+          <h3
+            class="_our_stories__items__item__header__name_910c6d"
+          >
+            Agus
+          </h3>
+          <p
+            class="_our_stories__items__item__header__profession_910c6d"
+          >
+            CEO of 
+            <strong>
+              WANNA
+            </strong>
+            <br />
+            cofounder of 
+            <strong>
+              WALLAPOP
+            </strong>
+          </p>
+        </div>
+        <div
+          class="_our_stories__items__item__image_910c6d "
+          style="background-image: url("/members/agus.webp");"
+        >
+          <svg
+            class="_our_stories__items__item__image__icon_910c6d"
+            fill="none"
+            height="48"
+            style="transform: rotate(0deg);"
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              fill="white"
+              r="24"
+            />
+            <path
+              d="M24 19.5V30.5"
+              stroke="#151515"
+            />
+            <path
+              d="M29.5059 24.995L18.5059 24.995"
+              stroke="#111111"
+            />
+          </svg>
+        </div>
+        <div
+          class="_our_stories__items__item__content_910c6d _collapsed_910c6d"
+        >
+          <p
+            class="_our_stories__items__item__content__story_910c6d"
+          >
+            Un cáncer a los 39 me enseñó algo muy sencillo: la gente a la que le importo de verdad sólo...
+          </p>
+        </div>
+      </div>
+      <div
+        class="_our_stories__items__item_910c6d"
+        style="top: 0px;"
+      >
+        <div
+          class="_our_stories__items__item__header_910c6d"
+        >
+          <h3
+            class="_our_stories__items__item__header__name_910c6d"
+          >
+            Adrià
+          </h3>
+          <p
+            class="_our_stories__items__item__header__profession_910c6d"
+          >
+            former lead designer at wallapop
+          </p>
+        </div>
+        <div
+          class="_our_stories__items__item__image_910c6d "
+          style="background-image: url("/members/adria.webp");"
+        >
+          <svg
+            class="_our_stories__items__item__image__icon_910c6d"
+            fill="none"
+            height="48"
+            style="transform: rotate(0deg);"
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              fill="white"
+              r="24"
+            />
+            <path
+              d="M24 19.5V30.5"
+              stroke="#151515"
+            />
+            <path
+              d="M29.5059 24.995L18.5059 24.995"
+              stroke="#111111"
+            />
+          </svg>
+        </div>
+        <div
+          class="_our_stories__items__item__content_910c6d _collapsed_910c6d"
+        >
+          <p
+            class="_our_stories__items__item__content__story_910c6d"
+          >
+            Acabo de ser padre y todo se siente como una nube: amor, cansancio y desconcierto mezclados. Estar tanto en casa...
+          </p>
+        </div>
+      </div>
+      <div
+        class="_our_stories__items__item_910c6d"
+        style="top: 50px;"
+      >
+        <div
+          class="_our_stories__items__item__header_910c6d"
+        >
+          <h3
+            class="_our_stories__items__item__header__name_910c6d"
+          >
+            Marta
+          </h3>
+          <p
+            class="_our_stories__items__item__header__profession_910c6d"
+          >
+            corporate & legal manager
+          </p>
+        </div>
+        <div
+          class="_our_stories__items__item__image_910c6d "
+          style="background-image: url("/members/marta.webp");"
+        >
+          <svg
+            class="_our_stories__items__item__image__icon_910c6d"
+            fill="none"
+            height="48"
+            style="transform: rotate(0deg);"
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              fill="white"
+              r="24"
+            />
+            <path
+              d="M24 19.5V30.5"
+              stroke="#151515"
+            />
+            <path
+              d="M29.5059 24.995L18.5059 24.995"
+              stroke="#111111"
+            />
+          </svg>
+        </div>
+        <div
+          class="_our_stories__items__item__content_910c6d _collapsed_910c6d"
+        >
+          <p
+            class="_our_stories__items__item__content__story_910c6d"
+          >
+            Yo era de esas madres que su mejor momento era recoger a mi hija cada día en el colegio. Era...
+          </p>
+        </div>
+      </div>
+      <div
+        class="_our_stories__items__item_910c6d"
+        style="top: 100px;"
+      >
+        <div
+          class="_our_stories__items__item__header_910c6d"
+        >
+          <h3
+            class="_our_stories__items__item__header__name_910c6d"
+          >
+            Miguel
+          </h3>
+          <p
+            class="_our_stories__items__item__header__profession_910c6d"
+          >
+            Emprendedor e inversor consciente
+          </p>
+        </div>
+        <div
+          class="_our_stories__items__item__image_910c6d "
+          style="background-image: url("/members/miguel.jpg");"
+        >
+          <svg
+            class="_our_stories__items__item__image__icon_910c6d"
+            fill="none"
+            height="48"
+            style="transform: rotate(0deg);"
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              fill="white"
+              r="24"
+            />
+            <path
+              d="M24 19.5V30.5"
+              stroke="#151515"
+            />
+            <path
+              d="M29.5059 24.995L18.5059 24.995"
+              stroke="#111111"
+            />
+          </svg>
+        </div>
+        <div
+          class="_our_stories__items__item__content_910c6d _collapsed_910c6d"
+        >
+          <p
+            class="_our_stories__items__item__content__story_910c6d"
+          >
+            Con 36 años, decidí lanzarme al vacío y montar mi propia empresa de muebles en Shanghái. Había convencido a una...
+          </p>
+        </div>
+      </div>
+      <div
+        class="_our_stories__items__item_910c6d"
+        style="top: 0px;"
+      >
+        <div
+          class="_our_stories__items__item__header_910c6d"
+        >
+          <h3
+            class="_our_stories__items__item__header__name_910c6d"
+          >
+            Jordi
+          </h3>
+          <p
+            class="_our_stories__items__item__header__profession_910c6d"
+          >
+            creative developer
+          </p>
+        </div>
+        <div
+          class="_our_stories__items__item__image_910c6d "
+          style="background-image: url("/members/jordi.jpg");"
+        >
+          <svg
+            class="_our_stories__items__item__image__icon_910c6d"
+            fill="none"
+            height="48"
+            style="transform: rotate(0deg);"
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              fill="white"
+              r="24"
+            />
+            <path
+              d="M24 19.5V30.5"
+              stroke="#151515"
+            />
+            <path
+              d="M29.5059 24.995L18.5059 24.995"
+              stroke="#111111"
+            />
+          </svg>
+        </div>
+        <div
+          class="_our_stories__items__item__content_910c6d _collapsed_910c6d"
+        >
+          <p
+            class="_our_stories__items__item__content__story_910c6d"
+          >
+            Tenía quince años cuando apareció. La psoriasis llegó sin avisar, sin explicación, y mi primera reacción fue la pregunta que...
+          </p>
+        </div>
+      </div>
+      <div
+        class="_our_stories__items__item_910c6d"
+        style="top: 50px;"
+      >
+        <div
+          class="_our_stories__items__item__header_910c6d"
+        >
+          <h3
+            class="_our_stories__items__item__header__name_910c6d"
+          >
+            Pau
+          </h3>
+          <p
+            class="_our_stories__items__item__header__profession_910c6d"
+          >
+            translator
+          </p>
+        </div>
+        <div
+          class="_our_stories__items__item__image_910c6d "
+          style="background-image: url("/members/pau.jpg");"
+        >
+          <svg
+            class="_our_stories__items__item__image__icon_910c6d"
+            fill="none"
+            height="48"
+            style="transform: rotate(0deg);"
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              fill="white"
+              r="24"
+            />
+            <path
+              d="M24 19.5V30.5"
+              stroke="#151515"
+            />
+            <path
+              d="M29.5059 24.995L18.5059 24.995"
+              stroke="#111111"
+            />
+          </svg>
+        </div>
+        <div
+          class="_our_stories__items__item__content_910c6d _collapsed_910c6d"
+        >
+          <p
+            class="_our_stories__items__item__content__story_910c6d"
+          >
+            Estábamos recorriendo el circuito que rodea el Annapurna con tres buenos amigos. Hace ya unos cuantos años de esto. Fue...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
