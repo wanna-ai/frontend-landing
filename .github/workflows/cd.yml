@@ -24,7 +24,7 @@ jobs:
         id: set-environments
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            ENVIRONMENTS='["playground", beta]'
+            ENVIRONMENTS='["playground", "beta"]'
           elif [[ "${{ github.ref }}" == "refs/tags/develop" ]]; then
             ENVIRONMENTS='["playground"]'
           elif [[ "${{ github.ref }}" == "refs/tags/beta" ]]; then
