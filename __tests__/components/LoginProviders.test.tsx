@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import LoginProviders from '@/components/LoginProviders/LoginProviders'
 import { renderWithContext } from '../helpers/test-utils'
@@ -8,13 +8,26 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: mockPush }),
 }))
 
+vi.mock('@/app/hook/useAuth', () => ({
+  useAuth: () => ({ checkAuthStatus: vi.fn().mockResolvedValue(null) }),
+}))
+
 const mockFetch = vi.fn()
 vi.stubGlobal('fetch', mockFetch)
+
+const mockWindowOpen = vi.fn()
+const originalWindowOpen = window.open
 
 describe('LoginProviders', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockFetch.mockResolvedValue({ ok: true })
+    window.open = mockWindowOpen
+    mockWindowOpen.mockReturnValue({}) // popup not blocked
+  })
+
+  afterEach(() => {
+    window.open = originalWindowOpen
   })
 
   it('renders Google button', () => {
@@ -23,10 +36,9 @@ describe('LoginProviders', () => {
     expect(screen.getByText('Continuar con Google')).toBeInTheDocument()
   })
 
-  it('saves lastpage cookie before redirect', async () => {
+  it('saves lastpage cookie before opening popup', async () => {
     renderWithContext(<LoginProviders lastpage="register" />)
 
-    // The LoginOAuth component has onClick on the wrapping div
     const googleText = screen.getByText('Continuar con Google')
     const clickableDiv = googleText.closest('[class*="login"]')!
     fireEvent.click(clickableDiv)
@@ -37,7 +49,6 @@ describe('LoginProviders', () => {
       }))
     })
 
-    // Verify the cookie payload includes lastpage
     const fetchCall = mockFetch.mock.calls.find(
       (call: [string, ...unknown[]]) => call[0] === '/api/auth/set-cookie'
     )
@@ -47,15 +58,17 @@ describe('LoginProviders', () => {
     expect(body.value).toBe('register')
   })
 
-  it('redirects to backend OAuth endpoint', async () => {
+  it('opens popup to backend OAuth endpoint', async () => {
     renderWithContext(<LoginProviders lastpage="register" />)
 
     const clickableDiv = screen.getByText('Continuar con Google').closest('[class*="login"]')!
     fireEvent.click(clickableDiv)
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith(
-        expect.stringContaining('/oauth2/authorization/google')
+      expect(mockWindowOpen).toHaveBeenCalledWith(
+        expect.stringContaining('/oauth2/authorization/google'),
+        'google-auth',
+        'width=500,height=600,popup=true'
       )
     })
   })
@@ -68,8 +81,10 @@ describe('LoginProviders', () => {
     fireEvent.click(clickableDiv)
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith(
-        expect.stringContaining(`/oauth2/authorization/google?sessionId=${testSessionId}`)
+      expect(mockWindowOpen).toHaveBeenCalledWith(
+        expect.stringContaining(`/oauth2/authorization/google?sessionId=${testSessionId}`),
+        'google-auth',
+        expect.any(String)
       )
     })
   })
@@ -81,9 +96,31 @@ describe('LoginProviders', () => {
     fireEvent.click(clickableDiv)
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith(
-        expect.stringMatching(/\/oauth2\/authorization\/google$/)
+      expect(mockWindowOpen).toHaveBeenCalledWith(
+        expect.stringMatching(/\/oauth2\/authorization\/google$/),
+        'google-auth',
+        expect.any(String)
       )
+    })
+  })
+
+  it('falls back to location.href when popup is blocked', async () => {
+    mockWindowOpen.mockReturnValue(null)
+    const originalHref = window.location.href
+    Object.defineProperty(window, 'location', {
+      value: { ...window.location, href: originalHref },
+      writable: true,
+      configurable: true,
+    })
+
+    renderWithContext(<LoginProviders lastpage="register" />)
+
+    const clickableDiv = screen.getByText('Continuar con Google').closest('[class*="login"]')!
+    fireEvent.click(clickableDiv)
+
+    await waitFor(() => {
+      expect(mockWindowOpen).toHaveBeenCalled()
+      expect(window.location.href).toContain('/oauth2/authorization/google')
     })
   })
 
@@ -92,16 +129,39 @@ describe('LoginProviders', () => {
 
     const clickableDiv = screen.getByText('Continuar con Google').closest('[class*="login"]')!
     fireEvent.click(clickableDiv)
-
-    // Second click should be ignored due to isLoading state
     fireEvent.click(clickableDiv)
 
     await waitFor(() => {
-      // setCookie should only be called once (for the first click)
       const setCookieCalls = mockFetch.mock.calls.filter(
         (call: [string, ...unknown[]]) => call[0] === '/api/auth/set-cookie'
       )
       expect(setCookieCalls.length).toBe(1)
+    })
+  })
+
+  it('navigates to /result on WANNA_AUTH_SUCCESS when lastpage is register', async () => {
+    mockFetch.mockResolvedValue({ ok: true })
+    renderWithContext(<LoginProviders lastpage="register" />)
+
+    window.dispatchEvent(new MessageEvent('message', {
+      data: { type: 'WANNA_AUTH_SUCCESS', token: 'test-token-123' },
+    }))
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/result')
+    })
+  })
+
+  it('navigates to /story/{postId} on WANNA_AUTH_SUCCESS when postId exists', async () => {
+    mockFetch.mockResolvedValue({ ok: true })
+    renderWithContext(<LoginProviders lastpage="story" />, { postId: 'abc-123' })
+
+    window.dispatchEvent(new MessageEvent('message', {
+      data: { type: 'WANNA_AUTH_SUCCESS', token: 'test-token-123' },
+    }))
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/story/abc-123')
     })
   })
 })
