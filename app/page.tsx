@@ -11,6 +11,7 @@ import Image from 'next/image'
 import LottieAnimation from '@/components/LottieAnimation/LottieAnimation'
 import animationData from '@/public/animation.json'
 import { useAuth } from '@/app/hook/useAuth'
+import { useSession } from '@/app/hook/useSession'
 
 // components
 import OurStories from '@/components/OurStories/OurStories'
@@ -24,6 +25,7 @@ export default function Home() {
 
   const router = useRouter()
   const { checkAuthStatus } = useAuth();
+  useSession();
 
   useEffect(() => {
     checkAuthStatus();
