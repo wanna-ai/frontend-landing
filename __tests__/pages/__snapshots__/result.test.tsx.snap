@@ -1,0 +1,105 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ResultPage > snapshot: complete object 1`] = `
+<div>
+  <div
+    class="_result_b5aec2"
+  >
+    <div
+      class="_result__container_b5aec2"
+    >
+      <div
+        class="_result__content_b5aec2"
+      >
+        <div
+          class="_result__story_b5aec2"
+        >
+          <div
+            class="_result__story__header_b5aec2"
+          >
+            <p>
+              Esta es tu historia:
+            </p>
+          </div>
+          <div
+            class="_result__story__user_b5aec2"
+          >
+            <img
+              alt="Test User"
+              class="_result__story__user__avatar_b5aec2"
+              height="24"
+              src="/pic.jpg"
+              width="24"
+            />
+            <p
+              class="_result__story__user__name_b5aec2"
+            >
+              Test User
+              <span>
+                · 
+                16 feb
+              </span>
+            </p>
+          </div>
+          <div
+            class="_result__story__title_b5aec2"
+          >
+            <h1>
+              Test Title
+            </h1>
+          </div>
+          <div
+            class="_result__story__experience_b5aec2"
+          >
+            <div
+              data-testid="markdown"
+            >
+              Test experience content
+            </div>
+          </div>
+        </div>
+        <div
+          class="_result__reflection_b5aec2"
+        >
+          <div
+            class="_result__reflection__title_b5aec2"
+          >
+            <p>
+              Aquí va una reflexión sobre tu historia...
+            </p>
+          </div>
+          <div
+            data-testid="markdown"
+          >
+            Test reflection content
+          </div>
+        </div>
+        <div
+          class="_result__complete_b5aec2"
+        >
+          <button
+            class="_result__complete__button_b5aec2"
+            disabled=""
+          >
+            <p>
+              Decide quién ve tu historia
+            </p>
+            <svg
+              fill="none"
+              height="8"
+              viewBox="0 0 16 8"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.3536 4.03553C15.5488 3.84027 15.5488 3.52369 15.3536 3.32843L12.1716 0.146446C11.9763 -0.048816 11.6597 -0.048816 11.4645 0.146446C11.2692 0.341708 11.2692 0.658291 11.4645 0.853553L14.2929 3.68198L11.4645 6.51041C11.2692 6.70567 11.2692 7.02225 11.4645 7.21751C11.6597 7.41278 11.9763 7.41278 12.1716 7.21751L15.3536 4.03553ZM0 3.68198L0 4.18198L15 4.18198V3.68198V3.18198L0 3.18198L0 3.68198Z"
+                fill="var(--color-white)"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

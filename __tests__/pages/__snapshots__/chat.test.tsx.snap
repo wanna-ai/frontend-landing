@@ -1,0 +1,82 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ChatPage > snapshot: chat with 2 messages 1`] = `
+<div>
+  <div
+    class="_chat_c026c0"
+  >
+    <div
+      class="_chat__messages_c026c0"
+    >
+      <div
+        class="_chat__messages__message_c026c0"
+      >
+        <div
+          class="_chat__messages__message__content_c026c0 _chat__messages__message__content__user_c026c0"
+        >
+          <div
+            data-testid="markdown"
+          >
+            Hello Wanna
+          </div>
+        </div>
+      </div>
+      <div
+        class="_chat__messages__message_c026c0"
+      >
+        <div
+          class="_chat__messages__message__content_c026c0 _chat__messages__message__content__avatar_c026c0"
+        >
+          <div
+            data-testid="markdown"
+          >
+            Welcome to Wanna!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="_chat__input_c026c0 "
+    >
+      <form
+        class="_chat__input__form_c026c0"
+      >
+        <div
+          class="_chat__input__editable_c026c0 _empty_c026c0"
+          contenteditable="true"
+          data-placeholder="Cuéntame lo que quieras..."
+        />
+        <div
+          class="_chat__input__form__buttons_c026c0"
+        >
+          <button
+            class="_chat__input__form__button_c026c0"
+            disabled=""
+            type="submit"
+          >
+            <svg
+              fill="none"
+              height="34"
+              viewBox="0 0 34 34"
+              width="34"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="16.6265"
+                cy="16.6265"
+                fill="transparent"
+                r="16.6265"
+              />
+              <path
+                d="M12.8594 18.5374L16.6246 14.627L20.3906 18.5374"
+                stroke="var(--color-black)"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;

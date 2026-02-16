@@ -1,0 +1,58 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CardStory > snapshot 1`] = `
+<div>
+  <div
+    class="_cardstory_c9b895"
+  >
+    <div
+      class="_cardstory__content_c9b895"
+    >
+      <div
+        class="_cardstory__content__header_c9b895"
+      >
+        <div
+          class="_cardstory__content__header__user_c9b895"
+        >
+          <img
+            alt="John Doe"
+            class="_cardstory__content__header__user__picture_c9b895"
+            height="24"
+            src="/avatar.jpg"
+            width="24"
+          />
+          <p
+            class="_cardstory__content__header__user__name_c9b895"
+          >
+            John Doe
+          </p>
+        </div>
+      </div>
+      <div
+        class="_cardstory__content__body_c9b895"
+      >
+        <p
+          class="_cardstory__content__body__title_c9b895"
+        >
+          My Story Title
+        </p>
+      </div>
+    </div>
+    <div
+      class="_cardstory__footer_c9b895"
+    >
+      <a
+        href="/"
+        target="_blank"
+      >
+        <img
+          alt="Arrow right"
+          height="24"
+          src="/wanna-logo.svg"
+          width="24"
+        />
+      </a>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StoryPage > snapshot: login view 1`] = `
+<div>
+  <div
+    class="_story_4e7168 "
+  >
+    <div
+      class="_story__login_4e7168"
+    >
+      <p>
+        Test User
+         desea compartir contigo una historia personal
+      </p>
+      <div
+        class="_story__login__content_4e7168"
+      >
+        <div
+          data-testid="card-story"
+        >
+          Test User
+           - 
+          Preview Title
+        </div>
+      </div>
+      <div
+        class="_story__login__login_4e7168"
+      >
+        <h3
+          class="_story__login__login__title_4e7168"
+        >
+          Para poder leer la historia completa, registrate
+        </h3>
+        <div
+          data-testid="login-providers"
+        >
+          Login (
+          story
+          )
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
