@@ -21,6 +21,7 @@ Next.js API Route (app/api/session/init/route.ts)
   │
   │  POST {API_BASE_URL}/api/v1/session/init
   │  Header: X-Wanna-Session-Id: <uuid>
+  │  Header: X-Forwarded-For: <client-ip>  (if available)
   │  Body: { language, userAgent, screenWidth, ... }
   ▼
 Backend
@@ -66,11 +67,15 @@ Backend
 
 The `connection` field is only present if the browser supports the Network Information API.
 
+## IP Forwarding
+
+The API route extracts the real client IP from the incoming request headers (`x-forwarded-for` first entry, or `x-real-ip` as fallback) and forwards it to the backend as `X-Forwarded-For`. This ensures the backend sees the end user's IP instead of the Next.js server IP.
+
 ## Tests
 
 Se ejecutan con `npm test` (vitest). Configuración en `vitest.config.ts` con jsdom.
 
-### API Route — `__tests__/api/session-init.test.ts` (7 tests)
+### API Route — `__tests__/api/session-init.test.ts` (10 tests)
 
 | Test | Qué verifica |
 |------|-------------|
@@ -80,6 +85,9 @@ Se ejecutan con `npm test` (vitest). Configuración en `vitest.config.ts` con js
 | forwards client context in body to backend | El body del cliente (language, screenWidth, etc.) se reenvía al backend |
 | sets cookie with correct options on new session | La cookie se crea con `MaxAge=1800`, `HttpOnly`, `SameSite=lax`, `Path=/` |
 | handles backend failure gracefully | Si el backend falla, devuelve HTTP 500 con mensaje de error |
+| forwards X-Forwarded-For header from client to backend | Reenvía la primera IP de `x-forwarded-for` al backend como `X-Forwarded-For` |
+| forwards X-Real-Ip when X-Forwarded-For is absent | Usa `x-real-ip` como fallback cuando no hay `x-forwarded-for` |
+| does not send X-Forwarded-For when no client IP headers present | No envía `X-Forwarded-For` si no hay cabeceras de IP en el request |
 | handles request with no body | Funciona aunque el request no tenga body (no rompe) |
 
 ### Hook — `__tests__/hooks/useSession.test.tsx` (5 tests)

@@ -104,6 +104,51 @@ describe('POST /api/session/init', () => {
     expect(data.error).toBe('Failed to initialize session')
   })
 
+  it('forwards X-Forwarded-For header from client to backend', async () => {
+    mockGet.mockReturnValue(undefined)
+
+    const request = new NextRequest('http://localhost:3000/api/session/init', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-forwarded-for': '203.0.113.50, 70.41.3.18',
+      },
+      body: JSON.stringify({}),
+    })
+
+    await POST(request)
+
+    const [, options] = mockFetch.mock.calls[0]
+    expect(options.headers['X-Forwarded-For']).toBe('203.0.113.50')
+  })
+
+  it('forwards X-Real-Ip when X-Forwarded-For is absent', async () => {
+    mockGet.mockReturnValue(undefined)
+
+    const request = new NextRequest('http://localhost:3000/api/session/init', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-real-ip': '198.51.100.23',
+      },
+      body: JSON.stringify({}),
+    })
+
+    await POST(request)
+
+    const [, options] = mockFetch.mock.calls[0]
+    expect(options.headers['X-Forwarded-For']).toBe('198.51.100.23')
+  })
+
+  it('does not send X-Forwarded-For when no client IP headers present', async () => {
+    mockGet.mockReturnValue(undefined)
+
+    await POST(createRequest({ language: 'es-ES' }))
+
+    const [, options] = mockFetch.mock.calls[0]
+    expect(options.headers['X-Forwarded-For']).toBeUndefined()
+  })
+
   it('handles request with no body', async () => {
     mockGet.mockReturnValue(undefined)
 
