@@ -25,13 +25,23 @@ export async function POST(request: NextRequest) {
       // No body or invalid JSON — proceed without context
     }
 
+    // Extract client IP for forwarding
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || request.headers.get('x-real-ip')
+      || '';
+
     // Call backend to init session
+    const backendHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'X-Wanna-Session-Id': sessionId,
+    };
+    if (clientIp) {
+      backendHeaders['X-Forwarded-For'] = clientIp;
+    }
+
     await fetch(`${API_BASE_URL}/api/v1/session/init`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Wanna-Session-Id': sessionId,
-      },
+      headers: backendHeaders,
       body: JSON.stringify(clientContext),
     });
 
