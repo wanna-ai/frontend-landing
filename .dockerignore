@@ -45,3 +45,6 @@ next-env.d.ts
 Dockerfile
 .dockerignore
 docker-compose.yml
+
+# Docs
+docs
